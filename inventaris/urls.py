@@ -65,14 +65,14 @@ urlpatterns = [
     # JENIS
     path('inventaris/masterdata/jenis', adminhome.viewjenis, name='jenis'),
     path('inventaris/masterdata/jenis/tambah',adminhome.addjenis, name='jenis_add'),
-    # path('inventaris/masterdata/jenis/edit/<int:pk>', adminhome.editjenis,name='jenis_edit'),
-    # path('inventaris/masterdata/jenis/delete/<int:pk>', adminhome.deletejenis,name='jenis_delete'),
+    path('inventaris/masterdata/jenis/edit/<int:pk>', adminhome.editjenis,name='jenis_edit'),
+    path('inventaris/masterdata/jenis/delete/<int:pk>', adminhome.deletejenis,name='jenis_delete'),
     
     # SUPPLIER 
     path('inventaris/masterdata/supplier', adminhome.viewsupplier, name='supplier'),
     path('inventaris/masterdata/supplier/tambah',adminhome.addsupplier, name='supplier_add'),
-    # path('inventaris/masterdata/supplier/edit/<int:pk>', adminhome.editsupplier,name='supplier_edit'),
-    # path('inventaris/masterdata/supplier/delete/<int:pk>', adminhome.deletesupplier,name='merk_delete'),
+    path('inventaris/masterdata/supplier/edit/<int:pk>', adminhome.editsupplier,name='supplier_edit'),
+    path('inventaris/masterdata/supplier/delete/<int:pk>', adminhome.deletesupplier,name='merk_delete'),
     
     # CUSTOMER
     path('inventaris/masterdata/customer', adminhome.viewcustomer, name='customer'),
@@ -83,6 +83,6 @@ urlpatterns = [
     # TIPE
     path('inventaris/masterdata/tipe', adminhome.viewtipe, name='tipe'),
     path('inventaris/masterdata/tipe/tambah',adminhome.addtipe, name='tipe_add'),
-    # path('inventaris/masterdata/tipe/edit/<int:pk>', adminhome.edittipe,name='tipe_edit'),
-    # path('inventaris/masterdata/tipe/delete/<int:pk>', adminhome.deletetipe,name='tipe_delete'),
+    path('inventaris/masterdata/tipe/edit/<int:pk>', adminhome.edittipe,name='tipe_edit'),
+    path('inventaris/masterdata/tipe/delete/<int:pk>', adminhome.deletetipe,name='tipe_delete'),
 ]

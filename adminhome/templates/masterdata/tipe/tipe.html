@@ -22,7 +22,7 @@
 {% block page_content %}
 <section class="content-header">
     <h1>
-        <i class="fa fa-database"></i> Jenis
+        <i class="fa fa-database"></i> Tipe
     </h1>
 </section>
 <section class="content">
@@ -43,123 +43,96 @@
                             <a class="btn btn-primary pull-right" href="/inventaris/masterdata/tipe/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         </div>
                     </div>
-                    <br>
-                    
                     <!-- pagination atas -->
                     <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-lg justify-content-center">
+                                {% if daftar_tipe.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_tipe.previous_page_number }}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_tipe.number }} of {{ daftar_tipe.paginator.num_pages }}.</span></li>
+                                {% if daftar_tipe.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_tipe.next_page_number }}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_tipe.paginator.num_pages }}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     </center>
-                    <br/>
                     <!-- end pagination atas -->
                     
                     <!-- konten -->
                     <div class="row">
-                        <div class="col-sm-8">
+                        <div class="col-sm-12">
                             <table id="data" class="table table-bordered table-striped table-responsive no-padding">
                                 <thead>
                                     <tr>
                                         <th width="50px">No</th>
-                                        <th>Merk</th>
-                                        <th width="150px">Aksi</th>
+                                        <th>Tipe</th>
+                                        <th width="350px">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% if daftar_tipe %}
+                                    {% for tipe in daftar_tipe %}
                                     <tr>
-                                        <td>1</td>
-                                        <td>Rinso</td>
-                                        <td>
-                                            <form action="" >
-                                                <!-- DELETE -->
-                                                <button class="btn btn-danger" type="submit">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                                <!-- EDIT -->
-                                                <a href="/inventaris/masterdata/merk/edit" class="btn btn-info">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Rinso</td>
-                                        <td>
-                                            <form action="" >
-                                                <!-- DELETE -->
-                                                <button class="btn btn-danger" type="submit">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                                <!-- EDIT -->
-                                                <a href="/inventaris/masterdata/merk/edit" class="btn btn-info">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Rinso</td>
-                                        <td>
-                                            <form action="" >
-                                                <!-- DELETE -->
-                                                <button class="btn btn-danger" type="submit">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                                <!-- EDIT -->
-                                                <a href="/inventaris/masterdata/merk/edit" class="btn btn-info">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Rinso</td>
-                                        <td>
-                                            <form action="" >
-                                                <!-- DELETE -->
-                                                <button class="btn btn-danger" type="submit">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                                <!-- EDIT -->
-                                                <a href="/inventaris/masterdata/merk/edit" class="btn btn-info">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ tipe.nama_type }}</td>
+                                        <td><a href="/inventaris/masterdata/tipe/edit/{{ tipe.id_type }}" class="btn btn-info"><i
+                                            class="fa fa-edit"></i></a>
+                                            <a href="/inventaris/masterdata/tipe/delete/{{ tipe.id_type }}" class="btn btn-danger confirm-delete"><i
+                                                class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="3"><center>Tidak ada data tipe saat ini...</center></td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+                        <!-- end konten -->
+                        
+                        <!-- pagination bawah -->
+                        <center>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-lg justify-content-center">
+                                    {% if daftar_tipe.has_previous %}
+                                    <li class="page-item">
+                                        <a href="?page=1" class="page-item">&laquo;</a>
+                                        <a href="?page={{ daftar_tipe.previous_page_number }}" class="page-item">&lt;</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="page-item disabled"><span class="current">Page {{ daftar_tipe.number }} of {{ daftar_tipe.paginator.num_pages }}.</span></li>
+                                    {% if daftar_tipe.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ daftar_tipe.next_page_number }}">&gt;</a>
+                                        <a class="page-link" href="?page={{ daftar_tipe.paginator.num_pages }}">&raquo;</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </center>
+                        <!-- end pagination bawah -->
+                        
                     </div>
-                    <!-- end konten -->
-                    
-                    <!-- pagination bawah -->
-                    <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
-                    </center>
-                    <br/>
-                    <!-- end pagination bawah -->
-                    
                 </div>
             </div>
         </div>
-    </div>
-</section>
-{% endblock %}
+    </section>
+    {% endblock %}
+    {% block extrajs %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script>
+        $('.confirm-delete').on('click', function(e) {
+            return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+        })
+    </script>
+    {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from adminhome.models import merk_brg, jenis_brg
-from adminhome.forms import Merkform
+from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer 
+from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform
 from django.core.paginator import Paginator
 
 # -----------+
@@ -140,45 +140,189 @@ def addmerk(request):
 
 
 def editmerk(request,pk):
-    return render(request, 'masterdata/merk/merk_edit.html')
+    Merk = merk_brg.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Merkform(request.POST, instance=Merk)
+        if form.is_valid():
+            Merk = form.save(commit=False)
+            nama_merk = request.POST['nama_merk']
+            Merk.save()
+            return redirect('/inventaris/masterdata/merk', pk=Merk.pk)
+    else:
+        form = Merkform(instance=Merk)
+    return render(request, 'masterdata/merk/merk_edit.html', {'form': form, 'merk' : Merk})
 
 def deletemerk(request,pk):
     Merk = merk_brg.objects.get(pk=pk)
     Merk.delete()
     return redirect('/inventaris/masterdata/merk')
 
+def searchmerk(request):
+    ''' This could be your actual view or a new one '''
+    # Your code
+    if request.method == 'GET': # If the form is submitted
+        search_query = request.GET.get('search_box_merk', None)
+        # Do whatever you need with the word the user looked for
+
+    # Your code
 def viewjenis(request):
-    return render(request, 'masterdata/jenis/jenis.html')
+    daftar_jenis = jenis_brg.objects.all()
+    pagination = Paginator(daftar_jenis,5)
+
+    page = request.GET.get('page','')
+    jenis_pg = pagination.get_page(page)
+    return render(request, 'masterdata/jenis/jenis.html', {'daftar_jenis': jenis_pg})
 
 def addjenis(request):
-    return render(request, 'masterdata/jenis/jenis_tambah.html')
+    if request.method == 'POST':
+        form_data = request.POST
+        form = Jenisform(form_data)
+        if form.is_valid():
+            Jenis = jenis_brg(
+                nama_jenis=request.POST['nama_jenis']
+            )
+            Jenis.save()
+            return redirect('/inventaris/masterdata/jenis')
+    else:
+        form = Jenisform()
+    return render(request, 'masterdata/jenis/jenis_tambah.html', {'form': form})
 
-def editjenis(request):
-    return render(request, 'masterdata/jenis/jenis_edit.html')
+def editjenis(request,pk):
+    Jenis = jenis_brg.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Jenisform(request.POST, instance=Jenis)
+        if form.is_valid():
+            Jenis = form.save(commit=False)
+            nama_jenis = request.POST['nama_jenis']
+            Jenis.save()
+            return redirect('/inventaris/masterdata/jenis', pk=Jenis.pk)
+    else:
+        form = Jenisform(instance=Jenis)
+    return render(request, 'masterdata/jenis/jenis_edit.html', {'form': form, 'jenis' : Jenis})
+
+def deletejenis(request,pk):
+    jenis = jenis_brg.objects.get(pk=pk)
+    jenis.delete()
+    return redirect('/inventaris/masterdata/jenis')
 
 def viewsupplier(request):
-    return render(request, 'masterdata/supplier/supplier.html')
+    daftar_supplier = supplier.objects.all()
+    pagination = Paginator(daftar_supplier,5)
+
+    page = request.GET.get('page','')
+    supplier_pg = pagination.get_page(page)
+    return render(request, 'masterdata/supplier/supplier.html', {'daftar_supplier': supplier_pg})
 
 def addsupplier(request):
-    return render(request, 'masterdata/supplier/supplier_tambah.html')
+    if request.method == 'POST':
+        form_data = request.POST
+        form = Supplierform(form_data)
+        if form.is_valid():
+            Supplier = supplier(
+                nama_supplier=request.POST['nama_supplier'],
+                alamat_supplier=request.POST['alamat_supplier'],
+                notlp_supplier=request.POST['notlp_supplier']
+            )
+            Supplier.save()
+            return redirect('/inventaris/masterdata/supplier')
+    else:
+        form = Supplierform()
+    return render(request, 'masterdata/supplier/supplier_tambah.html', {'form': form})
 
-def editsupplier(request):
-    return render(request, 'masterdata/supplier/supplier_edit.html')
+def editsupplier(request,pk):
+    Supplier = supplier.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Supplierform(request.POST, instance=Supplier)
+        if form.is_valid():
+            Supplier = form.save(commit=False)
+            nama_supplier = request.POST['nama_supplier']
+            alamat_supplier = request.POST['alamat_supplier']
+            notlp_supplier = request.POST['notlp_supplier']
+            Supplier.save()
+            return redirect('/inventaris/masterdata/supplier', pk=Supplier.pk)
+    else:
+        form = Supplierform(instance=Supplier)
+    return render(request, 'masterdata/supplier/supplier_edit.html', {'form': form, 'supplier' : Supplier})
+
+def deletesupplier(request,pk):
+    Supplier = supplier.objects.get(pk=pk)
+    Supplier.delete()
+    return redirect('/inventaris/masterdata/supplier')
 
 def viewcustomer(request):
-    return render(request, 'masterdata/customer/customer.html')
+    daftar_customer = customer.objects.all()
+    pagination = Paginator(daftar_customer,5)
+    page = request.GET.get('page','')
+    customer_pg = pagination.get_page(page)
+    return render(request, 'masterdata/customer/customer.html',{'daftar_customer': customer_pg})
 
 def addcustomer(request):
-    return render(request, 'masterdata/customer/customer_tambah.html')
+    if request.method == 'POST':
+        form_data = request.POST
+        form = Customerform(form_data)
+        if form.is_valid():
+            Customer = customer(
+                nama_customer= request.POST['nama_customer'],
+                alamat_customer=request.POST['alamat_customer'],
+                notlp_customer=request.POST['notlp_customer']
+            )
+            Customer.save()
+            return redirect('/inventaris/masterdata/customer')
+    else:
+        form = Supplierform()
+    return render(request, 'masterdata/customer/customer_tambah.html', {'form': form})
 
-def editcustomer(request):
-    return render(request, 'masterdata/customer/customer_edit.html')
+def editcustomer(request,pk):
+    Customer = customer.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Customerform(request.POST, instance=Customer)
+        if form.is_valid():
+            Customer = form.save(commit=False)
+            nama_customer = request.POST['nama_customer']
+            alamat_customer = request.POST['alamat_customer']
+            notlp_customer = request.POST['notlp_customer']
+            Customer.save()
+            return redirect('/inventaris/masterdata/customer', pk=Customer.pk)
+    else:
+        form = Customerform(instance=Customer)
+    return render(request, 'masterdata/customer/customer_edit.html', {'form': form, 'customer' : Customer})
 
 def viewtipe(request):
-    return render(request, 'masterdata/tipe/tipe.html')
+    daftar_tipe = type_brg.objects.all()
+    pagination = Paginator(daftar_tipe,5)
+
+    page = request.GET.get('page','')
+    tipe_pg = pagination.get_page(page)
+    return render(request, 'masterdata/tipe/tipe.html',{'daftar_tipe': tipe_pg})
 
 def addtipe(request):
-    return render(request, 'masterdata/tipe/tipe_tambah.html')
+    if request.method == 'POST':
+        form_data = request.POST
+        form = Typeform(form_data)
+        if form.is_valid():
+            Tipe = type_brg(
+                nama_type=request.POST['nama_type']
+            )
+            Tipe.save()
+            return redirect('/inventaris/masterdata/tipe')
+    else:
+        form = Typeform()
+    return render(request, 'masterdata/tipe/tipe_tambah.html', {'form': form})
 
-def edittipe(request):
-    return render(request, 'masterdata/tipe/tipe_edit.html')
+def edittipe(request,pk):
+    Tipe = type_brg.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Typeform(request.POST, instance=Tipe)
+        if form.is_valid():
+            Tipe = form.save(commit=False)
+            nama_type= request.POST['nama_type']
+            Tipe.save()
+            return redirect('/inventaris/masterdata/tipe', pk=Tipe.pk)
+    else:
+        form = Typeform(instance=Tipe)
+    return render(request, 'masterdata/tipe/tipe_edit.html', {'form': form, 'tipe' : Tipe})
+
+def deletetipe(request,pk):
+    Tipe = type_brg.objects.get(pk=pk)
+    Tipe.delete()
+    return redirect('/inventaris/masterdata/tipe')

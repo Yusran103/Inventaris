@@ -4,7 +4,7 @@
 {% block page_content %}
 <section class="content-header">
     <h1>
-        <i class="fa fa-edit"></i> Tambah Jenis
+        <i class="fa fa-edit"></i> Tambah Tipe
     </h1>
 </section>
 <section class="content">
@@ -12,18 +12,19 @@
         <div class="col-sm-12">
             <div class="box box-success">
                 <div class="box-body">
-                    <form action="" class="form-horizontal">
+                    <form action="{% url 'tipe_add' %}" method="POST" class="form-horizontal">
+                        {% csrf_token %}
                         <div class="col-sm-8">
                             <br>
                             <div class="form-group">
-                                <label for="jenis" class="col-sm-2 control-label">Jenis</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="jenis" placeholder="Jenis">
+                                <label for="nama_type" class="col-sm-2 control-label">{{form.nama_type.label}} :</label>
+                                <div class="col-sm-8">
+                                    {{form.nama_type}}
                                 </div>
                             </div>
-                            <div class="form-group pull-right">
-                                <button type="button" class="btn btn-primary">Tambah</button>
-                                <a href="/inventaris/masterdata/jenis" type="button" class="btn btn-danger">Kembali</a>
+                            <div class="form-group col-md-5 pull-right">
+                                <input type="submit" value="Tambah" class="btn btn-primary"></input>
+                                <a href="{% url 'tipe'%}" type="button" class="btn btn-danger">Kembali</a>
                             </div>
                         </div>
                     </form>
@@ -32,4 +33,12 @@
         </div>
     </div>
 </section>
+{% endblock %}
+{% block extrajs %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+    $('.confirm-add').on('click', function(e) {
+        return confirm('Apakah anda yakin ingin menambah data tersebut?')
+    })
+</script>
 {% endblock %}
