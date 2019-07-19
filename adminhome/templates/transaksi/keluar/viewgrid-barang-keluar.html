@@ -1,0 +1,122 @@
+{% extends  "layout/admin/base-admin.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<style>
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 4px 8px;
+        text-decoration: none;
+        transition: background-color .3s;
+    }
+    
+    .pagination a.active {
+        background-color: dodgerblue;
+        color: white;
+    }
+    
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+</style>
+{% endblock%}
+
+{% block page_content %}
+<section class="content-header">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-footer clearfix">
+                    <div class="box-header with-border">
+                        <i class="fa fa-list-alt"></i>
+                        <h1 class="box-title">Daftar Barang Keluar</h1>
+                    </div>
+                    <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                        <input type="text" class="form-control" placeholder="Cari.....">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                    <div class="pull-right col-md-4">
+                        <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/tambah"><i class="fa fa-plus"></i> Tambah</a>
+                        <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/list"><i class="fa fa-th-list"></i></a>
+                    </div>
+                    <br/>
+                    <br/>
+                    <center>
+                        <div class="pagination pagination-xs no-margin">
+                            <a href="#">&laquo;</a>
+                            <a href="#"><</a>
+                            <a href="#">1</a>
+                            <a href="#">/</a>
+                            <a href="#">1</a>
+                            <a href="#">></a>
+                            <a href="#">&raquo;</a>
+                        </div>
+                    </center>
+                    <br/>
+                    <!-- KONTEN -->
+                    <div class="box box-warning">
+                        <div class="col-sm-12">
+                            <form action="" role="form">
+                                
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <img src="/static/assets/images/logo.png" alt="" class="img-thumbnail img-responsive">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <h5><strong>Nama Barang</strong></h5>
+                                            <p>Barang Rahasia</p>
+                                            <h5><strong>Kode Barang</strong></h5>
+                                            <p>1234-567-8910</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <h5><strong>Tanggal Keluar : </strong></h5>
+                                            <p>12-12-2020</p>
+                                            <h5><strong>Serial Number: </strong></h5>
+                                            <p>1234567890 </p>
+                                            <h5><strong>Jumlah : </strong></h5>
+                                            <p>4000 ekor </p>
+                                            <strong><h5>Customer : </strong></h5>
+                                            <p>Blacksmith</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <h5><strong>Alamat Customer : </strong></h5>
+                                            <p>Jl. Raden Kanjeng Jimat NO19 RT02 RW06 Magersari, Gedangan, Sidarjo</p>
+                                            <h5><strong>Nomor Resi : </strong></h5> 
+                                            <p>1234-89746849-12414</p>
+                                            <h5><strong>No. Bukti Beli : </strong></h5>
+                                            <p>123451234512345</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="/inventaris/barangkeluar/edit" type="button" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="#" type="button" class="btn btn-danger btn-sm">Hapus</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--END KONTEN  -->
+                    <center>
+                        <div class="pagination pagination-xs no-margin">
+                            <a href="#">&laquo;</a>
+                            <a href="#"><</a>
+                            <a href="#">1</a>
+                            <a href="#">/</a>
+                            <a href="#">1</a>
+                            <a href="#">></a>
+                            <a href="#">&raquo;</a>
+                        </div>
+                    </center>   
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

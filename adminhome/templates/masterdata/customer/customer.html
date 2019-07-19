@@ -1,0 +1,117 @@
+{% extends  "layout/admin/base-admin.html" %}
+{% load static %}
+{% block extrastyle %}
+<style>
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 4px 8px;
+        text-decoration: none;
+        transition: background-color .3s;
+    }
+    
+    .pagination a.active {
+        background-color: dodgerblue;
+        color: white;
+    }
+    
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+</style>
+{% endblock%}
+
+{% block page_content %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-database"></i> Customer
+    </h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="input-group input-group-md col-md-6 col-xs-8 col-lg-6 pull-left">
+                                <input type="text" class="form-control" placeholder="Cari.....">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="pull-right col-md-4">
+                            <a class="btn btn-primary pull-right" href="/inventaris/masterdata/customer/tambah"><i class="fa fa-plus"></i> Tambah</a>
+                        </div>
+                    </div>
+                    <br>
+                    
+                    <!-- pagination atas -->
+                    <center>
+                        <div class="pagination pagination-xs no-margin">
+                            <a href="#">&laquo;</a>
+                            <a href="#"><</a>
+                            <a href="#">1</a>
+                            <a href="#">/</a>
+                            <a href="#">1</a>
+                            <a href="#">></a>
+                            <a href="#">&raquo;</a>
+                        </div>
+                    </center>
+                    <br/>
+                    <!-- end pagination atas -->
+                    
+                    <!-- konten -->
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <table id="data" class="table table-bordered table-striped table-responsive no-padding">
+                                <thead>
+                                    <tr>
+                                        <th width="50px">No</th>
+                                        <th>Merk</th>
+                                        <th width="350px">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Rinso</td>
+                                        <td>
+                                            <form action="" >
+                                                <!-- DELETE -->
+                                                <button class="btn btn-danger" type="submit">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <!-- EDIT -->
+                                                <a href="/inventaris/masterdata/customer/edit" class="btn btn-info">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- end konten -->
+                    
+                    <!-- pagination bawah -->
+                    <center>
+                        <div class="pagination pagination-xs no-margin">
+                            <a href="#">&laquo;</a>
+                            <a href="#"><</a>
+                            <a href="#">1</a>
+                            <a href="#">/</a>
+                            <a href="#">1</a>
+                            <a href="#">></a>
+                            <a href="#">&raquo;</a>
+                        </div>
+                    </center>
+                    <br/>
+                    <!-- end pagination bawah -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

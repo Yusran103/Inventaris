@@ -1,0 +1,62 @@
+{% load static %}
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">INVENTARIS BARANG</li>
+            <li><a href="/inventaris"><i class="fa fa-home"></i> <span>DASHBOARD</span></a></li>
+            <li class="treeview">
+                <!-- Transaksi -->
+                <a href="#">
+                    <i class="fa fa-folder"></i>
+                    <span>TRANSAKSI</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/inventaris/barangmasuk"><i class="fa fa-circle-o"></i> Barang Masuk</a></li>
+                    <li><a href="/inventaris/barangkeluar"><i class="fa fa-circle-o"></i> Barang Keluar</a></li>
+                    <li><a href="/inventaris/stok"><i class="fa fa-circle-o"></i> Stok</a></li>
+                </ul>
+            </li>
+            <!-- LAPORAN -->
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-book"></i>
+                    <span>LAPORAN</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/inventaris/laporan/barangmasuk"><i class="fa fa-circle-o"></i> Laporan Barang Masuk</a></li>
+                    <li><a href="/inventaris/laporan/barangkeluar"><i class="fa fa-circle-o"></i> Laporan Barang Keluar</a></li>
+                    <li><a href="/inventaris/laporan/stok"><i class="fa fa-circle-o"></i> Stok</a></li>
+                </ul>
+            </li>
+            <!-- User -->
+            <li><a href="/inventaris/users"><i class="fa fa-users"></i> <span>Users</span></a></li>
+            <!-- MASTER DATA -->
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-database"></i>
+                    <span>MASTER DATA</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/inventaris/masterdata/merk"><i class="fa fa-circle-o"></i> Merk</a></li>
+                    <li><a href="/inventaris/masterdata/jenis"><i class="fa fa-circle-o"></i> Jenis</a></li>
+                    <li><a href="/inventaris/masterdata/tipe"><i class="fa fa-circle-o"></i> Tipe</a></li>
+                    <li><a href="/inventaris/masterdata/supplier"><i class="fa fa-circle-o"></i> Supplier</a></li>
+                    <li><a href="/inventaris/masterdata/customer"><i class="fa fa-circle-o"></i> Customer</a></li>
+                    
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

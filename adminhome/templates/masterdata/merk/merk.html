@@ -1,0 +1,124 @@
+{% extends  "layout/admin/base-admin.html" %}
+{% load static %}
+{% block extrastyle %}
+
+{% endblock%}
+
+{% block page_content %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-database"></i> Merk
+    </h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="input-group input-group-md col-md-6 col-xs-8 col-lg-6 pull-left">
+                                <input type="text" class="form-control" placeholder="Cari.....">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-flat"><i
+                                        class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="pull-right col-md-4">
+                                <a class="btn btn-primary pull-right" href="/inventaris/masterdata/merk/tambah"><i
+                                    class="fa fa-plus"></i> Tambah</a>
+                                </div>
+                            </div>
+                            <!-- pagination atas -->
+                            <center>
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination pagination-lg justify-content-center">
+                                        {% if daftar_merk.has_previous %}
+                                        <li class="page-item">
+                                            <a href="?page=1" class="page-item">&laquo;</a>
+                                            <a href="?page={{ daftar_merk.previous_page_number }}" class="page-item">&lt;</a>
+                                        </li>
+                                        {% endif %}
+                                        <li class="page-item disabled"><span class="current">Page {{ daftar_merk.number }} of {{ daftar_merk.paginator.num_pages }}.</span></li>
+                                        {% if daftar_merk.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ daftar_merk.next_page_number }}">&gt;</a>
+                                            <a class="page-link" href="?page={{ daftar_merk.paginator.num_pages }}">&raquo;</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </center>
+                            <!-- end pagination atas -->
+                            
+                            <!-- konten -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="data" class="table table-bordered table-striped table-responsive no-padding">
+                                        <thead>
+                                            <tr>
+                                                <th width="50px">No</th>
+                                                <th>Merk</th>
+                                                <th width="350px">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if daftar_merk %}
+                                            {% for merk in daftar_merk %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ merk.nama_merk }}</td>
+                                                <td><a href="/inventaris/masterdata/merk/edit/{{ merk.id_merk }}" class="btn btn-info"><i
+                                                    class="fa fa-edit"></i></a>
+                                                    <a href="/inventaris/masterdata/merk/delete/{{ merk.id_merk }}" class="btn btn-danger confirm-delete"><i
+                                                        class="fa fa-trash"></i></a>
+                                                        </<a>
+                                                        </tr>
+                                                        {% endfor %}
+                                                        {% else %}
+                                                        <tr>
+                                                            <td colspan="3">Tidak ada data merk saat ini...</td>
+                                                        </tr>
+                                                        {% endif %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- end konten -->
+                                        
+                                        <!-- pagination bawah -->
+                                        <center>
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination pagination-lg justify-content-center">
+                                                    {% if daftar_merk.has_previous %}
+                                                    <li class="page-item">
+                                                        <a href="?page=1" class="page-item">&laquo;</a>
+                                                        <a href="?page={{ daftar_merk.previous_page_number }}" class="page-item">&lt;</a>
+                                                    </li>
+                                                    {% endif %}
+                                                    <li class="page-item disabled"><span class="current">Page {{ daftar_merk.number }} of {{ daftar_merk.paginator.num_pages }}.</span></li>
+                                                    {% if daftar_merk.has_next %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page={{ daftar_merk.next_page_number }}">&gt;</a>
+                                                        <a class="page-link" href="?page={{ daftar_merk.paginator.num_pages }}">&raquo;</a>
+                                                    </li>
+                                                    {% endif %}
+                                                </ul>
+                                            </nav>
+                                        </center>
+                                        <!-- end pagination bawah -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    {% endblock %}
+                    {% block extrajs %}
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+                    <script>
+                        $('.confirm-delete').on('click', function(e) {
+                            return confirm('yakin?')
+                        })
+                    </script>
+                    {% endblock %}
