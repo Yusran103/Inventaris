@@ -77,8 +77,8 @@ urlpatterns = [
     # CUSTOMER
     path('inventaris/masterdata/customer', adminhome.viewcustomer, name='customer'),
     path('inventaris/masterdata/customer/tambah',adminhome.addcustomer, name='customer_add'),
-    # path('inventaris/masterdata/customer/edit/<int:pk>', adminhome.editcustomer,name='customer_edit'),
-    # path('inventaris/masterdata/customer/delete/<int:pk>', adminhome.deletecustomer,name='customer_delete'),
+    path('inventaris/masterdata/customer/edit/<int:pk>', adminhome.editcustomer,name='customer_edit'),
+    path('inventaris/masterdata/customer/delete/<int:pk>', adminhome.deletecustomer,name='customer_delete'),
     
     # TIPE
     path('inventaris/masterdata/tipe', adminhome.viewtipe, name='tipe'),

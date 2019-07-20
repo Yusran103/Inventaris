@@ -56,6 +56,7 @@ def tambahbarangmasuk(request):
 
 
 def barangkeluar(request):
+    
     return render(request, 'transaksi/keluar/view-barang-keluar.html')
 
 
@@ -269,7 +270,7 @@ def addcustomer(request):
             Customer.save()
             return redirect('/inventaris/masterdata/customer')
     else:
-        form = Supplierform()
+        form = Customerform()
     return render(request, 'masterdata/customer/customer_tambah.html', {'form': form})
 
 def editcustomer(request,pk):
@@ -286,6 +287,11 @@ def editcustomer(request,pk):
     else:
         form = Customerform(instance=Customer)
     return render(request, 'masterdata/customer/customer_edit.html', {'form': form, 'customer' : Customer})
+
+def deletecustomer(request,pk):
+    Customer = customer.objects.get(pk=pk)
+    Customer.delete()
+    return redirect('/inventaris/masterdata/customer')
 
 def viewtipe(request):
     daftar_tipe = type_brg.objects.all()
