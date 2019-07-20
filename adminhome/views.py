@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, logout, login
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib import messages
 from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer 
 from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform
 from django.core.paginator import Paginator
+from adminhome.models import user
 
 # -----------+
 # LOGIN      |
@@ -9,6 +13,26 @@ from django.core.paginator import Paginator
 
 def index(request):
     return render(request, 'login.html')
+
+
+
+def auth_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request,user)
+                return HttpResponseRedirect(reverse('/inventaris/'))
+            else:
+                return HttpResponse("Your account was inactive.")
+        else:
+            print("Someone tried to login and failed.")
+            print("They used username: {} and password: {}".format(username,password))
+            return HttpResponse("salah")
+    else:
+        return render(request, 'login.html', {})
 
 # -----------+
 # DASHBOARD  |

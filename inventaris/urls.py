@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth.views import LoginView
 
 from adminhome import views as adminhome
 
@@ -23,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # LOGIN FROM
     path('', adminhome.index, name='login'),
+    path('inventaris/login/', adminhome.auth_login, name='login_auth'),
     # FORGET PASSWORD
     path('changepassword/', adminhome.changepassword, name='changepassword'),
     # ADMIN DASHBOARD
