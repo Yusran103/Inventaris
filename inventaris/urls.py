@@ -36,8 +36,8 @@ urlpatterns = [
 
     # BARANG KELUAR
     path('inventaris/barangkeluar',adminhome.barangkeluargrid, name='barangkeluar_grid'),
-    path('inventaris/barangkeluar/list',adminhome.barangkeluar, name='barangkeluar_list'),
-    path('inventaris/barangkeluar/tambah',adminhome.tambahbarangkeluar, name='barangkeluar_add'),
+    path('inventaris/barangkeluar/list',adminhome.viewbarangkeluar, name='barangkeluar_list'),
+    path('inventaris/barangkeluar/tambah',adminhome.addbarangkeluar, name='barangkeluar_add'),
     # path('inventaris/barangkeluar/edit/<id:pk>', adminhome.editbarangkeluar,name='barangkeluar_edit'),
     # path('inventaris/barangkeluar/delete/<id:pk>', adminhome.editbarangkeluar,name='barangkeluar_delete'),
     

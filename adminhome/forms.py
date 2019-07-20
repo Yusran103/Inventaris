@@ -1,6 +1,6 @@
-from django.forms import Textarea, ModelForm 
+from django.forms import Textarea, ModelForm, ModelChoiceField
 from django import forms
-from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer
+from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer, barang_keluar
 
 # -------------+
 # FORM MERK    |
@@ -38,7 +38,7 @@ class Jenisform(ModelForm):
 
 
 # -------------+
-# TIPE MERK    |
+# TIPE FORM    |
 # -------------+
 
 class Typeform(ModelForm):
@@ -69,7 +69,7 @@ class Supplierform(ModelForm):
             required=True
         )
     alamat_supplier = forms.CharField(
-        widget=forms.TextInput(
+        widget=forms.Textarea(
             attrs={
                 'class':'form-control',
                 'placeholder':'Isikan Alamat Supplier'
@@ -106,7 +106,7 @@ class Customerform(ModelForm):
             required=True
         )
     alamat_customer = forms.CharField(
-        widget=forms.TextInput(
+        widget=forms.Textarea(
             attrs={
                 'class':'form-control',
                 'placeholder':'Isikan Alamat Customer'
@@ -128,3 +128,21 @@ class Customerform(ModelForm):
     class Meta:
         model = customer
         fields = ['nama_customer','alamat_customer','notlp_customer']
+
+# --------------------+
+# FORM BARANG KELUAR  |
+# -------------------+
+class BarangkeluarForm(forms.Form):
+    no_bukti = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Bukti Barang'
+            }
+        ),
+        required=True
+    )
+
+    class Meta:
+        model = barang_keluar
+        fields = ['no_bukti']

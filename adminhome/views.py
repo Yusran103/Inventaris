@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer 
-from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform
+from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer , barang_keluar
+from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform, BarangkeluarForm
 from django.core.paginator import Paginator
 
 # -----------+
@@ -55,9 +55,13 @@ def tambahbarangmasuk(request):
 # -------------+
 
 
-def barangkeluar(request):
-    
-    return render(request, 'transaksi/keluar/view-barang-keluar.html')
+def viewbarangkeluar(request):
+    daftar_barangkeluar = barang_keluar.objects.all()
+    pagination = Paginator(daftar_barangkeluar,5)
+
+    page = request.GET.get('page','')
+    barangkeluar_pg = pagination.get_page(page)
+    return render(request, 'transaksi/keluar/view-barang-keluar.html', {'daftar_barangkeluar':barangkeluar_pg})
 
 
 def barangkeluargrid(request):
@@ -67,9 +71,33 @@ def barangkeluargrid(request):
 def editbarangkeluar(request):
     return render(request, 'transaksi/keluar/edit-barang-keluar.html')
 
-
-def tambahbarangkeluar(request):
-    return render(request, 'transaksi/keluar/add-barang-keluar.html')
+def addbarangkeluar(request):
+    merk_id = merk_brg.objects.all()
+    if request.method == 'POST':
+        form_data = request.POST
+        form = BarangkeluarForm(form_data)
+        if form.is_valid():
+            Barangkeluar = barang_keluar(
+                no_bukti=request.POST['no_bukti'],
+                nm_brg_keluar=request.POST['nm_brg_keluar'],
+                kd_brg_keluar=request.POST['kd_brg_keluar'],
+                tgl_keluar=request.POST['tgl_keluar'],
+                jml_keluar=request.POST['jml_keluar'],
+                harga_satuan=request.POST['harga_satuan'],
+                total_bayar=request.POST['total_bayar'],
+                Costumer=request.POST['Customer'],
+                alamat_customer=request.POST['alamat_customer'],
+                no_resi=request.POST['no_resi'],
+                merk_id=merk_brg.objects.get(nama_merk = nama_merk),
+                jenis_id=request.POST['jenis_id'],
+                tipe_id=request.POST['tipe_id'],
+                foto_keluar=request.POST['foto_keluar']
+            )
+            Barangkeluar.save()
+            return redirect('/inventaris/transaksi/barangkeluar')
+    else:
+        form = BarangkeluarForm()
+    return render(request, 'transaksi/keluar/add-barang-keluar.html', {'form':form}, {'merk_id':merk_id})
 
 # -------------+
 # LAPORAN      |

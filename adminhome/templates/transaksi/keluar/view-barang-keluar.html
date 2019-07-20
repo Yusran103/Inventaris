@@ -2,24 +2,7 @@
 {% load static %}
 
 {% block extrastyle %}
-<style>
-    .pagination a {
-        color: black;
-        float: left;
-        padding: 4px 8px;
-        text-decoration: none;
-        transition: background-color .3s;
-    }
-    
-    .pagination a.active {
-        background-color: dodgerblue;
-        color: white;
-    }
-    
-    .pagination a:hover:not(.active) {background-color: #ddd;
-    }
-</style>
-{% endblock%}
+{% endblock %}
 
 {% block page_content %}
 <section class="content-header">
@@ -43,17 +26,27 @@
                     </div>
                     <br/>
                     <br/>
+                    <!-- pagination atas -->
                     <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-lg justify-content-center">
+                                {% if daftar_merk.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1" class="page-item">&laquo;</a>
+                                    <a href="#" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">#</span></li>
+                                {% if daftar_merk.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="#">&gt;</a>
+                                    <a class="page-link" href="#">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     </center>
+                    <!-- pagination atas-->
                     <br/>
                     <div class="col-sm-12">
                         <table id="data" class="table table-bordered table-striped table-responsive no-padding">
@@ -71,15 +64,17 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% if daftar_barangkeluar %}
+                                {% for data in daftar_barangkeluar %}
                                 <tr>
-                                    <td>1</td>
-                                    <td>12345</td>
-                                    <td>12345</td>  
-                                    <td>Sapi</td>
-                                    <td>21-12-2021</td>
-                                    <td>100</td>
-                                    <td>Pengembala Sapi</td>
-                                    <td>111222-33-22-444</td>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ data.no_bukti }}</td>
+                                    <td>{{ data.kd_brg_keluar }}</td>  
+                                    <td>{{ data.nm_brg_keluar }}</td>
+                                    <td>{{ data.tgl_keluar }}</td>
+                                    <td>{{ data.jml_keluar }}</td>
+                                    <td>{{ data.Customer }}</td>
+                                    <td>{{ data.no_resi }}</td>
                                     <td>
                                         <form action="" >
                                             <!-- DELETE -->
@@ -93,20 +88,36 @@
                                         </form>
                                     </td>
                                 </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="3"><center>Tidak ada data barang keluar saat ini...</center></td>
+                                </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
+                    <!-- pagination bawah -->
                     <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-lg justify-content-center">
+                                {% if daftar_merk.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1" class="page-item">&laquo;</a>
+                                    <a href="#" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">#</span></li>
+                                {% if daftar_merk.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="#">&gt;</a>
+                                    <a class="page-link" href="#">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     </center>
+                    <!-- pagination bawah -->  
                 </div>
             </div>
         </div>

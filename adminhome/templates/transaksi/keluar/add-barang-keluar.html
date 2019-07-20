@@ -15,13 +15,14 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
-                <form action="" class="form-horizontal">
+                <form action="{% url 'barangkeluar_add' %}" method="POST" role="form" class="form-horizontal">
+                    {% csrf_token %}
                     <div class="box-body">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="nobuktibeli" class="col-sm-3 control-label">No. Bukti Beli</label>
+                                <label for="no_bukti" class="col-sm-3 control-label">No. Bukti Beli</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="nobuktibeli" placeholder="No. Bukti Beli">
+                                    {{form.no_bukti}}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -40,7 +41,7 @@
                             <div class="form-group">
                                 <label for="kodebarang" class="col-sm-3 control-label">Kode Barang</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="kodebarang" placeholder="Kode Barang">
+                                    <input type="text" class="form-control" id="kodebarang" placeholder="Kode Barang" disabled>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -57,7 +58,7 @@
                             <div class="form-group">
                                 <label for="serialnumber" class="col-sm-3 control-label">Serial Number</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="serialnumber" placeholder="Serial Number">
+                                    <input type="text" class="form-control" id="serialnumber" placeholder="Serial Number" disabled>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -69,13 +70,21 @@
                             <div class="form-group">
                                 <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="hargasatuan" placeholder="Harga Satuan">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Rp.</span>
+                                        <input type="number" class="form-control" id="hargasatuan" placeholder="Harga Satuan">
+                                        <span class="input-group-addon">.00</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="totalbayar" class="col-sm-3 control-label">Total Bayar</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="totalbayar" placeholder="Total Bayar">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Rp.</span>
+                                        <input type="number" class="form-control" id="totalbayar" placeholder="Total Bayar" disabled>
+                                        <span class="input-group-addon">.00</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -84,27 +93,6 @@
                             <div class="form-group">
                                 <label for="customer" class="col-sm-2 control-label">Customer</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="customer" placeholder="Customer">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="alamatcustomer" class="col-sm-2 control-label">Alamat Customer</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" id="alamatcustomer" rows="3" placeholder="Tulis alamat customer disini ..."></textarea>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="noresi" class="col-sm-2 control-label">No. Resi</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="noresi" placeholder="No. Resi">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="merk" class="col-sm-2 control-label">Merk</label>
-                                <div class="col-sm-10" id="merk">
                                     <select  class="form-control selectpicker" data-live-search="true">
                                         <option value="">Option</option>
                                         <option value="1">Option 1</option>
@@ -117,9 +105,49 @@
                             </div>
                             
                             <div class="form-group">
+                                <label for="alamatcustomer" class="col-sm-2 control-label">Alamat Customer</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="alamatcustomer" rows="3" placeholder="Alamat customer..." disabled></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="noresi" class="col-sm-2 control-label">No. Resi</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="noresi" placeholder="No. Resi" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="merk" class="col-sm-2 control-label">Merk</label>
+                                <div class="col-sm-10" id="merk">
+                                    <select  class="form-control selectpicker" data-live-search="true" name="merk">
+                                        <option value="">-----Pilih merk------</option>
+                                        {% for data in merk_id %}
+                                        <option value="{{ data.id_merk }}">{{ data.nama_merk }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
                                 <label for="jenis" class="col-sm-2 control-label">Jenis</label>
                                 <div class="col-sm-10" >
-                                    <select class="form-control selectpicker" id="jenis" data-live-search="true">
+                                    <select class="form-control selectpicker" id="jenis" data-live-search="true" name="jenis">
+                                        <option value="">Option</option>
+                                        <option value="1">Option 1</option>
+                                        <option value="2">Option 2</option>
+                                        <option value="3">Option 3</option>
+                                        <option value="4">Option 4</option>
+                                        <option value="5">Option 5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tipe" class="col-sm-2 control-label">Tipe</label>
+                                <div class="col-sm-10" >
+                                    <select class="form-control selectpicker" id="tipe" data-live-search="true">
                                         <option value="">Option</option>
                                         <option value="1">Option 1</option>
                                         <option value="2">Option 2</option>
@@ -138,7 +166,7 @@
                             </div>
                             <br>
                             <div class="form-group pull-right">    
-                                <a href="#" type="button" class="btn btn-primary">Simpan</a>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                                 <a href="#" type="button" class="btn btn-success">Simpan dan Tambah</a>
                                 <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
                             </div>

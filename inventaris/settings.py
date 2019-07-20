@@ -81,7 +81,7 @@ DATABASES = {
         # nama database
         'NAME': 'inventaris',
         'USER': 'postgres',
-        'PASSWORD': '1',
+        'PASSWORD': 'ruindigosold',
         'HOST':'localhost',
         'PORT':'5432',
     }
