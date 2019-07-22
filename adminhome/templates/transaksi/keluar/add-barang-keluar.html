@@ -14,69 +14,82 @@
 <section class="content">
     <div class="row">
         <div class="col-sm-12">
-            <div class="box box-primary">
-                <form action="{% url 'barangkeluar_add' %}" method="POST" role="form" class="form-horizontal">
+            <div class="box box-primary"> 
+                <form action="{% url 'barangkeluar_add' %}" enctype="multipart/form-data" method="POST" role="form" class="form-horizontal">
                     {% csrf_token %}
                     <div class="box-body">
                         <div class="col-sm-6">
+                            <!-- No. Bukti Beli -->
                             <div class="form-group">
                                 <label for="no_bukti" class="col-sm-3 control-label">No. Bukti Beli</label>
                                 <div class="col-sm-9">
                                     {{form.no_bukti}}
                                 </div>
                             </div>
+                            
+                            <!-- Nama Barang -->
                             <div class="form-group">
                                 <label for="namabarang" class="col-sm-3 control-label">Nama Barang</label>
                                 <div class="col-sm-9" id="namabarang">
                                     <select  class="form-control selectpicker" data-live-search="true">
-                                        <option value="">Option</option>
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                        <option value="4">Option 4</option>
-                                        <option value="5">Option 5</option>
+                                        <option value="">--- Pilih Nama Barang ---</option>
+                                        {% for data in daftar_barangmasuk %}
+                                        <option value="{{ data.nm_barang }}">{{ data.nm_barang }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
+                            
+                            <!-- Kode Barang -->
                             <div class="form-group">
                                 <label for="kodebarang" class="col-sm-3 control-label">Kode Barang</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="kodebarang" placeholder="Kode Barang" disabled>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="tanggalbarang" class="col-sm-3 control-label">Tanggal Keluar</label>
-                                <div class="col-sm-9">
-                                    <div class="input-group date">
-                                        <input type="text" data-date-format="dd/mm/yyyy" class="form-control pull-right" id="date" placeholder="Tanggal Keluar">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
+                            <!-- Serial Number -->
                             <div class="form-group">
                                 <label for="serialnumber" class="col-sm-3 control-label">Serial Number</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="serialnumber" placeholder="Serial Number" disabled>
                                 </div>
                             </div>
+                            
+                            <!-- tanggal keluar -->
                             <div class="form-group">
-                                <label for="jumlah" class="col-sm-3 control-label">Jumlah</label>
+                                <label for="tgl_keluar" class="col-sm-3 control-label">Tanggal Keluar</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" id="jumlah" placeholder="Jumlah">
+                                    <div class="input-group date" id="date">
+                                        {{ form.tgl_keluar }}
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            
+                            <!-- Jumlah -->
                             <div class="form-group">
-                                <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan</label>
+                                <label for="jml_keluar" class="col-sm-3 control-label">Jumlah</label>
+                                <div class="col-sm-9">
+                                    {{ form.jml_keluar }}
+                                </div>
+                            </div>
+                            
+                            <!-- Harga Satuan -->
+                            <div class="form-group">
+                                <label for="harga_satuan" class="col-sm-3 control-label">Harga Satuan</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon">Rp.</span>
-                                        <input type="number" class="form-control" id="hargasatuan" placeholder="Harga Satuan">
+                                        {{ form.harga_satuan }}
                                         <span class="input-group-addon">.00</span>
                                     </div>
                                 </div>
                             </div>
+                            
+                            <!-- Total Bayar -->
                             <div class="form-group">
                                 <label for="totalbayar" class="col-sm-3 control-label">Total Bayar</label>
                                 <div class="col-sm-9">
@@ -88,29 +101,31 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <!-- col ke 2 -->
+                        <!-- Customer -->
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="customer" class="col-sm-2 control-label">Customer</label>
                                 <div class="col-sm-10">
                                     <select  class="form-control selectpicker" data-live-search="true">
-                                        <option value="">Option</option>
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                        <option value="4">Option 4</option>
-                                        <option value="5">Option 5</option>
+                                        <option value="">--- Pilih Customer ---</option>
+                                        {% for data in daftar_customer %}
+                                        <option value="{{ data.id_customer }}">{{ data.nama_customer }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
                             
+                            <!-- Alamat Customer -->
                             <div class="form-group">
                                 <label for="alamatcustomer" class="col-sm-2 control-label">Alamat Customer</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" id="alamatcustomer" rows="3" placeholder="Alamat customer..." disabled></textarea>
+                                    <textarea class="form-control" id="alamatcustomer" rows="2" placeholder="Alamat customer..." disabled></textarea>
                                 </div>
                             </div>
                             
+                            <!-- No. Resi -->
                             <div class="form-group">
                                 <label for="noresi" class="col-sm-2 control-label">No. Resi</label>
                                 <div class="col-sm-10">
@@ -118,53 +133,54 @@
                                 </div>
                             </div>
                             
+                            <!-- Merk -->
                             <div class="form-group">
                                 <label for="merk" class="col-sm-2 control-label">Merk</label>
                                 <div class="col-sm-10" id="merk">
-                                    <select  class="form-control selectpicker" data-live-search="true" name="merk">
-                                        <option value="">-----Pilih merk------</option>
-                                        {% for data in merk_id %}
+                                    <select  class="form-control selectpicker" data-live-search="true" for="merk_id">
+                                        <option value="">--- Pilih Merk ---</option>
+                                        {% for data in daftar_merk %}
                                         <option value="{{ data.id_merk }}">{{ data.nama_merk }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                             </div>
                             
+                            <!-- Jenis -->
                             <div class="form-group">
                                 <label for="jenis" class="col-sm-2 control-label">Jenis</label>
                                 <div class="col-sm-10" >
                                     <select class="form-control selectpicker" id="jenis" data-live-search="true" name="jenis">
-                                        <option value="">Option</option>
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                        <option value="4">Option 4</option>
-                                        <option value="5">Option 5</option>
+                                        <option value="">--- Pilih Jenis ---</option>
+                                        {% for data in daftar_jenis %}
+                                        <option value="{{ data.id_jenis }}">{{ data.nama_jenis }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
                             
+                            <!-- Tipe -->
                             <div class="form-group">
                                 <label for="tipe" class="col-sm-2 control-label">Tipe</label>
                                 <div class="col-sm-10" >
-                                    <select class="form-control selectpicker" id="tipe" data-live-search="true">
-                                        <option value="">Option</option>
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                        <option value="4">Option 4</option>
-                                        <option value="5">Option 5</option>
+                                    <select class="form-control selectpicker" id="tipe" data-live-search="true" name="tipe">
+                                        <option value="">--- Pilih Tipe ---</option>
+                                        {% for data in daftar_tipe %}
+                                        <option value="{{ data.id_type }}">{{ data.nama_type }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
                             
+                            <!-- Gambar -->
                             <div class="form-group">
                                 <label for="gambar" class="col-sm-2 control-label">Gambar</label>
                                 <div class="col-sm-10">
-                                    <input type="file" id="gambar">
+                                    <input type="file" id="gambar" name="gambar">
                                 </div>
                             </div>
                             <br>
+                            <!-- Button -->
                             <div class="form-group pull-right">    
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                                 <a href="#" type="button" class="btn btn-success">Simpan dan Tambah</a>

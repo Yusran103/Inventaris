@@ -50,7 +50,7 @@ class barang_masuk(models.Model):
     jml_masuk = models.IntegerField()
     supplier = models.CharField(max_length=100)
     no_resi = models.TextField()
-    foto_masuk = models.TextField() 
+    foto_masuk = models.FileField(upload_to='media/')
 
     jenis = models.ForeignKey(jenis_brg, on_delete=models.DO_NOTHING)
     merk = models.ForeignKey(merk_brg, on_delete=models.DO_NOTHING)
@@ -76,9 +76,9 @@ class barang_keluar(models.Model):
     kd_brg_keluar = models.CharField(max_length=10)
     nm_brg_keluar = models.CharField(max_length=100)
 
-    jenis = models.ForeignKey(jenis_brg, on_delete=models.DO_NOTHING)
-    merk = models.ForeignKey(merk_brg, on_delete=models.DO_NOTHING)
-    tipe = models.ForeignKey(type_brg, on_delete=models.DO_NOTHING)
+    jenis = models.CharField(max_length=20)
+    merk = models.CharField(max_length=20)
+    tipe = models.CharField(max_length=20)
 
     class Meta:
         db_table = "tb_barang_keluar"

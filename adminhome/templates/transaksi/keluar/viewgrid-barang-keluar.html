@@ -29,17 +29,17 @@
                     <center>
                         <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-lg justify-content-center">
-                                {% if daftar_merk.has_previous %}
+                                {% if daftar_barangkeluar.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="#" class="page-item">&lt;</a>
+                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">#</span></li>
-                                {% if daftar_merk.has_next %}
+                                {% if daftar_barangkeluar.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="#">&gt;</a>
-                                    <a class="page-link" href="#">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
@@ -101,17 +101,17 @@
                     <center>
                         <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-lg justify-content-center">
-                                {% if daftar_merk.has_previous %}
+                                {% if daftar_barangkeluar.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="#" class="page-item">&lt;</a>
+                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">#</span></li>
-                                {% if daftar_merk.has_next %}
+                                {% if daftar_barangkeluar.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="#">&gt;</a>
-                                    <a class="page-link" href="#">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>

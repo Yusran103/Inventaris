@@ -1,4 +1,4 @@
-from django.forms import Textarea, ModelForm, ModelChoiceField
+from django.forms import Textarea, ModelForm, NumberInput
 from django import forms
 from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer, barang_keluar
 
@@ -143,6 +143,147 @@ class BarangkeluarForm(forms.Form):
         required=True
     )
 
+    nm_brg_keluar = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Nama Barang'
+            }
+        ),
+        required=True
+    )
+
+    kd_brg_keluar = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Kode Barang'
+            }
+        ),
+        required=True
+    )
+
+    tgl_keluar = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control pull-right',
+                'placeholder':'Tanggal Keluar',
+                'data-date-format':"dd/mm/yyyy"
+            }
+        ),
+        required=True
+    )
+
+    sn_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Serial Number Barang'
+            }
+        ),
+        required=True
+    )
+
+    jml_keluar = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Jumlah Barang'
+            }
+        ),
+        required=True
+    )
+
+    harga_satuan = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Harga Satuan'
+            }
+        ),
+        required=True
+    )
+
+    total_bayar = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Total Bayar'
+            }
+        ),
+        required=True
+    )
+
+    Customer = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Customer'
+            }
+        ),
+        required=True
+    )
+
+    alamat_customer = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Alamat Customer'
+            }
+        ),
+        required=True
+    )
+
+    no_resi = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Resi'
+            }
+        ),
+        required=True
+    )
+
+    merk_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Merk'
+            }
+        ),
+        required=True
+    )
+
+    jenis_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Jenis'
+            }
+        ),
+        required=True
+    )
+
+    tipe_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Tipe'
+            }
+        ),
+        required=True
+    )
+
+    foto_keluar = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Foto'
+            }
+        ),
+        required=True
+    )
+
     class Meta:
         model = barang_keluar
-        fields = ['no_bukti']
+        fields = ['no_bukti','nm_brg_keluar','kd_brg_keluar','tgl_keluar','sn_barang','jml_keluar','harga_satuan','total_bayar','Customer','alamat_customer','no_resi','merk_id','jenis_id','tipe_id','foto_keluar']

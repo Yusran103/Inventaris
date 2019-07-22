@@ -24,8 +24,8 @@
                                         <button id="search_submit_merk" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
                                     </span>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                         <div class="pull-right col-md-4">
                             <a class="btn btn-primary pull-right" href="/inventaris/masterdata/merk/tambah"><i
                                 class="fa fa-plus"></i> Tambah</a>
@@ -74,20 +74,20 @@
                                                 class="fa fa-edit"></i></a>
                                                 <a href="/inventaris/masterdata/merk/delete/{{ merk.id_merk }}" class="btn btn-danger confirm-delete"><i
                                                     class="fa fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                        {% else %}
-                                        <tr>
-                                            <td colspan="3"><center>Tidak ada data merk saat ini...</center></td>
-                                        </tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            {% else %}
+                                            <tr>
+                                                <td colspan="3"><center>Tidak ada data merk saat ini...</center></td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <!-- end konten -->
-                        
+                            <!-- end konten -->
+                            
                             <!-- pagination bawah -->
                             <center>
                                 <nav aria-label="Page navigation example">

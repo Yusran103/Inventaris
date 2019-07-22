@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer , barang_keluar
+from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer , barang_keluar, barang_masuk
 from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform, BarangkeluarForm
 from django.core.paginator import Paginator
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 # -----------+
 # LOGIN      |
@@ -72,14 +74,19 @@ def editbarangkeluar(request):
     return render(request, 'transaksi/keluar/edit-barang-keluar.html')
 
 def addbarangkeluar(request):
-    merk_id = merk_brg.objects.all()
+    daftar_merk = merk_brg.objects.all()
+    daftar_tipe = type_brg.objects.all()
+    daftar_jenis = jenis_brg.objects.all()
+    daftar_customer = customer.objects.all()
+    daftar_barangmasuk = barang_masuk.objects.all()
+
     if request.method == 'POST':
         form_data = request.POST
         form = BarangkeluarForm(form_data)
         if form.is_valid():
             Barangkeluar = barang_keluar(
                 no_bukti=request.POST['no_bukti'],
-                nm_brg_keluar=request.POST['nm_brg_keluar'],
+                nm_brg_keluar=form.cleaned_data['value'],
                 kd_brg_keluar=request.POST['kd_brg_keluar'],
                 tgl_keluar=request.POST['tgl_keluar'],
                 jml_keluar=request.POST['jml_keluar'],
@@ -88,16 +95,16 @@ def addbarangkeluar(request):
                 Costumer=request.POST['Customer'],
                 alamat_customer=request.POST['alamat_customer'],
                 no_resi=request.POST['no_resi'],
-                merk_id=merk_brg.objects.get(nama_merk = nama_merk),
-                jenis_id=request.POST['jenis_id'],
-                tipe_id=request.POST['tipe_id'],
-                foto_keluar=request.POST['foto_keluar']
+                merk_id=form.cleaned_data['value'],
+                jenis_id=form.cleaned_data['value'],
+                tipe_id=form.cleaned_data['value'],
+                foto_keluar=request.FILES['foto_keluar'],
             )
             Barangkeluar.save()
             return redirect('/inventaris/transaksi/barangkeluar')
     else:
         form = BarangkeluarForm()
-    return render(request, 'transaksi/keluar/add-barang-keluar.html', {'form':form}, {'merk_id':merk_id})
+    return render(request, 'transaksi/keluar/add-barang-keluar.html', {'form':form, 'daftar_merk':daftar_merk, 'daftar_tipe':daftar_tipe, 'daftar_jenis':daftar_jenis, 'daftar_customer':daftar_customer, 'daftar_barangmasuk':daftar_barangmasuk})
 
 # -------------+
 # LAPORAN      |
@@ -234,6 +241,8 @@ def deletejenis(request,pk):
     jenis.delete()
     return redirect('/inventaris/masterdata/jenis')
 
+
+# Supplier
 def viewsupplier(request):
     daftar_supplier = supplier.objects.all()
     pagination = Paginator(daftar_supplier,5)
@@ -278,6 +287,7 @@ def deletesupplier(request,pk):
     Supplier.delete()
     return redirect('/inventaris/masterdata/supplier')
 
+# customer
 def viewcustomer(request):
     daftar_customer = customer.objects.all()
     pagination = Paginator(daftar_customer,5)
