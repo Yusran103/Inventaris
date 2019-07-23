@@ -1,7 +1,7 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
 {% block extrastyle %}
-
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 {% endblock%}
 
 {% block page_content %}
@@ -56,7 +56,7 @@
                         <!-- konten -->
                         <div class="row">
                             <div class="col-sm-12">
-                                <table id="data" class="table table-bordered table-striped table-responsive no-padding">
+                                <table id="data" class="table table-bordered table-striped table-responsive no-padding" id="myTable">
                                     <thead>
                                         <tr>
                                             <th width="50px">No</th>
@@ -74,20 +74,20 @@
                                                 class="fa fa-edit"></i></a>
                                                 <a href="/inventaris/masterdata/merk/delete/{{ merk.id_merk }}" class="btn btn-danger confirm-delete"><i
                                                     class="fa fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                        {% else %}
-                                        <tr>
-                                            <td colspan="3"><center>Tidak ada data merk saat ini...</center></td>
-                                        </tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            {% else %}
+                                            <tr>
+                                                <td colspan="3"><center>Tidak ada data merk saat ini...</center></td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <!-- end konten -->
-                        
+                            <!-- end konten -->
+                            
                             <!-- pagination bawah -->
                             <center>
                                 <nav aria-label="Page navigation example">
@@ -117,9 +117,15 @@
         {% endblock %}
         {% block extrajs %}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+        <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
         <script>
             $('.confirm-delete').on('click', function(e) {
                 return confirm('Apakah anda yakin ingin menghapus data tersebut?')
             })
+        </script>
+        <script>
+            $(document).ready( function () {
+                $('#myTable').DataTable();
+            } );
         </script>
         {% endblock %}

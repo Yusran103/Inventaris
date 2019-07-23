@@ -1,6 +1,7 @@
-from django.forms import Textarea, ModelForm 
+from django.forms.models import ModelMultipleChoiceField
+from django.forms import Textarea, ModelForm
 from django import forms
-from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer
+from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk
 
 # -------------+
 # FORM MERK    |
@@ -16,7 +17,7 @@ class Merkform(ModelForm):
             required=True
         )
     class Meta:
-        model = merk_brg
+        model = Merk_brg
         fields = ['nama_merk']
 
 # -------------+
@@ -33,16 +34,16 @@ class Jenisform(ModelForm):
             required=True
         )
     class Meta:
-        model = jenis_brg
+        model = Jenis_brg
         fields = ['nama_jenis']
 
 
 # -------------+
-# TIPE MERK    |
+# TIPE FORM    |
 # -------------+
 
-class Typeform(ModelForm):
-    nama_type = forms.CharField(
+class Tipeform(ModelForm):
+    nama_tipe = forms.CharField(
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
@@ -52,8 +53,8 @@ class Typeform(ModelForm):
             required=True
         )
     class Meta:
-        model = type_brg
-        fields = ['nama_type']
+        model = Tipe_brg
+        fields = ['nama_tipe']
 
 # ---------------+
 # FORM SUPPLIER  |
@@ -89,7 +90,7 @@ class Supplierform(ModelForm):
         )
 
     class Meta:
-        model = supplier
+        model = Supplier
         fields = ['nama_supplier','alamat_supplier','notlp_supplier']
 
 # ---------------+
@@ -126,5 +127,100 @@ class Customerform(ModelForm):
         )
 
     class Meta:
-        model = customer
+        model = Customer
         fields = ['nama_customer','alamat_customer','notlp_customer']
+
+# ------------+
+# BRG MSK FORM|
+# ------------+
+
+class Barang_masuk_form(ModelForm):
+    kd_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan Kode Barang'
+                }
+            ),
+        )
+    nm_barang = forms.CharField(
+        widget= forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan Nama Barang'
+                }
+            ),
+        )
+    sn_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan Serial Number Barang'
+                }
+            ),
+        )
+    tgl_masuk = forms.DateField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan Tanggal masuk Barang',
+                'id':'datepicker'
+                }
+            ),
+        )
+    jml_masuk = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'type' : 'number',
+                'min' : '1',
+                'placeholder':'Isikan Jumlah Barang'
+                }
+            ),
+        )
+    supplier_id = forms.ModelChoiceField(
+        queryset = Supplier.objects.all(),
+        widget = forms.ChoiceField(
+        )
+        )
+    # no_resi = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class':'form-control',
+    #             'placeholder':'Isikan nomor resi'
+    #             }
+    #         ),
+    #     )
+    # foto_masuk = forms.FileField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class':'form-control',
+    #             'placeholder':'tambahkan Foto'
+    #             }
+    #         ),
+    #     )
+    # jenis_id = forms.ModelMultipleChoiceField(
+    #     queryset = Jenis_brg.objects.all()
+    #     )
+    # merk_id = forms.ModelMultipleChoiceField(
+    #     queryset = Merk_brg.objects.all()
+    #     )
+    # tipe_id = forms.ModelMultipleChoiceField(
+    #     queryset = Tipe_brg.objects.all()
+    #     )
+    
+    class Meta:
+        model = Barang_masuk
+        fields = [
+            'kd_barang',
+            'nm_barang',
+            'sn_barang',
+            'tgl_masuk',
+            'jml_masuk',
+            'supplier_id',
+            'no_resi',
+            'foto_masuk',
+            'jenis_id',
+            'merk_id',
+            'tipe_id'
+            ]
