@@ -45,7 +45,12 @@ def barangmasuk(request):
 
 
 def barangmasukgrid(request):
-    return render(request, 'transaksi/masuk/viewgrid-barang-masuk.html')
+    daftar_barang = Barang_masuk.objects.all()
+    pagination = Paginator(daftar_barang,10)
+
+    page = request.GET.get('page','')
+    barang_masuk_pg = pagination.get_page(page)
+    return render(request, 'transaksi/masuk/viewgrid-barang-masuk.html', {'daftar_barang_masuk': barang_masuk_pg})
 
 
 def editbarangmasuk(request):
@@ -53,14 +58,12 @@ def editbarangmasuk(request):
 
 
 def tambahbarangmasuk(request):
-    print(request)
     jenis = Jenis_brg.objects.all()
     merk = Merk_brg.objects.all()
     tipe = Tipe_brg.objects.all()
     supplier = Supplier.objects.all()
 
     if request.method == 'POST':
-        print(request.POST)
         form = Barang_masuk_form(request.POST , request.FILES)
         if form.is_valid():
             form = Barang_masuk(
