@@ -179,35 +179,27 @@ class Barang_masuk_form(ModelForm):
             ),
         )
     supplier_id = forms.ModelChoiceField(
-        queryset = Supplier.objects.all(),
-        widget = forms.ChoiceField(
+        queryset = Supplier.objects.all()
         )
+    no_resi = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan nomor resi'
+                }
+            ),
         )
-    # no_resi = forms.CharField(
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'class':'form-control',
-    #             'placeholder':'Isikan nomor resi'
-    #             }
-    #         ),
-    #     )
     # foto_masuk = forms.FileField(
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'class':'form-control',
-    #             'placeholder':'tambahkan Foto'
-    #             }
-    #         ),
     #     )
-    # jenis_id = forms.ModelMultipleChoiceField(
-    #     queryset = Jenis_brg.objects.all()
-    #     )
-    # merk_id = forms.ModelMultipleChoiceField(
-    #     queryset = Merk_brg.objects.all()
-    #     )
-    # tipe_id = forms.ModelMultipleChoiceField(
-    #     queryset = Tipe_brg.objects.all()
-    #     )
+    jenis_id = forms.ModelChoiceField(
+        queryset = Jenis_brg.objects.all()
+        )
+    merk_id = forms.ModelChoiceField(
+        queryset = Merk_brg.objects.all()
+        )
+    tipe_id = forms.ModelChoiceField(
+        queryset = Tipe_brg.objects.all()
+        )
     
     class Meta:
         model = Barang_masuk

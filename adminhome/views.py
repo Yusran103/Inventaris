@@ -37,7 +37,7 @@ def stok(request):
 
 def barangmasuk(request):
     daftar_barang = Barang_masuk.objects.all()
-    pagination = Paginator(daftar_barang,5)
+    pagination = Paginator(daftar_barang,10)
 
     page = request.GET.get('page','')
     barang_masuk_pg = pagination.get_page(page)
@@ -60,10 +60,10 @@ def tambahbarangmasuk(request):
     supplier = Supplier.objects.all()
 
     if request.method == 'POST':
-        print(Supplier.objects.get(pk=request.POST.get('supplier_id')))
+        print(request.POST)
         form = Barang_masuk_form(request.POST , request.FILES)
         if form.is_valid():
-            barang_masuk = Barang_masuk(
+            form = Barang_masuk(
                 kd_barang=request.POST['kd_barang'],
                 nm_barang=request.POST['nm_barang'],
                 sn_barang=request.POST['sn_barang'],
@@ -71,12 +71,12 @@ def tambahbarangmasuk(request):
                 supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
                 jml_masuk=request.POST['jml_masuk'],
                 no_resi=request.POST['no_resi'],
-                foto_masuk=request.POST['foto_masuk'],
+                foto_masuk=request.FILES['foto_masuk'],
                 jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
                 merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
                 tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
             )
-            barang_masuk.save()
+            form.save()
             return redirect('/inventaris/barangmasuk/list')
     else:
         form = Barang_masuk_form()
@@ -157,7 +157,7 @@ def changepassword(request):
 
 def viewmerk(request):
     daftar_merk = Merk_brg.objects.all()
-    pagination = Paginator(daftar_merk,5)
+    pagination = Paginator(daftar_merk,10)
 
     page = request.GET.get('page','')
     merk_pg = pagination.get_page(page)
@@ -207,7 +207,7 @@ def searchmerk(request):
     # Your code
 def viewjenis(request):
     daftar_jenis = Jenis_brg.objects.all()
-    pagination = Paginator(daftar_jenis,5)
+    pagination = Paginator(daftar_jenis,10)
 
     page = request.GET.get('page','')
     jenis_pg = pagination.get_page(page)
@@ -247,7 +247,7 @@ def deletejenis(request,pk):
 
 def viewsupplier(request):
     daftar_supplier = Supplier.objects.all()
-    pagination = Paginator(daftar_supplier,5)
+    pagination = Paginator(daftar_supplier,10)
 
     page = request.GET.get('page','')
     supplier_pg = pagination.get_page(page)
@@ -291,7 +291,7 @@ def deletesupplier(request,pk):
 
 def viewcustomer(request):
     daftar_customer = Customer.objects.all()
-    pagination = Paginator(daftar_customer,5)
+    pagination = Paginator(daftar_customer,10)
     page = request.GET.get('page','')
     customer_pg = pagination.get_page(page)
     return render(request, 'masterdata/customer/customer.html',{'daftar_customer': customer_pg})
@@ -334,7 +334,7 @@ def deletecustomer(request,pk):
 
 def viewtipe(request):
     daftar_tipe = Tipe_brg.objects.all()
-    pagination = Paginator(daftar_tipe,5)
+    pagination = Paginator(daftar_tipe,10)
 
     page = request.GET.get('page','')
     tipe_pg = pagination.get_page(page)

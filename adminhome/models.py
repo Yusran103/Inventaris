@@ -66,7 +66,7 @@ class Barang_masuk(models.Model):
     tgl_masuk = models.DateField()
     jml_masuk = models.IntegerField()
     no_resi = models.CharField(max_length=100,blank=True)
-    foto_masuk = models.FileField(upload_to='foto/',blank=True) 
+    foto_masuk = models.ImageField(upload_to='foto/',blank=True) 
     
     supplier_id = models.ForeignKey(Supplier,on_delete=models.CASCADE,db_column='supplier_id')
     jenis_id = models.ForeignKey(Jenis_brg,on_delete=models.CASCADE,db_column='jenis_id')
@@ -92,7 +92,7 @@ class Barang_keluar(models.Model):
     no_resi = models.CharField(max_length=20)
     harga_satuan = models.IntegerField()
     total_bayar = models.IntegerField()
-    foto_keluar = models.FileField(upload_to='foto/')
+    foto_keluar = models.ImageField(upload_to='foto/')
     kd_brg_keluar = models.CharField(max_length=10)
     nm_brg_keluar = models.CharField(max_length=100)
 

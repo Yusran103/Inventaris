@@ -88,5 +88,6 @@ urlpatterns = [
     path('inventaris/masterdata/tipe/edit/<int:pk>', adminhome.edittipe,name='tipe_edit'),
     path('inventaris/masterdata/tipe/delete/<int:pk>', adminhome.deletetipe,name='tipe_delete'),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
