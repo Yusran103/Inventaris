@@ -53,8 +53,18 @@ def barangmasukgrid(request):
     return render(request, 'transaksi/masuk/viewgrid-barang-masuk.html', {'daftar_barang_masuk': barang_masuk_pg})
 
 
-def editbarangmasuk(request):
-    return render(request, 'transaksi/masuk/edit-barang-masuk.html')
+def editbarangmasuk(request,pk):
+    barang_masuk = Barang_masuk.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Merkform(request.POST, instance=barang_masuk)
+        if form.is_valid():
+            barang_masuk = form.save(commit=False)
+            nama_merk = request.POST['nama_merk']
+            barang_masuk.save()
+            return redirect('/inventaris/masterdata/merk', pk=barang_masuk.pk)
+    else:
+        form = Merkform(instance=barang_masuk)
+    return render(request, 'transaksi/masuk/edit-barang-masuk.html', {'form': form, 'barang_masuk' : barang_masuk})
 
 
 def tambahbarangmasuk(request):

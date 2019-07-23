@@ -70,7 +70,7 @@
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <div class="container">
                                             {% if barang_masuk.foto_masuk %}
-                                            <img src="{{barang_masuk.foto_masuk.url}}" class="img-responsive" width="120" height="120" />
+                                            <img src="{{barang_masuk.foto_masuk.url}}" class="img-responsive" width="100" height="100" />
                                             {% else %}
                                             <span class="text-muted" > Tanpa Foto </span>
                                             {% endif %}
@@ -93,7 +93,12 @@
                                             <h5><strong>No Resi :</strong> {{barang_masuk.no_resi}}</h5>
                                         </div>
                                     </div>
+                                    <div class="col-sm-2 pull-right">
+                                        <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" class="btn btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
+                                    </div>
                                 </div>
+                                <br/>
                             </div>
                             {% endfor %}
                             {% else %}

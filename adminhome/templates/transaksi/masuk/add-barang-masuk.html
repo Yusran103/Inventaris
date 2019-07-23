@@ -58,12 +58,6 @@
                         <div class="form-group">
                             <label for="supplier" class="col-sm-2 control-label">Supplier : </label>
                             <div class="col-sm-10">
-                                <!-- <select class="form-control selectpicker" data-live-search="true" name="supplier_id" id="supplier_id" required>
-                                    <option value=""> Pilih Supplier </option>
-                                    {% for supplier in daftar_supplier %}
-                                    <option value="{{ supplier.id_supplier }}">{{ supplier.nama_supplier }} </option>
-                                    {% endfor %}
-                                </select> -->
                                 {{form.supplier_id}}
                             </div>
                         </div>
@@ -76,36 +70,18 @@
                         <div class="form-group">
                             <label for="merk" class="col-sm-2 control-label">Merk : </label>
                             <div class="col-sm-10" id="merk">
-                                <!-- <select class="form-control selectpicker" data-live-search="true" name="merk_id" id="merk_id" required>
-                                    <option value=""> Pilih Merk </option>
-                                    {% for merk in daftar_merk %}
-                                    <option value="{{ merk.id_merk }}">{{ merk.nama_merk }} </option>
-                                    {% endfor %}
-                                </select> -->
                                 {{form.merk_id}}
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="jenis" class="col-sm-2 control-label">Jenis : </label>
                             <div class="col-sm-10" id="jenis">
-                                <!-- <select class="form-control selectpicker" data-live-search="true" name="jenis_id" id="jenis_id" required>
-                                    <option value=""> Pilih Jenis </option>
-                                    {% for jenis in daftar_jenis %}
-                                    <option value="{{ jenis.id_jenis }}">{{ jenis.nama_jenis }} </option>
-                                    {% endfor %}
-                                </select> -->
                                 {{form.jenis_id}}
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="jenis" class="col-sm-2 control-label">Tipe : </label>
                             <div class="col-sm-10" id="tipe">
-                                <!-- <select class="form-control selectpicker" data-live-search="true" name="tipe_id" id="tipe_id" required>
-                                    <option value=""> Pilih Tipe </option>
-                                    {% for tipe in daftar_tipe %}
-                                    <option value="{{ tipe.id_tipe }}">{{ tipe.nama_tipe }} </option>
-                                    {% endfor %}
-                                </select> -->
                                 {{form.tipe_id}}
                             </div>
                         </div>
