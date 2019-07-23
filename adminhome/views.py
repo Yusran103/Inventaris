@@ -1,9 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404 ,redirect
 from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer , barang_keluar, barang_masuk
 from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform, BarangkeluarForm
 from django.core.paginator import Paginator
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 
 # -----------+
 # LOGIN      |
@@ -74,6 +72,7 @@ def editbarangkeluar(request):
     return render(request, 'transaksi/keluar/edit-barang-keluar.html')
 
 def addbarangkeluar(request):
+    print(request.POST.get('customer'))
     daftar_merk = merk_brg.objects.all()
     daftar_tipe = type_brg.objects.all()
     daftar_jenis = jenis_brg.objects.all()
@@ -81,30 +80,36 @@ def addbarangkeluar(request):
     daftar_barangmasuk = barang_masuk.objects.all()
 
     if request.method == 'POST':
-        form_data = request.POST
-        form = BarangkeluarForm(form_data)
+        form = BarangkeluarForm(request.POST, request.FILES)
         if form.is_valid():
             Barangkeluar = barang_keluar(
                 no_bukti=request.POST['no_bukti'],
-                nm_brg_keluar=form.cleaned_data['value'],
+                nama_barang=barang_masuk.objects.get(pk=request.POST.get('nama_barang')),
                 kd_brg_keluar=request.POST['kd_brg_keluar'],
                 tgl_keluar=request.POST['tgl_keluar'],
                 jml_keluar=request.POST['jml_keluar'],
                 harga_satuan=request.POST['harga_satuan'],
                 total_bayar=request.POST['total_bayar'],
-                Costumer=request.POST['Customer'],
+                costumer_id=customer.objects.get(pk=request.POST.get('customer_id')),
                 alamat_customer=request.POST['alamat_customer'],
                 no_resi=request.POST['no_resi'],
-                merk_id=form.cleaned_data['value'],
-                jenis_id=form.cleaned_data['value'],
-                tipe_id=form.cleaned_data['value'],
-                foto_keluar=request.FILES['foto_keluar'],
+                merk_id=merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                jenis_id=jenis_brg.objects.get(pk=request.POST.get('merk_id')),
+                tipe_id=type_brg.objects.get(pk=request.POST.get('tipe_id')),
+                foto_keluar=request.FILES['foto_keluar']
             )
             Barangkeluar.save()
             return redirect('/inventaris/transaksi/barangkeluar')
     else:
         form = BarangkeluarForm()
-    return render(request, 'transaksi/keluar/add-barang-keluar.html', {'form':form, 'daftar_merk':daftar_merk, 'daftar_tipe':daftar_tipe, 'daftar_jenis':daftar_jenis, 'daftar_customer':daftar_customer, 'daftar_barangmasuk':daftar_barangmasuk})
+    return render(request, 'transaksi/keluar/add-barang-keluar.html', {
+        'form':form, 
+        'daftar_merk':daftar_merk, 
+        'daftar_tipe':daftar_tipe, 
+        'daftar_jenis':daftar_jenis, 
+        'daftar_customer':daftar_customer, 
+        'daftar_barangmasuk':daftar_barangmasuk
+        })
 
 # -------------+
 # LAPORAN      |

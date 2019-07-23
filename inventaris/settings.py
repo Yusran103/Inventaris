@@ -79,7 +79,7 @@ DATABASES = {
         # MYSQL
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # nama database
-        'NAME': 'inventaris',
+        'NAME': 'inventariss',
         'USER': 'postgres',
         'PASSWORD': 'ruindigosold',
         'HOST':'localhost',
@@ -130,5 +130,9 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/foto/'
+
+MEDIA_ROOT = (
+    os.path.join(BASE_DIR, "foto")
+)
+

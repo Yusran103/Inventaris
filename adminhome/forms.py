@@ -1,6 +1,7 @@
-from django.forms import Textarea, ModelForm, NumberInput
+from django.forms.models import ModelMultipleChoiceField
+from django.forms import Textarea, ModelForm
 from django import forms
-from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer, barang_keluar
+from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer, barang_keluar, barang_masuk
 
 # -------------+
 # FORM MERK    |
@@ -132,7 +133,7 @@ class Customerform(ModelForm):
 # --------------------+
 # FORM BARANG KELUAR  |
 # -------------------+
-class BarangkeluarForm(forms.Form):
+class BarangkeluarForm(ModelForm):
     no_bukti = forms.CharField(
         widget=forms.TextInput(
             attrs={
@@ -143,14 +144,8 @@ class BarangkeluarForm(forms.Form):
         required=True
     )
 
-    nm_brg_keluar = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Nama Barang'
-            }
-        ),
-        required=True
+    nama_barang = forms.ModelChoiceField(
+        queryset = barang_masuk.objects.all(),
     )
 
     kd_brg_keluar = forms.CharField(
@@ -214,21 +209,16 @@ class BarangkeluarForm(forms.Form):
         required=True
     )
 
-    Customer = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Customer'
-            }
-        ),
-        required=True
+    customer_id = forms.ModelChoiceField(
+        queryset = customer.objects.all(),
     )
 
     alamat_customer = forms.CharField(
-        widget=forms.TextInput(
+        widget=forms.Textarea(
             attrs={
                 'class':'form-control',
-                'placeholder':'Alamat Customer'
+                'placeholder':'Alamat Customer',
+                'rows':'3'
             }
         ),
         required=True
@@ -244,46 +234,28 @@ class BarangkeluarForm(forms.Form):
         required=True
     )
 
-    merk_id = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Merk'
-            }
-        ),
-        required=True
+    merk_id = forms.ModelChoiceField(
+        queryset = merk_brg.objects.all(),
     )
 
-    jenis_id = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Jenis'
-            }
-        ),
-        required=True
+    jenis_id = forms.ModelChoiceField(
+        queryset = jenis_brg.objects.all(),
     )
 
-    tipe_id = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Tipe'
-            }
-        ),
-        required=True
+    tipe_id = forms.ModelChoiceField(
+        queryset = type_brg.objects.all(),
     )
 
-    foto_keluar = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Foto'
-            }
-        ),
-        required=True
-    )
+    # foto_keluar = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class':'form-control',
+    #             'placeholder':'Foto'
+    #         }
+    #     ),
+    #     required=True
+    # )
 
     class Meta:
         model = barang_keluar
-        fields = ['no_bukti','nm_brg_keluar','kd_brg_keluar','tgl_keluar','sn_barang','jml_keluar','harga_satuan','total_bayar','Customer','alamat_customer','no_resi','merk_id','jenis_id','tipe_id','foto_keluar']
+        fields = "__all__"
