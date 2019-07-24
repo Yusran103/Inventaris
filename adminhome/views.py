@@ -54,17 +54,27 @@ def barangmasukgrid(request):
 
 
 def editbarangmasuk(request,pk):
-    barang_masuk = Barang_masuk.objects.get(pk=pk)
+    masuk = Barang_masuk.objects.get(pk=pk)
     if request.method == "POST":
-        form = Merkform(request.POST, instance=barang_masuk)
+        form = Barang_masuk_form(request.POST,request.FILES, instance=masuk)
         if form.is_valid():
             barang_masuk = form.save(commit=False)
-            nama_merk = request.POST['nama_merk']
+            kd_barang=request.POST['kd_barang'],
+            nm_barang=request.POST['nm_barang'],
+            sn_barang=request.POST['sn_barang'],
+            tgl_masuk=request.POST['tgl_masuk'],
+            supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
+            jml_masuk=request.POST['jml_masuk'],
+            no_resi=request.POST['no_resi'],
+            foto_masuk=request.FILES['foto_masuk'],
+            jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+            merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+            tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
             barang_masuk.save()
-            return redirect('/inventaris/masterdata/merk', pk=barang_masuk.pk)
+            return redirect('/inventaris/barangmasuk', pk=masuk.pk)
     else:
-        form = Merkform(instance=barang_masuk)
-    return render(request, 'transaksi/masuk/edit-barang-masuk.html', {'form': form, 'barang_masuk' : barang_masuk})
+        form = Barang_masuk_form(instance=masuk)
+    return render(request, 'transaksi/masuk/edit-barang-masuk.html', {'form': form, 'barang_masuk' : masuk})
 
 
 def tambahbarangmasuk(request):
@@ -101,6 +111,11 @@ def tambahbarangmasuk(request):
         'daftar_tipe':tipe,
         'daftar_supplier':supplier
         })
+
+def deletebarangmasuk(request,pk):
+    barang_masuk = Barang_masuk.objects.get(pk=pk)
+    barang_masuk.delete()
+    return redirect('/inventaris/barangmasuk')
 
 # -------------+
 # BARANG KELUAR|

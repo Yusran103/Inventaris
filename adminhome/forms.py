@@ -162,7 +162,7 @@ class Barang_masuk_form(ModelForm):
     tgl_masuk = forms.DateField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
+                'class':'form-control tgl_masuk',
                 'placeholder':'Isikan Tanggal masuk Barang',
                 'id':'datepicker'
                 }

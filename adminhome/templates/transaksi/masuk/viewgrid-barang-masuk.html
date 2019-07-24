@@ -102,7 +102,11 @@
                             </div>
                             {% endfor %}
                             {% else %}
-                            <span><center>Tidak ada data barang masuk saat ini...</center></span>
+                            <div class="box box-warning">
+                                <br/>  
+                                <span><center>Tidak ada data barang masuk saat ini...</center></span>
+                                <br/>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
@@ -134,5 +138,10 @@
 {% endblock %}
 
 {% block extrajs %}
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+    $('.confirm-delete').on('click', function(e) {
+        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+    })
+</script>
 {% endblock %}
