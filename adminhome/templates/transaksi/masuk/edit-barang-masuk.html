@@ -88,6 +88,7 @@
                     <div class="form-group">
                         <label for="gambar" class="col-sm-2 control-label">Gambar : </label>
                         <div class="col-sm-8">
+                            
                             {{form.foto_masuk}}
                         </div>
                     </div>
@@ -103,7 +104,11 @@
                     <br/>
                     <br/>
                     <h4>Foto:</h4>
+                    {% if barang_masuk.foto_masuk %}
                     <img src="{{barang_masuk.foto_masuk.url}}" class="img-responsive" width="150" height="150" />
+                    {% else %}
+                    <span class="text-muted" ><b> Tanpa Foto </b></span>
+                    {% endif %}
                 </div>
             </form>
         </div>
