@@ -119,7 +119,7 @@ class User(models.Model):
     username = models.CharField(max_length=8)
     password = models.CharField(max_length=8)
     level = models.CharField(
-        max_length=9, choices=USER_CHOICES, default='Admin')
+        max_length=10, choices=USER_CHOICES, default='Admin')
 
     class Meta:
         db_table = "tb_user"
