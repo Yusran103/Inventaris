@@ -2,10 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer 
-from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform
+from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer, user 
+from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform, Userform
 from django.core.paginator import Paginator
-from adminhome.models import user
 
 # -----------+
 # LOGIN      |
@@ -14,25 +13,22 @@ from adminhome.models import user
 def index(request):
     return render(request, 'login.html')
 
-
-
-def auth_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
+def login_view(request):
+    if request.POST:
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
             if user.is_active:
-                login(request,user)
-                return HttpResponseRedirect(reverse('/inventaris/'))
-            else:
-                return HttpResponse("Your account was inactive.")
+               return redirect('/inventaris/')
+            else:   
+                messages.add_message(request, messages.INFO, 'User belum terverifikasi')
         else:
-            print("Someone tried to login and failed.")
-            print("They used username: {} and password: {}".format(username,password))
-            return HttpResponse("salah")
-    else:
-        return render(request, 'login.html', {})
+            messages.add_message(request, messages.INFO, 'Username atau password Anda salah')
+
+    return render(request,'login.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('/login/')
 
 # -----------+
 # DASHBOARD  |
@@ -114,18 +110,51 @@ def laporanstok(request):
 # -------------+
 # USERS        |
 # -------------+
-
-
 def viewuser(request):
-    return render(request, 'users/view-user.html')
-
+    daftar_user = user.objects.all()
+    pagination = Paginator(daftar_user,5)
+    page = request.GET.get('page','')
+    user_pg = pagination.get_page(page)
+    return render(request, 'users/view-user.html',{'daftar_user': user_pg})
 
 def adduser(request):
-    return render(request, 'users/add-user.html')
+    if request.method == 'POST':
+        form_data = request.POST
+        form = Userform(form_data)
+        if form.is_valid():
+            User = user(
+                    nm_lengkap = request.POST['nm_lengkap'],
+                    username = request.POST['username'],
+                    level = request.POST['level'],
+                    password = request.POST['password'],
+                )
+            User.save()
+            return redirect('/inventaris/users')
+    else:
+        form = Userform()
 
+    return render(request, 'users/add-user.html', {'form':form})
 
-def edituser(request):
-    return render(request, 'users/edit-user.html')
+def edituser(request,pk):
+    User = user.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Userform(request.POST, instance=User)
+        if form.is_valid():
+            User = form.save(commit=False)
+            nm_lengkap = request.POST['nm_lengkap']
+            username = request.POST['username']
+            level = request.POST['level']
+            password = request.POST['password']
+            User.save()
+            return redirect('/inventaris/users', pk=User.pk)
+    else:
+        form = Userform(instance=User)
+    return render(request, 'users/edit-user.html', {'form': form, 'user' : User})
+
+def deleteuser(request,pk):
+    User = user.objects.get(pk=pk)
+    User.delete()
+    return redirect('/inventaris/users')
 
 # ---------------+
 # CHANGE PASSWORD|
@@ -356,3 +385,5 @@ def deletetipe(request,pk):
     Tipe = type_brg.objects.get(pk=pk)
     Tipe.delete()
     return redirect('/inventaris/masterdata/tipe')
+
+

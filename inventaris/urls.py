@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView
+from django.conf.urls import url
 
 from adminhome import views as adminhome
 
@@ -24,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # LOGIN FROM
     path('', adminhome.index, name='login'),
-    path('inventaris/login/', adminhome.auth_login, name='login_auth'),
+    url(r'^login/', adminhome.login_view),
     # FORGET PASSWORD
     path('changepassword/', adminhome.changepassword, name='changepassword'),
     # ADMIN DASHBOARD
@@ -55,7 +56,9 @@ urlpatterns = [
     # USERS
     path('inventaris/users', adminhome.viewuser, name='user'),
     path('inventaris/users/tambah', adminhome.adduser, name='user_add'),
-    path('inventaris/users/edit', adminhome.edituser, name='user_edit'),
+    url(r'^addusers/', adminhome.adduser),
+    path('inventaris/users/edit/<int:pk>', adminhome.edituser, name='user_edit'),
+    path('inventaris/users/delete/<int:pk>', adminhome.deleteuser,name='user_delete'),
     
     # MASTERDATA
     # MERK

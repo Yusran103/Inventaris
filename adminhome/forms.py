@@ -1,6 +1,6 @@
 from django.forms import Textarea, ModelForm 
 from django import forms
-from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer
+from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer, user
 
 # -------------+
 # FORM MERK    |
@@ -9,11 +9,11 @@ class Merkform(ModelForm):
     nama_merk = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Nama Merk'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Nama Merk'
+            }
             ),
-            required=True
+        required=True
         )
     class Meta:
         model = merk_brg
@@ -26,11 +26,11 @@ class Jenisform(ModelForm):
     nama_jenis = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Nama Jenis'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Nama Jenis'
+            }
             ),
-            required=True
+        required=True
         )
     class Meta:
         model = jenis_brg
@@ -45,11 +45,11 @@ class Typeform(ModelForm):
     nama_type = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Nama Tipe'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Nama Tipe'
+            }
             ),
-            required=True
+        required=True
         )
     class Meta:
         model = type_brg
@@ -62,30 +62,30 @@ class Supplierform(ModelForm):
     nama_supplier = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Nama Supplier'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Nama Supplier'
+            }
             ),
-            required=True
+        required=True
         )
     alamat_supplier = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Alamat Supplier'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Alamat Supplier'
+            }
             ),
-            required=True
+        required=True
         )
 
     notlp_supplier = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Nomor Hp Supplier'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Nomor Hp Supplier'
+            }
             ),
-            required=True
+        required=True
         )
 
     class Meta:
@@ -99,32 +99,68 @@ class Customerform(ModelForm):
     nama_customer = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Nama Customer'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Nama Customer'
+            }
             ),
-            required=True
+        required=True
         )
     alamat_customer = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Alamat Customer'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Alamat Customer'
+            }
             ),
-            required=True
+        required=True
         )
 
     notlp_customer = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Nomor Hp Customer'
-                }
+            'class':'form-control',
+            'placeholder':'Isikan Nomor Hp Customer'
+            }
             ),
-            required=True
+        required=True
         )
 
     class Meta:
         model = customer
         fields = ['nama_customer','alamat_customer','notlp_customer']
+
+# ---------------+
+# FORM Add User  |
+# ---------------+
+
+class Userform(ModelForm):
+    class Meta:
+        model = user
+        fields = ['nm_lengkap', 'username', 'level', 'password']
+        labels = {
+            'nm_lengkap':"Nama",
+            'username':'Username',
+            'level':'Level',
+            'password':'Password',
+        }
+        error_messages = {
+            'nm_lengkap': {
+                'required': 'masukan nama'
+            },
+            'username' : {
+                'required': "Anda harus masukan username"
+            },
+            'level' : {
+                'required': "Anda harus memilih level"
+            },
+            'password':{
+                'required': "Masukan password"
+            }
+        }
+        widgets = {
+            'level':forms.Select (attrs={ 'class':'form-control' }),
+            'username':forms.TextInput (attrs={ 'class':'form-control' }),
+            'nm_lengkap':forms.TextInput (attrs={ 'class':'form-control' }),
+            'password': forms.PasswordInput(attrs={ 'class':'form-control' })
+
+        }
