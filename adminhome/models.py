@@ -66,7 +66,7 @@ class Barang_masuk(models.Model):
     tgl_masuk = models.DateField()
     jml_masuk = models.IntegerField()
     no_resi = models.CharField(max_length=100,blank=True)
-    foto_masuk = models.ImageField(upload_to='foto/',blank=True) 
+    foto_masuk = models.ImageField(upload_to='foto/',blank=True , null=True) 
     
     supplier_id = models.ForeignKey(Supplier,on_delete=models.CASCADE,db_column='supplier_id')
     jenis_id = models.ForeignKey(Jenis_brg,on_delete=models.CASCADE,db_column='jenis_id')
