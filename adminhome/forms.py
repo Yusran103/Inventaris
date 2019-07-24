@@ -1,4 +1,5 @@
 from django.forms.models import ModelMultipleChoiceField
+from hashid_field import HashidAutoField
 from django.forms import Textarea, ModelForm
 from django import forms
 from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Barangkeluar
@@ -154,7 +155,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Kode Barang',
-                'disabled':''
+                # 'disabled':''
             }
         ),
         required=True
@@ -177,7 +178,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Serial Number Barang',
-                'disabled':''
+                'disable/d':''
             }
         ),
         required=True
@@ -208,7 +209,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Total Bayar',
-                'disabled':''
+                # 'disabled':''
             }
         ),
         required=True
@@ -220,7 +221,7 @@ class BarangkeluarForm(ModelForm):
                 'class':'form-control',
                 'placeholder':'Alamat Customer',
                 'rows':'3',
-                'disabled':''
+                # 'disabled':''
             }
         ),
         required=True
@@ -231,27 +232,31 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'No. Resi',
-                'disabled':''
+                # 'disabled':''
             }
         ),
         required=True
     )
 
     customer_id = forms.ModelChoiceField(
-        queryset = Customer.objects.all(),
+        queryset = Customer.objects.all(),required=True
     )
 
     merk_id = forms.ModelChoiceField(
-        queryset = Merk_brg.objects.all(),
+        queryset = Merk_brg.objects.all(),required=True
     )
 
     jenis_id = forms.ModelChoiceField(
-        queryset = Jenis_brg.objects.all(),
+        queryset = Jenis_brg.objects.all(),required=True
     )
 
     tipe_id = forms.ModelChoiceField(
-        queryset = Tipe_brg.objects.all(),
+        queryset = Tipe_brg.objects.all(),required=True
     )
+
+    # foto_keluar = forms.FileField(
+    #     required=True
+    # )
 
     class Meta:
         model = Barangkeluar

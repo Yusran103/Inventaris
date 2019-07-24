@@ -1,4 +1,5 @@
 from django.db import models
+from hashid_field import HashidAutoField
 
 # Create your models here.
 
@@ -80,10 +81,14 @@ class Barang_masuk(models.Model):
     def __str__(self):
         return self.nm_barang
 
+    def delete(self, *args, **kwargs):
+        self.foto_masuk.delete()
+        super().delete(*args, **kwargs)
+
 # barang keluar
 class Barangkeluar(models.Model):
     """docstring for barang_keluar"""
-    id_keluar = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     nama_barang = models.ForeignKey(Barang_masuk,on_delete=models.CASCADE,db_column='nama_barang')
     tanggal = models.DateField()
     serialnumber = models.CharField(max_length=20)
@@ -99,13 +104,18 @@ class Barangkeluar(models.Model):
     jenis_id = models.ForeignKey(Jenis_brg,on_delete=models.CASCADE,db_column='jenis_id')
     merk_id = models.ForeignKey(Merk_brg,on_delete=models.CASCADE,db_column='merk_id')
     tipe_id = models.ForeignKey(Tipe_brg,on_delete=models.CASCADE,db_column='tipe_id')
-    foto_keluar = models.ImageField(upload_to='foto/',blank=True)
+    foto_keluar = models.ImageField(upload_to='foto/', blank=True, null=True)
 
     class Meta:
         db_table = "tb_barang_keluar"
 
     def __str__(self):
         return self.nama_barang
+
+    # agar file yang diupload bisa dihapus dr folder
+    def delete(self, *args, **kwargs):
+        self.foto_keluar.delete()
+        super().delete(*args, **kwargs)
 
 
 class User(models.Model):

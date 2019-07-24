@@ -76,14 +76,8 @@
                                     <td>{{ data.customer_id }}</td>
                                     <td>{{ data.no_resi }}</td>
                                     <td>
-                                        <!-- DELETE -->
-                                        <a class="btn btn-danger" type="submit">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                        <!-- EDIT -->
-                                        <a href="/inventaris/barangmasuk/edit" class="btn btn-info">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
+                                        <a href="/inventaris/barangkeluar/edit/{{ data.id }}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                        <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 {% endfor %}

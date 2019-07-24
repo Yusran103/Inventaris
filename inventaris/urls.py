@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from hashid_field import HashidAutoField
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -33,8 +34,8 @@ urlpatterns = [
     path('inventaris/barangmasuk',adminhome.barangmasukgrid, name='barangmasuk_grid'),
     path('inventaris/barangmasuk/list',adminhome.barangmasuk, name='barangmasuk_list'),
     path('inventaris/barangmasuk/tambah',adminhome.tambahbarangmasuk, name='barangmasuk_add'),
-    # path('inventaris/barangmasuk/edit/<id:pk>', adminhome.editbarangmasuk,name='barangmasuk_edit'),
-    # path('inventaris/barangmasuk/delete/<id:pk>', adminhome.editbarangmasuk,name='barangmasuk_delete'),
+    path('inventaris/barangmasuk/edit/<int:pk>', adminhome.editbarangmasuk,name='barangmasuk_edit'),
+    path('inventaris/barangmasuk/delete/<int:pk>', adminhome.deletebarangmasuk,name='barangmasuk_delete'),
 
     # BARANG KELUAR
     path('inventaris/barangkeluar',adminhome.barangkeluargrid, name='barangkeluar_grid'),

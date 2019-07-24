@@ -15,6 +15,9 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Hashid
+HASHID_FIELD_SALT = "a long and secure salt value that is not the same as SECRET_KEY"
+HASHID_FIELD_ALLOW_INT_LOOKUP = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/

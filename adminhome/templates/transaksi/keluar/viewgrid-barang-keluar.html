@@ -1,5 +1,6 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
+{% load l10n %}
 
 {% block extrastyle %}
 <style>
@@ -85,6 +86,8 @@
                                             <p>{{data.nama_barang}}</p>
                                             <h5><strong>Kode Barang</strong></h5>
                                             <p>{{data.kode_barang}}</p>
+                                            <h5><strong>Harga Satuan</strong></h5>
+                                            <p>Rp. {{data.harga_satuan}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
@@ -110,8 +113,8 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="/inventaris/barangkeluar/edit/{{ data.id_keluar}}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
-                                        <a href="/inventaris/barangkeluar/delete/{{ data.id_keluar }}" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                        <a href="/inventaris/barangkeluar/edit/{{ data.id }}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                        <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </div>
                             </div>

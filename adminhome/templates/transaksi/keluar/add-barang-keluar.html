@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-sm-13">
             <div class="box box-primary"> 
-                <form action="{% url 'barangkeluar_add' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                <form id="save1" action="{% url 'barangkeluar_add' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">
                     {% csrf_token %}
                     <!-- konten -->
                     <div class="box box-primary">
@@ -46,44 +46,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="tanggalkeluar" class="col-sm-3 control-label">Tanggal Keluar : </label>
-                                    <div class="col-sm-9">
-                                        {{form.tanggal}}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="jumlahkeluar" class="col-sm-3 control-label">Jumlah Keluar : </label>
-                                    <div class="col-sm-9">
-                                        {{form.jumlah}}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan : </label>
-                                    <div class="col-sm-9">
-                                        {{form.harga_satuan}}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="totalbayar" class="col-sm-3 control-label">Total Bayar : </label>
-                                    <div class="col-sm-9">
-                                        {{form.total_bayar}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6" >
-                                <div class="form-group">
-                                    <label for="customer" class="col-sm-3 control-label">Customer : </label>
-                                    <div class="col-sm-9">
-                                        {{form.customer_id}}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="alamatcustomer" class="col-sm-3 control-label">Alamat Customer: </label>
-                                    <div class="col-sm-9">
-                                        {{form.alamat_customer}}
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label for="noresi" class="col-sm-3 control-label">No. Resi : </label>
                                     <div class="col-sm-9">
                                         {{form.no_resi}}
@@ -107,6 +69,44 @@
                                         {{form.tipe_id}}
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <label for="jumlahkeluar" class="col-sm-3 control-label">Jumlah Keluar : </label>
+                                    <div class="col-sm-9">
+                                        {{form.jumlah}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan : </label>
+                                    <div class="col-sm-9">
+                                        {{form.harga_satuan}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="totalbayar" class="col-sm-3 control-label">Total Bayar : </label>
+                                    <div class="col-sm-9">
+                                        {{form.total_bayar}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer" class="col-sm-3 control-label">Customer : </label>
+                                    <div class="col-sm-9">
+                                        {{form.customer_id}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="alamatcustomer" class="col-sm-3 control-label">Alamat Customer: </label>
+                                    <div class="col-sm-9">
+                                        {{form.alamat_customer}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tanggalkeluar" class="col-sm-3 control-label">Tanggal Keluar : </label>
+                                    <div class="col-sm-9">
+                                        {{form.tanggal}}
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="foto" class="col-sm-3 control-label">Foto : </label>
                                     <div class="col-sm-9">
@@ -117,7 +117,7 @@
                                 <div class="form-group pull-right">   
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-primary">Simpan</button>
-                                        <a href="#" type="button" class="btn btn-success">Simpan dan Tambah</a>
+                                        <button class="btn btn-success">Simpan dan Tambah</button>
                                         <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
                                     </div> 
                                 </div>
