@@ -1,6 +1,23 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
+
 {% block extrastyle %}
+<style>
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 4px 8px;
+        text-decoration: none;
+        transition: background-color .3s;
+    }
+    
+    .pagination a.active {
+        background-color: dodgerblue;
+        color: white;
+    }
+    
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+</style>
 {% endblock%}
 
 {% block page_content %}
@@ -35,7 +52,7 @@
                                     <a href="?page={{ daftar_barangkeluar.previous_page_number }}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
-                                <li class="page-item disabled"><span class="current">#</span></li>
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
                                 {% if daftar_barangkeluar.has_next %}
                                 <li class="page-item">
                                     <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}">&gt;</a>
@@ -48,54 +65,66 @@
                     <!-- pagination atas-->
                     <br/>
                     <!-- KONTEN -->
-                    <!-- {% for data in daftar_barangkeluar %} -->
-                    <div class="box box-warning">
+                    <div class="row">
                         <div class="col-sm-12">
-                            <form action="" role="form">
+                            {% if daftar_barangkeluar %}
+                            {% for data in daftar_barangkeluar %}
+                            <div class="box box-warning">
                                 <br>
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <img src="/static/assets/images/logo.png" alt="" class="img-thumbnail img-responsive">
+                                        {% if data.foto_keluar %}
+                                        <img src="{{data.foto_keluar.url}}" class="img-responsive" width="150" height="150" />
+                                        {% else %}
+                                        <span class="text-muted" > Tidak ada Foto </span>
+                                        {% endif %}
                                     </div>
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <h5><strong>Nama Barang</strong></h5>
-                                            <p>Barang Rahasia</p>
+                                            <p>{{data.nama_barang}}</p>
                                             <h5><strong>Kode Barang</strong></h5>
-                                            <p>1234-567-8910</p>
+                                            <p>{{data.kode_barang}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <h5><strong>Tanggal Keluar : </strong></h5>
-                                            <p>12-12-2020</p>
+                                            <p>{{data.tanggal}}</p>
                                             <h5><strong>Serial Number: </strong></h5>
-                                            <p>1234567890 </p>
+                                            <p>{{data.serialnumber}}</p>
                                             <h5><strong>Jumlah : </strong></h5>
-                                            <p>4000 ekor </p>
+                                            <p>{{data.jumlah}}</p>
                                             <strong><h5>Customer : </strong></h5>
-                                            <p>Blacksmith</p>
+                                            <p>{{data.customer_id}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <h5><strong>Alamat Customer : </strong></h5>
-                                            <p>Jl. Raden Kanjeng Jimat NO19 RT02 RW06 Magersari, Gedangan, Sidarjo</p>
+                                            <p>{{data.alamat_customer}}</p>
                                             <h5><strong>Nomor Resi : </strong></h5> 
-                                            <p>1234-89746849-12414</p>
+                                            <p>{{data.no_resi}}</p>
                                             <h5><strong>No. Bukti Beli : </strong></h5>
-                                            <p>123451234512345</p>
+                                            <p>{{data.no_bukti}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="/inventaris/barangkeluar/edit" type="button" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" type="button" class="btn btn-danger btn-sm">Hapus</a>
+                                        <a href="/inventaris/barangkeluar/edit/{{ data.id_keluar}}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                        <a href="/inventaris/barangkeluar/delete/{{ data.id_keluar }}" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="box box-warning">
+                                <br/>  
+                                <span><center>Tidak ada data barang masuk saat ini...</center></span>
+                                <br/>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                    <!-- {% endfor %} -->
                     <!--END KONTEN  -->
                     <!-- pagination bawah -->
                     <center>
@@ -107,7 +136,7 @@
                                     <a href="?page={{ daftar_barangkeluar.previous_page_number }}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
-                                <li class="page-item disabled"><span class="current">#</span></li>
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
                                 {% if daftar_barangkeluar.has_next %}
                                 <li class="page-item">
                                     <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}">&gt;</a>

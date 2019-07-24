@@ -40,70 +40,96 @@
                         <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/list"><i class="fa fa-th-list"></i></a>
                     </div>
-                    <br/>
-                    <br/>
                     <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-lg justify-content-center">
+                                {% if daftar_barang_masuk.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barang_masuk.previous_page_number }}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_barang_masuk.number }} of {{ daftar_barang_masuk.paginator.num_pages }}.</span></li>
+                                {% if daftar_barang_masuk.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.next_page_number }}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.paginator.num_pages }}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     </center>
-                    <br/>
                     <!-- KONTEN -->
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 col-lg-12">
+                            {% if daftar_barang_masuk %}
+                            {% for barang_masuk in daftar_barang_masuk %}
                             <div class="box box-warning">
                                 <br>
                                 <div class="row">
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <div class="container">
-                                            <img src="/static/assets/images/logo.png" class="img-responsive" width="120" height="120" />
+                                            {% if barang_masuk.foto_masuk %}
+                                            <img src="{{barang_masuk.foto_masuk.url}}" class="img-responsive" width="100" height="100" />
+                                            {% else %}
+                                            <span class="text-muted" > Tanpa Foto </span>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <div class="form-group">
                                             <h5><strong>Nama Barang :</strong></h5>
-                                            <p>Mikrotik</p>
+                                            <p>{{barang_masuk.nm_barang}}</p>
                                             <h5><strong>Kode Barang :</strong></h5>
-                                            <p>BRG-1</p>
+                                            <p>{{barang_masuk.kd_barang}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-3 col-xs-4 col-lg-3">
                                         <div class="form-group">
-                                            <h5><strong>Tanggal Masuk :</strong> 12-01-2019</h5>
-                                            <h5><strong>Serial Number :</strong> 112233</h5>
-                                            <h5><strong>Jumlah :</strong> 6</h5>
-                                            <h5><strong>Supplier :</strong> Lorem</h5>
-                                            <h5><strong>No Resi :</strong> 1234</h5>
+                                            <h5><strong>Tanggal Masuk :</strong> {{barang_masuk.tgl_masuk}}</h5>
+                                            <h5><strong>Serial Number :</strong> {{barang_masuk.sn_barang}}</h5>
+                                            <h5><strong>Jumlah :</strong> {{barang_masuk.jml_masuk}}</h5>
+                                            <h5><strong>Supplier :</strong> {{barang_masuk.supplier_id}}</h5>
+                                            <h5><strong>No Resi :</strong> {{barang_masuk.no_resi}}</h5>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2 col-xs-2 col-lg-2 pull-right">
-                                        <form action="">
-                                            <a class="btn btn-warning" href="/inventaris/barangmasuk/edit">Edit</a>
-                                            <button class="btn btn-danger" type="submit">Delete</button>
-                                        </form>
+                                    <div class="col-sm-2 pull-right">
+                                        <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" class="btn btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </div>
+                                <br/>
                             </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="box box-warning">
+                                <br/>  
+                                <span><center>Tidak ada data barang masuk saat ini...</center></span>
+                                <br/>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <!--END KONTEN  -->
                     <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
-                    </center>    
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-lg justify-content-center">
+                                {% if daftar_barang_masuk.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barang_masuk.previous_page_number }}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_barang_masuk.number }} of {{ daftar_barang_masuk.paginator.num_pages }}.</span></li>
+                                {% if daftar_barang_masuk.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.next_page_number }}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.paginator.num_pages }}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </center>   
                 </div>
             </div>
         </div>
@@ -112,5 +138,10 @@
 {% endblock %}
 
 {% block extrajs %}
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+    $('.confirm-delete').on('click', function(e) {
+        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+    })
+</script>
 {% endblock %}

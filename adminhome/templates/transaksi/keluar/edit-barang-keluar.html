@@ -1,141 +1,126 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
 
+{% block extrastyle %}
+<link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap-select.css">
+{% endblock%}
+
 {% block page_content %}
 <section class="content-header">
     <h1>
-        <i class="fa fa-edit"></i> Edit Barang Keluar - <strong> Nama Barang </strong> 
+        <i class="fa fa-edit"></i> Edit Barang Keluar - <strong> {{barang_masuk.nm_barang}} </strong> 
     </h1>
 </section>
 <section class="content">
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-danger">
-                <form action="" class="form-horizontal">
-                    <div class="box-body">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="no" class="col-sm-3 control-label">No</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="no" placeholder="No">
+                <form action="{% url 'barangkeluar_add' pk=barang_keluar.pk %}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- konten -->
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nobukti" class="col-sm-3 control-label">No. Bukti : </label>
+                                    <div class="col-sm-9">
+                                        {{form.no_bukti}}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="nobuktibeli" class="col-sm-3 control-label">No. Bukti Beli</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="nobuktibeli" placeholder="No. Bukti Beli">
+                                <div class="form-group">
+                                    <label for="namabarang" class="col-sm-3 control-label">Nama Barang : </label>
+                                    <div class="col-sm-9">
+                                        {{form.nama_barang}}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="namabarang" class="col-sm-3 control-label">Nama Barang</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="namabarang" placeholder="Nama Barang">
+                                <div class="form-group">
+                                    <label for="kodebarang" class="col-sm-3 control-label">Kode Barang : </label>
+                                    <div class="col-sm-9">
+                                        {{form.kode_barang}}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="kodebarang" class="col-sm-3 control-label">Kode Barang</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="kodebarang" placeholder="Kode Barang">
+                                <div class="form-group">
+                                    <label for="serialnumber" class="col-sm-3 control-label">Serial Number : </label>
+                                    <div class="col-sm-9">
+                                        {{form.serialnumber}}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="tanggalbarang" class="col-sm-3 control-label">Tanggal Keluar</label>
-                                <div class="col-sm-9">
-                                    <div class="input-group date">
-                                        <input type="text" data-date-format="dd/mm/yyyy" class="form-control pull-right" id="date" placeholder="Tanggal Keluar">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
+                                <div class="form-group">
+                                    <label for="tanggalkeluar" class="col-sm-3 control-label">Tanggal Keluar : </label>
+                                    <div class="col-sm-9">
+                                        {{form.tanggal}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jumlahkeluar" class="col-sm-3 control-label">Jumlah Keluar : </label>
+                                    <div class="col-sm-9">
+                                        {{form.jumlah}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan : </label>
+                                    <div class="col-sm-9">
+                                        {{form.harga_satuan}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="totalbayar" class="col-sm-3 control-label">Total Bayar : </label>
+                                    <div class="col-sm-9">
+                                        {{form.total_bayar}}
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="serialnumber" class="col-sm-3 control-label">Serial Number</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="serialnumber" placeholder="Serial Number">
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <label for="customer" class="col-sm-3 control-label">Customer : </label>
+                                    <div class="col-sm-9">
+                                        {{form.customer_id}}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="jumlah" class="col-sm-3 control-label">Jumlah</label>
-                                <div class="col-sm-9">
-                                    <input type="number" class="form-control" id="jumlah" placeholder="Jumlah">
+                                <div class="form-group">
+                                    <label for="alamatcustomer" class="col-sm-3 control-label">Alamat Customer: </label>
+                                    <div class="col-sm-9">
+                                        {{form.alamat_customer}}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="hargasatuan" placeholder="Harga Satuan">
+                                <div class="form-group">
+                                    <label for="noresi" class="col-sm-3 control-label">No. Resi : </label>
+                                    <div class="col-sm-9">
+                                        {{form.no_resi}}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="totalbayar" class="col-sm-3 control-label">Total Bayar</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="totalbayar" placeholder="Total Bayar">
+                                <div class="form-group">
+                                    <label for="merk" class="col-sm-3 control-label">Merk : </label>
+                                    <div class="col-sm-9">
+                                        {{form.merk_id}}
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- col ke 2 -->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="customer" class="col-sm-2 control-label">Customer</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="customer" placeholder="Customer">
+                                <div class="form-group">
+                                    <label for="jenis" class="col-sm-3 control-label">Jenis : </label>
+                                    <div class="col-sm-9">
+                                        {{form.jenis_id}}
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="alamatcustomer" class="col-sm-2 control-label">Alamat Customer</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" id="alamatcustomer" rows="3" placeholder="Tulis alamat customer disini ..."></textarea>
+                                <div class="form-group">
+                                    <label for="tipe" class="col-sm-3 control-label">Tipe : </label>
+                                    <div class="col-sm-9">
+                                        {{form.tipe_id}}
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="noresi" class="col-sm-2 control-label">No. Resi</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="noresi" placeholder="No. Resi">
+                                <div class="form-group">
+                                    <label for="foto" class="col-sm-3 control-label">Foto : </label>
+                                    <div class="col-sm-9">
+                                        {{form.foto_keluar}}
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="merk" class="col-sm-2 control-label">Merk</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control selectpicker" id="merk" data-live-search="true">
-                                        <option value="">Option</option>
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                        <option value="4">Option 4</option>
-                                        <option value="5">Option 5</option>
-                                    </select>
+                                <!-- Button -->
+                                <div class="form-group pull-right">   
+                                    <div class="col-sm-12">
+                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                        <a href="#" type="button" class="btn btn-warning">Hapus</a>
+                                        <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
+                                    </div> 
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="jenis" class="col-sm-2 control-label">Jenis</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control selectpicker" id="jenis" data-live-search="true">
-                                        <option value="">Option</option>
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                        <option value="4">Option 4</option>
-                                        <option value="5">Option 5</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="gambar" class="col-sm-2 control-label">Gambar</label>
-                                <div class="col-sm-10">
-                                    <input type="file" id="gambar">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="form-group pull-right">    
-                                <button href="#" type="button" class="btn btn-primary">Simpan</button>
-                                <button href="#" type="button" class="btn btn-danger">Hapus</button>
-                                <a href="/inventaris/barangkeluar" type="button" class="btn btn-success">Kembali</a>
                             </div>
                         </div>
                     </div>
