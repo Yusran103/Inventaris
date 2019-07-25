@@ -76,6 +76,40 @@ def editbarangmasuk(request,pk):
         form = Barang_masuk_form(instance=masuk)
     return render(request, 'transaksi/masuk/edit-barang-masuk.html', {'form': form, 'barang_masuk' : masuk})
 
+def simpantambahbarangmasuk(request):
+    jenis = Jenis_brg.objects.all()
+    merk = Merk_brg.objects.all()
+    tipe = Tipe_brg.objects.all()
+    supplier = Supplier.objects.all()
+
+    if request.method == 'POST':
+        form = Barang_masuk_form(request.POST , request.FILES)
+        if form.is_valid():
+            form = Barang_masuk(
+                kd_barang=request.POST['kd_barang'],
+                nm_barang=request.POST['nm_barang'],
+                sn_barang=request.POST['sn_barang'],
+                tgl_masuk=request.POST['tgl_masuk'],
+                supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
+                jml_masuk=request.POST['jml_masuk'],
+                no_resi=request.POST['no_resi'],
+                foto_masuk=request.FILES.get('foto_masuk'),
+                jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
+            )
+            form.save()
+            return redirect('/inventaris/barangmasuk/tambah')
+    else:
+        form = Barang_masuk_form()
+    return render(request, 'transaksi/masuk/add-barang-masuk.html', 
+    {
+        'form': form,
+        'daftar_jenis':jenis,
+        'daftar_merk':merk,
+        'daftar_tipe':tipe,
+        'daftar_supplier':supplier
+        })
 
 def tambahbarangmasuk(request):
     jenis = Jenis_brg.objects.all()
@@ -94,6 +128,7 @@ def tambahbarangmasuk(request):
                 supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
                 jml_masuk=request.POST['jml_masuk'],
                 no_resi=request.POST['no_resi'],
+                harga_satuan=request.POST['harga_satuan'],
                 foto_masuk=request.FILES.get('foto_masuk'),
                 jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
                 merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),

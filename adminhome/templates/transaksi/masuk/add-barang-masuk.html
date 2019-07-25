@@ -16,7 +16,7 @@
         <!-- /.box-header -->
         <!-- form start -->
         <div class="col-md-9 col-xs-9 col-lg-9">        
-            <form action="{% url 'barangmasuk_add' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+            <form action="" id="form1" method="POST" class="form-horizontal" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="box box-primary">
                     <div class="box-body">
@@ -53,6 +53,12 @@
                             <label for="jumlah" class="col-sm-2 control-label">Jumlah : </label>
                             <div class="col-sm-3">
                                 {{form.jml_masuk}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier" class="col-sm-2 control-label">Harga barang : </label>
+                            <div class="col-sm-10">
+                                {{form.harga_satuan}}
                             </div>
                         </div>
                         <div class="form-group">
@@ -97,22 +103,35 @@
                 </div> 
             </div> 
             <div class="col-md-3 col-xs-3 col-lg-3  pull-right" style="display: inline-block">
-                <button type="submit" class="btn btn-md btn-primary"> Tambah</button>
+                <input type="submit" value="Tambah" name="s1" id='s1' class="btn btn-md btn-primary"></input>
                 <br/>
                 <br/>
-                <a href="#" class="btn btn-md btn-success"><b>Simpan dan Tambah</b></a>
+                <input type="submit" value="Simpan dan Tambah" name="s2" id='s2' class="btn btn-md btn-success"></input>
                 <br/>
                 <br/>
                 <a href="/inventaris/barangmasuk" class="btn btn-md btn-danger"><b>Kembali</b></a>
             </div>
         </form>
-        
     </div>
 </section>
 {% endblock %}
 {% block extrajs%}
 <script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
 <script>
+    $(function() {
+        $('#s1').click(function(e){
+            e.preventDefault();
+            $('#form1').attr('action', "{% url 'barangmasuk_add' %}");
+            $('#form1').submit();
+        });
+        $('#s2').click(function(e){
+            e.preventDefault();
+            $('#form1').attr('action',  "{% url 'barangmasuk_addcreate' %}");
+            $('#form1').submit();
+            alert('Data Berhasil di Tambah');
+        });
+    });
+    
     $('#datepicker').datepicker({
         format : "yyyy-mm-dd",
         autoclose: true
@@ -122,6 +141,92 @@
         var id = $(data).attr('id');
         $('#'+id).addClass('form-control selectpicker')
         $('#'+id).attr('data-live-search',true)
-    })
+    });
+    
+    $("input[data-type='currency']").on({
+        keyup: function() {
+            formatCurrency($(this));
+        },
+        blur: function() { 
+            formatCurrency($(this), "blur");
+        }
+    });
+    
+    
+    function formatNumber(n) {
+        // format number 1000000 to 1,234,567
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+    
+    
+    function formatCurrency(input, blur) {
+        // appends $ to value, validates decimal side
+        // and puts cursor back in right position.
+        
+        // get input value
+        var input_val = input.val();
+        
+        // don't validate empty input
+        if (input_val === "") { return; }
+        
+        // original length
+        var original_len = input_val.length;
+        
+        // initial caret position 
+        var caret_pos = input.prop("selectionStart");
+        
+        // check for decimal
+        if (input_val.indexOf(".") >= 0) {
+            
+            // get position of first decimal
+            // this prevents multiple decimals from
+            // being entered
+            var decimal_pos = input_val.indexOf(".");
+            
+            // split number by decimal point
+            var left_side = input_val.substring(0, decimal_pos);
+            var right_side = input_val.substring(decimal_pos);
+            
+            // add commas to left side of number
+            left_side = formatNumber(left_side);
+            
+            // validate right side
+            right_side = formatNumber(right_side);
+            
+            // On blur make sure 2 numbers after decimal
+            if (blur === "blur") {
+                right_side += "00";
+            }
+            
+            // Limit decimal to only 2 digits
+            right_side = right_side.substring(0, 2);
+            
+            // join number by .
+            input_val = "Rp " + left_side + "." + right_side;
+            
+        } else {
+            // no decimal entered
+            // add commas to number
+            // remove all non-digits
+            input_val = formatNumber(input_val);
+            input_val = "Rp " + input_val;
+            
+            // final formatting
+            if (blur === "blur") {
+                input_val += ".00";
+            }
+        }
+        
+        // send updated string to input
+        input.val(input_val);
+        
+        // put caret back in the right position
+        var updated_len = input_val.length;
+        caret_pos = updated_len - original_len + caret_pos;
+        input[0].setSelectionRange(caret_pos, caret_pos);
+    }
+    
+    
+    
 </script>
 {% endblock %}

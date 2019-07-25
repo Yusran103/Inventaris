@@ -189,6 +189,19 @@ class Barang_masuk_form(ModelForm):
                 }
             ),
         )
+    harga_satuan = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan Harga Barang',
+                'name':'currency-field',
+                'id':'currency-field',
+                'pattern':'^\Rp \d{1,3}(,\d{3})*(\.\d+)?$',
+                'value':'',
+                'data-type':'currency'
+                }
+            ),
+        )
     # foto_masuk = forms.FileField(
     #     )
     jenis_id = forms.ModelChoiceField(
@@ -208,6 +221,7 @@ class Barang_masuk_form(ModelForm):
             'nm_barang',
             'sn_barang',
             'tgl_masuk',
+            'harga_satuan',
             'jml_masuk',
             'supplier_id',
             'no_resi',

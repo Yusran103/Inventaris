@@ -65,6 +65,7 @@ class Barang_masuk(models.Model):
     sn_barang = models.CharField(max_length=20)
     tgl_masuk = models.DateField()
     jml_masuk = models.IntegerField()
+    harga_satuan = models.CharField(max_length=191,blank=True)
     no_resi = models.CharField(max_length=100,blank=True)
     foto_masuk = models.ImageField(upload_to='foto/',blank=True , null=True) 
     
