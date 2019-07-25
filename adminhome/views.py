@@ -24,7 +24,7 @@ def dashboard(request):
 
 
 def gridstok(request):
-    daftar_stok = Barang_masuk.objects.all()
+    daftar_stok = Barang_masuk.objects.all().order_by('-id_brg_masuk')
     pagination = Paginator(daftar_stok,5)
 
     page = request.GET.get('page','')
@@ -46,7 +46,7 @@ def stok(request):
 
 
 def barangmasuk(request):
-    daftar_barang = Barang_masuk.objects.all()
+    daftar_barang = Barang_masuk.objects.all().order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,10)
 
     page = request.GET.get('page','')
@@ -55,7 +55,7 @@ def barangmasuk(request):
 
 
 def barangmasukgrid(request):
-    daftar_barang = Barang_masuk.objects.all()
+    daftar_barang = Barang_masuk.objects.all().order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,5)
 
     page = request.GET.get('page','')
@@ -229,7 +229,7 @@ def changepassword(request):
 
 
 def viewmerk(request):
-    daftar_merk = Merk_brg.objects.all()
+    daftar_merk = Merk_brg.objects.all().order_by('-id_merk')
     pagination = Paginator(daftar_merk,10)
 
     page = request.GET.get('page','')
@@ -279,7 +279,7 @@ def searchmerk(request):
 
     # Your code
 def viewjenis(request):
-    daftar_jenis = Jenis_brg.objects.all()
+    daftar_jenis = Jenis_brg.objects.all().order_by('-id_jenis')
     pagination = Paginator(daftar_jenis,10)
 
     page = request.GET.get('page','')
@@ -319,7 +319,7 @@ def deletejenis(request,pk):
     return redirect('/inventaris/masterdata/jenis')
 
 def viewsupplier(request):
-    daftar_supplier = Supplier.objects.all()
+    daftar_supplier = Supplier.objects.all().order_by('-id_supplier')
     pagination = Paginator(daftar_supplier,10)
 
     page = request.GET.get('page','')
@@ -363,7 +363,7 @@ def deletesupplier(request,pk):
     return redirect('/inventaris/masterdata/supplier')
 
 def viewcustomer(request):
-    daftar_customer = Customer.objects.all()
+    daftar_customer = Customer.objects.all().order_by('-id_customer')
     pagination = Paginator(daftar_customer,10)
     page = request.GET.get('page','')
     customer_pg = pagination.get_page(page)
@@ -406,7 +406,7 @@ def deletecustomer(request,pk):
     return redirect('/inventaris/masterdata/customer')
 
 def viewtipe(request):
-    daftar_tipe = Tipe_brg.objects.all()
+    daftar_tipe = Tipe_brg.objects.all().order_by('-id_tipe')
     pagination = Paginator(daftar_tipe,10)
 
     page = request.GET.get('page','')
