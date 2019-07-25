@@ -194,11 +194,7 @@ class Barang_masuk_form(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Isikan Harga Barang',
-                'name':'currency-field',
-                'id':'currency-field',
-                'pattern':'^\Rp \d{1,3}(,\d{3})*(\.\d+)?$',
-                'value':'',
-                'data-type':'currency'
+                'id':'rupiah'
                 }
             ),
         )

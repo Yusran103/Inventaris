@@ -73,7 +73,7 @@
                                             {% if barang_masuk.foto_masuk %}
                                             <img src="{{barang_masuk.foto_masuk.url}}" class="img-responsive" width="100" height="100" />
                                             {% else %}
-                                            <span class="text-muted" > Tanpa Foto </span>
+                                            <img src="{% static 'assets/images/images.png' %}" class="img-responsive" width="100" height="100" />
                                             {% endif %}
                                         </div>
                                     </div>
@@ -92,6 +92,7 @@
                                             <h5><strong>Jumlah :</strong> {{barang_masuk.jml_masuk}}</h5>
                                             <h5><strong>Supplier :</strong> {{barang_masuk.supplier_id}}</h5>
                                             <h5><strong>No Resi :</strong> {{barang_masuk.no_resi}}</h5>
+                                            <h5><strong>Harga Barang :</strong> {{barang_masuk.harga_satuan}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-sm-2 pull-right">
