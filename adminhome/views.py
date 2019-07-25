@@ -66,7 +66,7 @@ def editbarangmasuk(request,pk):
             supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
             jml_masuk=request.POST['jml_masuk'],
             no_resi=request.POST['no_resi'],
-            foto_masuk=request.FILES['foto_masuk'],
+            foto_masuk=request.FILES.get('foto_masuk'),
             jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
             merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
             tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
