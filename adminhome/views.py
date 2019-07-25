@@ -24,11 +24,21 @@ def dashboard(request):
 
 
 def gridstok(request):
-    return render(request, 'transaksi/stok/viewgrid-stok.html')
+    daftar_stok = Barang_masuk.objects.all()
+    pagination = Paginator(daftar_stok,5)
+
+    page = request.GET.get('page','')
+    barang_stok_pg = pagination.get_page(page)
+    return render(request, 'transaksi/stok/viewgrid-stok.html', {'daftar_stok': barang_stok_pg})
 
 
 def stok(request):
-    return render(request, 'transaksi/stok/view-stok.html')
+    daftar_stok = Barang_masuk.objects.all()
+    pagination = Paginator(daftar_stok,10)
+
+    page = request.GET.get('page','')
+    barang_stok_pg = pagination.get_page(page)
+    return render(request, 'transaksi/stok/view-stok.html', {'daftar_stok': barang_stok_pg})
 
 # ------------+
 # BARANG MASUK|
@@ -46,7 +56,7 @@ def barangmasuk(request):
 
 def barangmasukgrid(request):
     daftar_barang = Barang_masuk.objects.all()
-    pagination = Paginator(daftar_barang,10)
+    pagination = Paginator(daftar_barang,5)
 
     page = request.GET.get('page','')
     barang_masuk_pg = pagination.get_page(page)
