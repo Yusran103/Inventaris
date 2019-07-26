@@ -16,17 +16,16 @@
             <form class="form-horizontal">
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="tanggalmasuk" class="col-sm-2 control-label">Tanggal : </label>
-                        <div class="col-sm-5">
+                        <label for="tanggalmasuk" class="col-sm-2 control-label">Bulan : </label>
+                        <div class="col-sm-4">
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker">
+                                <input type="text" class="form-control" autocomplete="off" placeholder="Masukan bulan dan tahun" id="datepicker1">
                             </div>
                         </div>
                     </div>
-                    <br/>
                     <div class="col-md-offset-2">
                         <form action="">
                             <button class="btn btn-primary"> Cetak</button>
@@ -40,9 +39,9 @@
 {% endblock %}
 {% block extrajs%}
 <script>
-    $('#datepicker').datepicker({
+    $('#datepicker1').datepicker({
         autoclose: true,
-        format: "MM yyyy",
+        format: "mm-yyyy",
         startView: "months", 
         minViewMode: "months"
     });

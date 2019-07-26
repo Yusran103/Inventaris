@@ -181,7 +181,8 @@ def editbarangkeluar(request):
 
 
 def tambahbarangkeluar(request):
-    return render(request, 'transaksi/keluar/add-barang-keluar.html')
+    barang_masuk = Barang_masuk.objects.all()
+    return render(request, 'transaksi/keluar/add-barang-keluar.html',{'masuk' : barang_masuk})
 
 # -------------+
 # LAPORAN      |
