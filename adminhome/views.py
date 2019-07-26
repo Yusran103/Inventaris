@@ -124,7 +124,7 @@ def deletebarangmasuk(request,pk):
 # BARANG KELUAR|
 # -------------+
 def viewbarangkeluar(request):
-    daftar_barangkeluar = Barangkeluar.objects.all().orderby('id')
+    daftar_barangkeluar = Barangkeluar.objects.all()
     pagination = Paginator(daftar_barangkeluar,5)
 
     page = request.GET.get('page','')
@@ -170,9 +170,6 @@ def editbarangkeluar(request,pk):
     return render(request, 'transaksi/keluar/edit-barang-keluar.html', {'form': form, 'barang_keluar' : keluar})
 
 def addbarangkeluar(request):
-    jenis = Jenis_brg.objects.all()
-    merk = Merk_brg.objects.all()
-    tipe = Tipe_brg.objects.all()
     customer = Customer.objects.all()
     barangmasuk = Barang_masuk.objects.all()
 
@@ -191,21 +188,17 @@ def addbarangkeluar(request):
                 total_bayar=request.POST['total_bayar'],
                 customer_id=Customer.objects.get(pk=request.POST.get('customer_id')),
                 alamat_customer=request.POST['alamat_customer'],
-                merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-                jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-                tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
+
+                merk_id=request.POST['merk_id'],
+                jenis_id=request.POST['jenis_id'],
+                tipe_id=request.POST['tipe_id'],
                 foto_keluar=request.FILES['foto_keluar']
             )
             form.save()
             return redirect('/inventaris/barangkeluar/list')
     else:
         form = BarangkeluarForm()
-    return render(request, 'transaksi/keluar/add-barang-keluar.html', 
-    {
-        'form': form,
-        'daftar_jenis':jenis,
-        'daftar_merk':merk,
-        'daftar_tipe':tipe,
+    return render(request, 'transaksi/keluar/add-barang-keluar.html',{'form': form,
         'daftar_customer':customer,
         'daftar_barangmasuk':barangmasuk
         })

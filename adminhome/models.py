@@ -98,12 +98,12 @@ class Barangkeluar(models.Model):
     jumlah = models.IntegerField()
     harga_satuan = models.IntegerField()
     total_bayar = models.IntegerField()
+    alamat_customer = models.TextField()
+    jenis_id = models.CharField(max_length=20)
+    merk_id = models.CharField(max_length=20)
+    tipe_id = models.CharField(max_length=20)
 
     customer_id = models.ForeignKey(Customer,on_delete=models.CASCADE,db_column='customer_id')
-    alamat_customer = models.TextField()
-    jenis_id = models.ForeignKey(Jenis_brg,on_delete=models.CASCADE,db_column='jenis_id')
-    merk_id = models.ForeignKey(Merk_brg,on_delete=models.CASCADE,db_column='merk_id')
-    tipe_id = models.ForeignKey(Tipe_brg,on_delete=models.CASCADE,db_column='tipe_id')
     foto_keluar = models.ImageField(upload_to='foto/', blank=True, null=True)
 
     class Meta:

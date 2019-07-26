@@ -1,5 +1,3 @@
-from django.forms.models import ModelMultipleChoiceField
-from hashid_field import HashidAutoField
 from django.forms import Textarea, ModelForm
 from django import forms
 from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Barangkeluar
@@ -146,20 +144,20 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
-    nama_barang = forms.ModelChoiceField(
-        queryset = Barang_masuk.objects.all(),
-    )
+    # nama_barang = forms.ModelChoiceField(
+    #     queryset = Barang_masuk.objects.all(),
+    # )
 
-    kode_barang = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Kode Barang',
-                # 'disabled':''
-            }
-        ),
-        required=True
-    )
+    # kode_barang = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class':'form-control',
+    #             'placeholder':'Kode Barang',
+    #             # 'disabled':''
+    #         }
+    #     ),
+    #     required=True
+    # )
 
     tanggal = forms.CharField(
         widget=forms.TextInput(
@@ -173,16 +171,16 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
-    serialnumber = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Serial Number Barang',
-                'disable/d':''
-            }
-        ),
-        required=True
-    )
+    # serialnumber = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class':'form-control',
+    #             'placeholder':'Serial Number Barang',
+    #             'disable/d':''
+    #         }
+    #     ),
+    #     required=True
+    # )
 
     jumlah = forms.IntegerField(
         widget=forms.NumberInput(
@@ -239,24 +237,25 @@ class BarangkeluarForm(ModelForm):
     )
 
     customer_id = forms.ModelChoiceField(
-        queryset = Customer.objects.all(),required=True
+        queryset = Customer.objects.all(),
+        required=True
     )
 
-    merk_id = forms.ModelChoiceField(
-        queryset = Merk_brg.objects.all(),required=True
-    )
-
-    jenis_id = forms.ModelChoiceField(
-        queryset = Jenis_brg.objects.all(),required=True
-    )
-
-    tipe_id = forms.ModelChoiceField(
-        queryset = Tipe_brg.objects.all(),required=True
-    )
-
-    # foto_keluar = forms.FileField(
-    #     required=True
+    # merk_id = forms.ModelChoiceField(
+    #     queryset = Merk_brg.objects.all(),required=True
     # )
+
+    # jenis_id = forms.ModelChoiceField(
+    #     queryset = Jenis_brg.objects.all(),required=True
+    # )
+
+    # tipe_id = forms.ModelChoiceField(
+    #     queryset = Tipe_brg.objects.all(),required=True
+    # )
+
+    foto_keluar = forms.FileField(
+        required=True
+    )
 
     class Meta:
         model = Barangkeluar

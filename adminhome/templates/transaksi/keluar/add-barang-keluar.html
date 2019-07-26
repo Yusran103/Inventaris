@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-sm-13">
             <div class="box box-primary"> 
-                <form id="save1" action="{% url 'barangkeluar_add' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                <form id="form1" action="{% url 'barangkeluar_add' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">
                     {% csrf_token %}
                     <!-- konten -->
                     <div class="box box-primary">
@@ -30,43 +30,48 @@
                                 <div class="form-group">
                                     <label for="namabarang" class="col-sm-3 control-label">Nama Barang : </label>
                                     <div class="col-sm-9">
-                                        {{form.nama_barang}}
+                                        <select id="mySelect" class="form-control" onclick="myFunction()">
+                                            <option value=" | ">--- pilih barang ---</option>
+                                            {% for data in daftar_barangmasuk %}
+                                            <option value="{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.merk_id}}|{{data.jenis_id}}|{{data.tipe_id}}">{{data.nm_barang}}</option>
+                                            {% endfor %}
+                                        </select>                                        
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="kodebarang" class="col-sm-3 control-label">Kode Barang : </label>
                                     <div class="col-sm-9">
-                                        {{form.kode_barang}}
+                                        <p class="form-control input" id="demo"></p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="serialnumber" class="col-sm-3 control-label">Serial Number : </label>
                                     <div class="col-sm-9">
-                                        {{form.serialnumber}}
+                                        <p class="form-control input" id="demo1"></p>  
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="noresi" class="col-sm-3 control-label">No. Resi : </label>
                                     <div class="col-sm-9">
-                                        {{form.no_resi}}
+                                        <p class="form-control input" id="demo2"></p>  
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="merk" class="col-sm-3 control-label">Merk : </label>
                                     <div class="col-sm-9">
-                                        {{form.merk_id}}
+                                        <p class="form-control input" id="demo3"></p>  
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="jenis" class="col-sm-3 control-label">Jenis : </label>
                                     <div class="col-sm-9">
-                                        {{form.jenis_id}}
+                                        <p class="form-control input" id="demo4"></p>  
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="tipe" class="col-sm-3 control-label">Tipe : </label>
                                     <div class="col-sm-9">
-                                        {{form.tipe_id}}
+                                        <p class="form-control input" id="demo5"></p>  
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +97,12 @@
                                 <div class="form-group">
                                     <label for="customer" class="col-sm-3 control-label">Customer : </label>
                                     <div class="col-sm-9">
-                                        {{form.customer_id}}
+                                        <select id="mySelect" class="form-control" onclick="myFunction()">
+                                            <option value=" | ">--- pilih barang ---</option>
+                                            {% for data in daftar_customer %}
+                                            <option value="{{data.alamat_customer}}">{{data.nama_customer}}</option>
+                                            {% endfor %}
+                                        </select>   
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -116,8 +126,8 @@
                                 <!-- Button -->
                                 <div class="form-group pull-right">   
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-primary">Simpan</button>
-                                        <button class="btn btn-success">Simpan dan Tambah</button>
+                                        <button type="submit" name="s1" id='s1' class="btn btn-md btn-primary">Simpan</button>
+                                        <button type="submit" name="s2" id='s2' class="btn btn-md btn-success">Simpan dan Tambah</button>
                                         <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
                                     </div> 
                                 </div>
@@ -134,16 +144,37 @@
 {% block extrajs %}
 <script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
 <script>
+    // autofill
+    function myFunction() {
+        var x = document.getElementById("mySelect").value;
+        var y = x.split("|");
+        var a = y[0];
+        var b = y[1];
+        var c = y[2];
+        var d = y[3];
+        var e = y[4];
+        var f = y[5];
+        document.getElementById("demo").innerHTML = a;
+        document.getElementById("demo1").innerHTML = b;
+        document.getElementById("demo2").innerHTML = c;
+        document.getElementById("demo3").innerHTML = d;
+        document.getElementById("demo4").innerHTML = e;
+        document.getElementById("demo5").innerHTML = f;
+    };
+    
+    // dual save button
+    
+    
     // datepicker
     $('#date').datepicker({
         format : "yyyy-mm-dd",
         autoclose: true,
     });
     
-    $.each($('select'),function(index,data){
+    $('.customer'),function(index,data){
         var id = $(data).attr('id');
         $('#'+id).addClass('form-control selectpicker')
         $('#'+id).attr('data-live-search',true)
-    })
+    };
 </script>
 {% endblock %}
