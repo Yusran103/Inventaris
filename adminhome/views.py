@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer, user 
-from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform, Userform
+from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer
+from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform, Userform, Loginform
 from django.core.paginator import Paginator
+from django.contrib import auth
+from adminhome.models import user
 
 # -----------+
 # LOGIN      |
@@ -13,21 +16,20 @@ from django.core.paginator import Paginator
 def index(request):
     return render(request, 'login.html')
 
-def login_view(request):
-    if request.POST:
-        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+def login_request(request):
+    if request.method == 'POST':
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
         if user is not None:
-            if user.is_active:
-               return redirect('/inventaris/')
-            else:   
-                messages.add_message(request, messages.INFO, 'User belum terverifikasi')
+            login(request, user)
+            return HttpResponseRedirect('/inventaris/')
         else:
-            messages.add_message(request, messages.INFO, 'Username atau password Anda salah')
+            return HttpResponse('Invalid Credientials', status=401 )
 
-    return render(request,'login.html')
-
-def logout_view(request):
+def logout_request(request):
     logout(request)
+    messages.info(request, "Logged out successfully")
     return redirect('/login/')
 
 # -----------+
@@ -36,6 +38,8 @@ def logout_view(request):
 
 
 def dashboard(request):
+    for key, value in request.session.items():
+        print('{} => {}'.format(key, value))
     return render(request, 'dashboard.html')
 
 # -----------+

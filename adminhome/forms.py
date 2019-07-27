@@ -2,6 +2,34 @@ from django.forms import Textarea, ModelForm
 from django import forms
 from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer, user
 
+
+# -------------+
+# FORM LOGIN    |
+# -------------+
+class Loginform(ModelForm):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+            'class':'form-control',
+            'placeholder':'Username'
+            }
+            ),
+        required=True
+        )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+            'class':'form-control',
+            'placeholder':'Password'
+            }
+            ),
+        required=True
+        )    
+    class Meta:
+        model = user
+        fields = ['username', 'password']
+
 # -------------+
 # FORM MERK    |
 # -------------+

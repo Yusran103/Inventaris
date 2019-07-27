@@ -17,10 +17,10 @@
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
                 <!-- User Account: style can be found in dropdown.less -->
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" href="#">Super User<span class="caret"></span></a>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" href="#">{{ request.session.username }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                             <li role="presentation"><a href="/changepassword">Ubah Password </a></li>
-                        <li role="presentation"><a href="#">Logout </a></li>
+                        <li role="presentation"><a href="/">Logout </a></li>
                     </ul>
                 </li>
                 <!-- Control Sidebar Toggle Button -->

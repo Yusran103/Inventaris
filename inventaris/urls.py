@@ -15,17 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.contrib.auth.views import LoginView
 from django.conf.urls import url
-
+from django.urls import path, include
 from adminhome import views as adminhome
-
+from homepage import views as homepage_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # LOGIN FROM
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', adminhome.index, name='login'),
-    url(r'^login/', adminhome.login_view),
+    url(r'^login/', homepage_views.login_view),
+    url(r'^logout/', homepage_views.logout_view),
     # FORGET PASSWORD
     path('changepassword/', adminhome.changepassword, name='changepassword'),
     # ADMIN DASHBOARD

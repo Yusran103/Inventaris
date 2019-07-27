@@ -98,5 +98,8 @@ class user(models.Model):
     level = models.CharField(
         max_length=20, choices=USER_CHOICES, default='Admin')
 
+    def __unicode__(self):
+        return self.id_user
+
     class Meta:
         db_table = "tb_user"

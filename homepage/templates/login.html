@@ -1,0 +1,35 @@
+{% include "layout/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<section class="login-form">
+	<h3 class="panel-title"><p align="center">Silahkan Login</p></h3>
+            </div>
+            <div class="panel-body">
+                <form action="" method="POST" role="login">
+                    {% csrf_token %}
+                    {% if messages %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <ul>
+                            {% for message in messages %}
+                            {{ message }}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    <fieldset>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="username" value="" placeholder="silahkan masukkan username..." />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" name="password" value="" placeholder="silahkan masukkan password..." />
+                        </div>
+                       <input class="btn btn-lg btn-success btn-block" type="submit" value="Log In" />
+              
+                    </fieldset>
+                </form>
+            </div>
+</section>
+{% endblock %}
