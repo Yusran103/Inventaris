@@ -65,7 +65,7 @@ class Barang_masuk(models.Model):
     sn_barang = models.CharField(max_length=20)
     tgl_masuk = models.DateField()
     jml_masuk = models.IntegerField()
-    harga_satuan = models.CharField(max_length=191,blank=True)
+    harga_satuan = models.IntegerField()
     no_resi = models.CharField(max_length=100,blank=True)
     foto_masuk = models.ImageField(upload_to='foto/',blank=True , null=True) 
     
@@ -108,22 +108,22 @@ class Barang_keluar(models.Model):
     def __str__(self):
         return self.nm_barang
 
-class User(models.Model):
-    """docstring for user"""
-    USER_CHOICES = [
-        ('Admin', 'Admin'),
-        ('SuperAdmin', 'SuperAdmin'),
-    ]
+class Stok_barang(models.Model):
+    id_stok = models.AutoField(primary_key=True)
+    tanggal = models.DateField()
+    nm_barang= models.CharField(max_length=100)
+    kd_barang = models.CharField(max_length=100)
+    hrg_barang = models.IntegerField()
+    jumlah_stok = models.IntegerField()
+    stok_akhir = models.IntegerField()
+    keterangan = models.CharField(max_length=100)
 
-    id_user = models.AutoField(primary_key=True)
-    nm_lengkap = models.CharField(max_length=25)
-    username = models.CharField(max_length=8)
-    password = models.CharField(max_length=8)
-    level = models.CharField(
-        max_length=10, choices=USER_CHOICES, default='Admin')
+    jenis_id = models.ForeignKey(Jenis_brg, on_delete=models.DO_NOTHING,db_column='jenis_id')
+    merk_id = models.ForeignKey(Merk_brg, on_delete=models.DO_NOTHING,db_column='merk_id')
+    tipe_id = models.ForeignKey(Tipe_brg, on_delete=models.DO_NOTHING,db_column='tipe_id')
 
     class Meta:
-        db_table = "tb_user"
+        db_table = "tb_stok"
     
     def __str__(self):
-        return self.nm_lengkap
+        return self.stok_akhir

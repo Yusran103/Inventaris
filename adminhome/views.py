@@ -438,7 +438,7 @@ def edittipe(request,pk):
             Tipe.save()
             return redirect('/inventaris/masterdata/tipe', pk=tipe.pk)
     else:
-        form = Tipeform(instance=Tipe)
+        form = Tipeform(instance=tipe)
     return render(request, 'masterdata/tipe/tipe_edit.html', {'form': form, 'tipe' : tipe})
 
 def deletetipe(request,pk):
