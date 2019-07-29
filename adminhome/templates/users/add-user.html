@@ -1,7 +1,7 @@
 {% extends  "layout/admin/base-admin.html" %}
 
 {% load static %}
-
+{% load bootstrap4 %}
 {% block extrastyle %}
 <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap-select.css">
 {% endblock%}
@@ -24,45 +24,22 @@
             </div>
             {% endif %}
             <div class="col-md-9 col-xs-9 col-lg-9">        
-                <form action="/addusers/" method="POST" class="form-horizontal" role="form">
-                    {% csrf_token %}
                     <div class="box-body">
-                    <div class="form-group">
-                            <label for="nama" class="col-sm-3 control-label">{{form.nm_lengkap.label}} :</label>
-                            <div class="col-sm-8">
-                             {{ form.nm_lengkap }} 
-                         </div>
-                    </div>
-                     <div class="form-group">
-                        <label for="Username" class="col-sm-3 control-label">{{form.username.label}} :</label>
-                        <div class="col-sm-8">
-                        {{ form.username }}
+                        <div class="form-group">
+                            <form method="post">
+
+                                {% csrf_token %}
+                                {% bootstrap_form form %}
+
+                                <button class="btn btn-success">Simpan</button>
+
+                            </form>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="level" class="col-sm-3 control-label">{{form.level.label}} :</label>
-                        <div class="col-sm-8">
-                        {{ form.level }}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="Password" class="col-sm-3 control-label">{{form.password.label}} :</label>
-                        <div class="col-sm-8">
-                            {{form.password}}
-                        </div>
-                    </div>
-
-                    <div class="col-md-offset-3 col-xs-offset-3 col-lg-offset-3">
-                        <input type="submit" value="Simpan" class="btn btn-success confirm-add"></input>
-                        <a href="/inventaris/users" class="btn btn-md btn-primary"><b>Kembali</b></a>
-                    </div>
-                </div>
-            </form>
-        </div>  
+                </form>
+            </div>  
+        </div>
     </div>
-</div>
 </section>
 {% endblock %}
 {% block extrajs%}

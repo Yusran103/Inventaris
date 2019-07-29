@@ -56,8 +56,7 @@ urlpatterns = [
     
     # USERS
     path('inventaris/users', adminhome.viewuser, name='user'),
-    path('inventaris/users/tambah', adminhome.adduser, name='user_add'),
-    url(r'^addusers/', adminhome.adduser),
+    path('inventaris/users/tambah', adminhome.SignUpView.as_view(), name='user_add'),
     path('inventaris/users/edit/<int:pk>', adminhome.edituser, name='user_edit'),
     path('inventaris/users/delete/<int:pk>', adminhome.deleteuser,name='user_delete'),
     
