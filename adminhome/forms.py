@@ -144,20 +144,29 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
-    # nama_barang = forms.ModelChoiceField(
-    #     queryset = Barang_masuk.objects.all(),
-    # )
+    nama_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Kode Barang',
+                'id':'demo',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
 
-    # kode_barang = forms.CharField(
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'class':'form-control',
-    #             'placeholder':'Kode Barang',
-    #             # 'disabled':''
-    #         }
-    #     ),
-    #     required=True
-    # )
+    kode_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Kode Barang',
+                'id':'demo1',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
 
     tanggal = forms.CharField(
         widget=forms.TextInput(
@@ -171,22 +180,25 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
-    # serialnumber = forms.CharField(
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'class':'form-control',
-    #             'placeholder':'Serial Number Barang',
-    #             'disable/d':''
-    #         }
-    #     ),
-    #     required=True
-    # )
+    serialnumber = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Serial Number Barang',
+                'id':'demo2',
+                # 'disable':''
+            }
+        ),
+        required=True
+    )
 
     jumlah = forms.IntegerField(
         widget=forms.NumberInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Jumlah Barang'
+                'placeholder':'Jumlah Barang',
+                'min' : '1',
+                'id':'jumlah'
             }
         ),
         required=True
@@ -196,7 +208,9 @@ class BarangkeluarForm(ModelForm):
         widget=forms.NumberInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Harga Satuan'
+                'placeholder':'Harga Satuan',
+                'id':'demo7',
+                # 'disabled':''
             }
         ),
         required=True
@@ -207,6 +221,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Total Bayar',
+                'id':'totalbayar',
                 # 'disabled':''
             }
         ),
@@ -219,6 +234,7 @@ class BarangkeluarForm(ModelForm):
                 'class':'form-control',
                 'placeholder':'Alamat Customer',
                 'rows':'3',
+                'id':'demo9'
                 # 'disabled':''
             }
         ),
@@ -230,32 +246,63 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'No. Resi',
+                'id':'demo3',
                 # 'disabled':''
             }
         ),
         required=True
     )
 
-    customer_id = forms.ModelChoiceField(
-        queryset = Customer.objects.all(),
+    customer_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Resi',
+                'id':'demo8',
+                # 'disabled':''
+            }
+        ),
         required=True
     )
 
-    # merk_id = forms.ModelChoiceField(
-    #     queryset = Merk_brg.objects.all(),required=True
-    # )
-
-    # jenis_id = forms.ModelChoiceField(
-    #     queryset = Jenis_brg.objects.all(),required=True
-    # )
-
-    # tipe_id = forms.ModelChoiceField(
-    #     queryset = Tipe_brg.objects.all(),required=True
-    # )
-
-    foto_keluar = forms.FileField(
+    merk_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Resi',
+                'id':'demo4',
+                # 'disabled':''
+            }
+        ),
         required=True
     )
+
+    jenis_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Resi',
+                'id':'demo5',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
+    tipe_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Resi',
+                'id':'demo6',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
+    # foto_keluar = forms.FileField(
+    # )
 
     class Meta:
         model = Barangkeluar
@@ -309,6 +356,17 @@ class Barang_masuk_form(ModelForm):
                 }
             ),
         )
+
+    harga_satuan = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan Harga Barang',
+                'id':'rupiah'
+                }
+            ),
+        )
+
     supplier_id = forms.ModelChoiceField(
         queryset = Supplier.objects.all()
         )

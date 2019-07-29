@@ -42,7 +42,8 @@ urlpatterns = [
     path('inventaris/barangkeluar/list',adminhome.viewbarangkeluar, name='barangkeluar_list'),
     path('inventaris/barangkeluar/tambah',adminhome.addbarangkeluar, name='barangkeluar_add'),
     path('inventaris/barangkeluar/edit/<int:pk>', adminhome.editbarangkeluar,name='barangkeluar_edit'),
-    path('inventaris/barangkeluar/delete/<int:pk>', adminhome.deletebarangkeluar,name='barangkeluar_delete'),    
+    path('inventaris/barangkeluar/delete/<int:pk>', adminhome.deletebarangkeluar,name='barangkeluar_delete'),
+    path('inventaris/barangkeluar/search', adminhome.searchbarangkeluar,name='barangkeluar_search'),     
     
     # STOK
     path('inventaris/stok', adminhome.gridstok, name='stok_grid'),

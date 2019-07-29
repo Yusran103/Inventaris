@@ -77,7 +77,7 @@
                                         {% if data.foto_keluar %}
                                         <img src="{{data.foto_keluar.url}}" class="img-responsive" width="150" height="150" />
                                         {% else %}
-                                        <span class="text-muted" > Tidak ada Foto </span>
+                                        <img src="{% static 'assets/images/noimage.png' %}" class="img-responsive img-thumbnail" width="150" height="150" />
                                         {% endif %}
                                     </div>
                                     <div class="col-sm-2">

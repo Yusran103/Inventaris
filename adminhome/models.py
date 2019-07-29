@@ -66,6 +66,7 @@ class Barang_masuk(models.Model):
     sn_barang = models.CharField(max_length=20)
     tgl_masuk = models.DateField()
     jml_masuk = models.IntegerField()
+    harga_satuan = models.IntegerField()
     no_resi = models.CharField(max_length=100,blank=True)
     foto_masuk = models.ImageField(upload_to='foto/',blank=True) 
     
@@ -81,29 +82,25 @@ class Barang_masuk(models.Model):
     def __str__(self):
         return self.nm_barang
 
-    def delete(self, *args, **kwargs):
-        self.foto_masuk.delete()
-        super().delete(*args, **kwargs)
-
 # barang keluar
 class Barangkeluar(models.Model):
     """docstring for barang_keluar"""
     id = models.AutoField(primary_key=True)
-    nama_barang = models.ForeignKey(Barang_masuk,on_delete=models.CASCADE,db_column='nama_barang')
+    nama_barang = models.CharField(max_length=100)
     tanggal = models.DateField()
     serialnumber = models.CharField(max_length=20)
     kode_barang = models.CharField(max_length=10)
     no_bukti = models.CharField(max_length=20)
-    no_resi = models.CharField(max_length=20)
+    no_resi = models.CharField(max_length=20,blank=True)
     jumlah = models.IntegerField()
     harga_satuan = models.IntegerField()
     total_bayar = models.IntegerField()
     alamat_customer = models.TextField()
-    jenis_id = models.CharField(max_length=20)
-    merk_id = models.CharField(max_length=20)
-    tipe_id = models.CharField(max_length=20)
+    jenis_id = models.CharField(max_length=100)
+    merk_id = models.CharField(max_length=100)
+    tipe_id = models.CharField(max_length=100)
 
-    customer_id = models.ForeignKey(Customer,on_delete=models.CASCADE,db_column='customer_id')
+    customer_id = models.CharField(max_length=100)
     foto_keluar = models.ImageField(upload_to='foto/', blank=True, null=True)
 
     class Meta:

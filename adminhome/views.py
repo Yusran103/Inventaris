@@ -40,7 +40,7 @@ def stok(request):
 
 
 def barangmasuk(request):
-    daftar_barang = Barang_masuk.objects.all()
+    daftar_barang = Barang_masuk.objects.all().order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,10)
 
     page = request.GET.get('page','')
@@ -49,7 +49,7 @@ def barangmasuk(request):
 
 
 def barangmasukgrid(request):
-    daftar_barang = Barang_masuk.objects.all()
+    daftar_barang = Barang_masuk.objects.all().order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,10)
 
     page = request.GET.get('page','')
@@ -69,6 +69,7 @@ def editbarangmasuk(request,pk):
             tgl_masuk=request.POST['tgl_masuk'],
             supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
             jml_masuk=request.POST['jml_masuk'],
+            harga_satuan=request.POST['harga_satuan'],
             no_resi=request.POST['no_resi'],
             foto_masuk=request.FILES['foto_masuk'],
             jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
@@ -96,6 +97,7 @@ def tambahbarangmasuk(request):
                 tgl_masuk=request.POST['tgl_masuk'],
                 supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
                 jml_masuk=request.POST['jml_masuk'],
+                harga_satuan=request.POST['harga_satuan'],
                 no_resi=request.POST['no_resi'],
                 foto_masuk=request.FILES['foto_masuk'],
                 jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
@@ -124,7 +126,7 @@ def deletebarangmasuk(request,pk):
 # BARANG KELUAR|
 # -------------+
 def viewbarangkeluar(request):
-    daftar_barangkeluar = Barangkeluar.objects.all()
+    daftar_barangkeluar = Barangkeluar.objects.all().order_by('-id')
     pagination = Paginator(daftar_barangkeluar,5)
 
     page = request.GET.get('page','')
@@ -133,7 +135,7 @@ def viewbarangkeluar(request):
 
 
 def barangkeluargrid(request):
-    daftar_barangkeluar = Barangkeluar.objects.all()
+    daftar_barangkeluar = Barangkeluar.objects.all().order_by('-id')
     pagination = Paginator(daftar_barangkeluar,5)
 
     page = request.GET.get('page','')
@@ -142,13 +144,15 @@ def barangkeluargrid(request):
 
 
 def editbarangkeluar(request,pk):
-    print(request.POST.get('id'))
     keluar = Barangkeluar.objects.get(pk=pk)
+    barangmasuk = Barang_masuk.objects.all()
+    customer = Customer.objects.all()
+
     if request.method == "POST":
         form = BarangkeluarForm(request.POST,request.FILES, instance=keluar)
         if form.is_valid():
             barang_keluar = form.save(commit=False)
-            nama_barang=Barang_masuk.objects.get(pk=request.POST.get('nama_barang')),
+            nama_barang=request.POST['nama_barang'],
             kode_barang=request.POST['kode_barang'],
             serialnumber=request.POST['serialnumber'],
             no_bukti=request.POST['no_bukti'],
@@ -157,27 +161,32 @@ def editbarangkeluar(request,pk):
             jumlah=request.POST['jumlah'],
             harga_satuan=request.POST['harga_satuan'],
             total_bayar=request.POST['total_bayar'],
-            customer_id=Customer.objects.get(pk=request.POST.get('customer_id')),
+            customer_id=request.POST['customer_id'],
             alamat_customer=request.POST['alamat_customer'],
-            merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-            jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-            tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
-            foto_keluar=request.FILES['foto_keluar']
+            merk_id=request.POST['merk_id'],
+            jenis_id=request.POST['jenis_id'],
+            tipe_id=request.POST['tipe_id'],
+            foto_keluar=request.FILES.get('foto_keluar')
             barang_keluar.save()
             return redirect('/inventaris/barangkeluar', pk=keluar.pk)
     else:
         form = BarangkeluarForm(instance=keluar)
-    return render(request, 'transaksi/keluar/edit-barang-keluar.html', {'form': form, 'barang_keluar' : keluar})
+    return render(request, 'transaksi/keluar/edit-barang-keluar.html', {
+        'form': form,
+        'barang_keluar' : keluar,
+        'daftar_customer':customer,
+        'daftar_barangmasuk':barangmasuk,
+        })
 
 def addbarangkeluar(request):
-    customer = Customer.objects.all()
     barangmasuk = Barang_masuk.objects.all()
+    customer = Customer.objects.all()
 
     if request.method == 'POST':
         form = BarangkeluarForm(request.POST , request.FILES)
         if form.is_valid():
             form = Barangkeluar(
-                nama_barang=Barang_masuk.objects.get(pk=request.POST.get('nama_barang')),
+                nama_barang=request.POST['nama_barang'],
                 kode_barang=request.POST['kode_barang'],
                 serialnumber=request.POST['serialnumber'],
                 no_bukti=request.POST['no_bukti'],
@@ -186,28 +195,27 @@ def addbarangkeluar(request):
                 jumlah=request.POST['jumlah'],
                 harga_satuan=request.POST['harga_satuan'],
                 total_bayar=request.POST['total_bayar'],
-                customer_id=Customer.objects.get(pk=request.POST.get('customer_id')),
+                customer_id=request.POST['customer_id'],
                 alamat_customer=request.POST['alamat_customer'],
-
                 merk_id=request.POST['merk_id'],
                 jenis_id=request.POST['jenis_id'],
                 tipe_id=request.POST['tipe_id'],
-                foto_keluar=request.FILES['foto_keluar']
+                foto_keluar=request.FILES.get('foto_keluar')
             )
             form.save()
             return redirect('/inventaris/barangkeluar/list')
     else:
         form = BarangkeluarForm()
-    return render(request, 'transaksi/keluar/add-barang-keluar.html',{'form': form,
+    return render(request, 'transaksi/keluar/add-barang-keluar.html',{
+        'form': form,
         'daftar_customer':customer,
-        'daftar_barangmasuk':barangmasuk
+        'daftar_barangmasuk':barangmasuk,
         })
 
 def deletebarangkeluar(request,pk):
     barang_keluar = Barangkeluar.objects.get(pk=pk)
     barang_keluar.delete()
     return redirect('/inventaris/barangkeluar')
-
 
 # -------------+
 # LAPORAN      |
@@ -247,7 +255,7 @@ def changepassword(request):
 # MASTER DATA  |
 # -------------+
 def viewmerk(request):
-    daftar_merk = Merk_brg.objects.all()
+    daftar_merk = Merk_brg.objects.all().order_by('-id_merk')
     pagination = Paginator(daftar_merk,10)
 
     page = request.GET.get('page','')
@@ -297,7 +305,7 @@ def searchmerk(request):
 
     # Your code
 def viewjenis(request):
-    daftar_jenis = Jenis_brg.objects.all()
+    daftar_jenis = Jenis_brg.objects.all().order_by('-id_jenis')
     pagination = Paginator(daftar_jenis,10)
 
     page = request.GET.get('page','')
@@ -337,7 +345,7 @@ def deletejenis(request,pk):
     return redirect('/inventaris/masterdata/jenis')
 
 def viewsupplier(request):
-    daftar_supplier = Supplier.objects.all()
+    daftar_supplier = Supplier.objects.all().order_by('-id_supplier')
     pagination = Paginator(daftar_supplier,10)
 
     page = request.GET.get('page','')
@@ -381,7 +389,7 @@ def deletesupplier(request,pk):
     return redirect('/inventaris/masterdata/supplier')
 
 def viewcustomer(request):
-    daftar_customer = Customer.objects.all()
+    daftar_customer = Customer.objects.all().order_by('-id_customer')
     pagination = Paginator(daftar_customer,10)
     page = request.GET.get('page','')
     customer_pg = pagination.get_page(page)
@@ -424,7 +432,7 @@ def deletecustomer(request,pk):
     return redirect('/inventaris/masterdata/customer')
 
 def viewtipe(request):
-    daftar_tipe = Tipe_brg.objects.all()
+    daftar_tipe = Tipe_brg.objects.all().order_by('-id_tipe')
     pagination = Paginator(daftar_tipe,10)
 
     page = request.GET.get('page','')
