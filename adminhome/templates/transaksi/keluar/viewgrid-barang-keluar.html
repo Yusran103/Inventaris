@@ -114,7 +114,7 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="/inventaris/barangkeluar/edit/{{ data.id }}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
-                                        <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                        <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger btn-sm confirm-delete"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                             {% else %}
                             <div class="box box-warning">
                                 <br/>  
-                                <span><center>Tidak ada data barang masuk saat ini...</center></span>
+                                <span><center>Tidak ada data barang keluar saat ini...</center></span>
                                 <br/>
                             </div>
                             {% endif %}
@@ -155,4 +155,12 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+    $('.confirm-delete').on('click', function(e) {
+        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+    })
+</script>
 {% endblock %}

@@ -3,8 +3,7 @@ from hashid_field import HashidAutoField
 from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Barangkeluar
 from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform , BarangkeluarForm, Barang_masuk_form
 from django.core.paginator import Paginator
-
-
+from django.http import HttpResponse
 
 # -----------+
 # LOGIN      |
@@ -212,7 +211,7 @@ def addbarangkeluar(request):
         'daftar_barangmasuk':barangmasuk,
         })
 
-def deletebarangkeluar(request,pk):
+def deletebarangkeluar(request, pk):
     barang_keluar = Barangkeluar.objects.get(pk=pk)
     barang_keluar.delete()
     return redirect('/inventaris/barangkeluar')
