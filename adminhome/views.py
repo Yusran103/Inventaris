@@ -129,6 +129,7 @@ def tambahbarangmasuk(request):
 
     if request.method == 'POST':
         form = Barang_masuk_form(request.POST , request.FILES)
+        
         if form.is_valid():
             form = Barang_masuk(
                 kd_barang=request.POST['kd_barang'],
