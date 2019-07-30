@@ -30,9 +30,9 @@
                                 <div class="col-sm-9" id="namabarang">
                                     <select id="mySelect" style="width: 100%" onclick="myFunction()">
                                         {% if masuk %}
-                                        {% for list_Masuk in masuk %}
                                         <option value=" | | | | | | ">Pilih Barang</option>
-                                        <option value="{{list_Masuk.nm_barang}}|{{list_Masuk.kd_barang}}|{{list_Masuk.sn_barang}}|{{list_Masuk.harga_satuan}}|{{list_Masuk.merk_id}}|{{list_Masuk.jenis_id}}|{{list_Masuk.tipe_id}}">{{list_Masuk.nm_barang}}</option>
+                                        {% for list_Masuk in masuk %}
+                                        <option value="{{list_Masuk.nm_barang}}|{{list_Masuk.kd_barang}}|{{list_Masuk.sn_barang}}|{{list_Masuk.hrg_barang}}|{{list_Masuk.merk_id}}|{{list_Masuk.jenis_id}}|{{list_Masuk.tipe_id}}">{{list_Masuk.nm_barang}}</option>
                                         {% endfor %}
                                         {% else %}
                                         <option value=" | | | | | | ">Tidak Ada barang Masuk</option>

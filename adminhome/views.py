@@ -213,7 +213,7 @@ def editbarangkeluar(request):
 
 
 def tambahbarangkeluar(request):
-    barang_masuk = Barang_masuk.objects.all()
+    barang_masuk = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
     return render(request, 'transaksi/keluar/add-barang-keluar.html',{'masuk' : barang_masuk})
 
 # -------------+
