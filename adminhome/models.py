@@ -129,3 +129,24 @@ class Stok_barang(models.Model):
     
     def __str__(self):
         return self.kd_barang
+
+class User(models.Model):
+    """docstring for user"""
+    USER_CHOICES = [
+        ('Admin', 'Admin'),
+        ('SuperAdmin', 'SuperAdmin'),
+    ]
+
+    id_user = models.AutoField(primary_key=True)
+    nm_lengkap = models.CharField(max_length=25)
+    username = models.CharField(max_length=8)
+    password = models.CharField(max_length=8)
+    level = models.CharField(
+        max_length=20, choices=USER_CHOICES, default='Admin')
+
+    def __unicode__(self):
+        return self.id_user
+
+    class Meta:
+        db_table = "tb_user"
+

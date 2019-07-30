@@ -31,7 +31,7 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Stok Barang</h1>
                     </div>
-                    <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                    <div class="input-group input-group-md input-group-sm col-md-4 col-xs-6 col-lg-4 pull-left">
                         <input type="text" class="form-control" placeholder="Cari.....">
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
@@ -41,9 +41,10 @@
                         <a class="btn btn-primary pull-right" href="/inventaris/stok"><i class="fa fa-pencil-square-o"></i></a>
                     </div>
                     <br/>
+                    <br/>
                     <center>
                         <nav aria-label="Page navigation example" style="display: inline-block">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-lg pagination-md pagination-sm justify-content-center">
                                 {% if daftar_stok.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1" class="page-item">&laquo;</a>
@@ -100,7 +101,7 @@
                     </div>
                     <center>
                         <nav aria-label="Page navigation example" style="display: inline-block">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-lg pagination-md pagination-sm justify-content-center">
                                 {% if daftar_stok.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1" class="page-item">&laquo;</a>
