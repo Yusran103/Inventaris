@@ -83,8 +83,8 @@
                                         <td>{{ stok.kd_barang }}</td>
                                         <td>{{ stok.nm_barang }}</td>
                                         <td>{{ stok.sn_barang }}</td>
-                                        <td>{{ stok.jml_masuk }}</td>
-                                        <td>{{ stok.harga_satuan }}</td>
+                                        <td>{{ stok.stok_akhir }}</td>
+                                        <td>{{ stok.hrg_barang }}</td>
                                         <td>{{ stok.merk_id }}</td>
                                         <td>{{ stok.jenis_id }}</td>
                                         <td>{{ stok.tipe_id }}</td>
@@ -92,7 +92,7 @@
                                     {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="8"><center>Tidak ada data stok saat ini...</center></td>
+                                        <td colspan="9"><center>Tidak ada data stok saat ini...</center></td>
                                     </tr>
                                     {% endif %}
                             </tbody>

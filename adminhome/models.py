@@ -114,9 +114,11 @@ class Stok_barang(models.Model):
     nm_barang= models.CharField(max_length=100)
     kd_barang = models.CharField(max_length=100)
     hrg_barang = models.IntegerField()
-    jumlah_stok = models.IntegerField()
-    stok_akhir = models.IntegerField()
+    jumlah_stok = models.IntegerField(default=0)
+    stok_akhir = models.IntegerField(default=0)
     keterangan = models.CharField(max_length=100)
+    foto_stok = models.ImageField(upload_to='foto/',blank=True , null=True)
+    sn_barang = models.CharField(max_length=20) 
 
     jenis_id = models.ForeignKey(Jenis_brg, on_delete=models.DO_NOTHING,db_column='jenis_id')
     merk_id = models.ForeignKey(Merk_brg, on_delete=models.DO_NOTHING,db_column='merk_id')
@@ -126,4 +128,4 @@ class Stok_barang(models.Model):
         db_table = "tb_stok"
     
     def __str__(self):
-        return self.stok_akhir
+        return self.nm_barang

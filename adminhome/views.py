@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404 ,redirect
-from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk
-from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form
+from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang
+from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form, Stok_form
 from django.core.paginator import Paginator
 
 # -----------+
@@ -24,7 +24,7 @@ def dashboard(request):
 
 
 def gridstok(request):
-    daftar_stok = Barang_masuk.objects.all().order_by('-id_brg_masuk')
+    daftar_stok = Stok_barang.objects.all().order_by('-id_stok')
     pagination = Paginator(daftar_stok,5)
 
     page = request.GET.get('page','')
@@ -33,7 +33,7 @@ def gridstok(request):
 
 
 def stok(request):
-    daftar_stok = Barang_masuk.objects.all()
+    daftar_stok = Stok_barang.objects.all()
     pagination = Paginator(daftar_stok,10)
 
     page = request.GET.get('page','')
@@ -126,10 +126,8 @@ def tambahbarangmasuk(request):
     merk = Merk_brg.objects.all()
     tipe = Tipe_brg.objects.all()
     supplier = Supplier.objects.all()
-
     if request.method == 'POST':
         form = Barang_masuk_form(request.POST , request.FILES)
-        
         if form.is_valid():
             form = Barang_masuk(
                 kd_barang=request.POST['kd_barang'],
@@ -146,6 +144,39 @@ def tambahbarangmasuk(request):
                 tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
             )
             form.save()
+            
+            if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kd_barang')):
+                cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kd_barang')).latest('id_stok')
+                stok_barang = Stok_barang.objects.create(
+                    tanggal=request.POST['tgl_masuk'],
+                    nm_barang=request.POST['nm_barang'],
+                    kd_barang=request.POST['kd_barang'],
+                    sn_barang=request.POST['sn_barang'],
+                    hrg_barang=request.POST['harga_satuan'],
+                    jumlah_stok=request.POST['jml_masuk'],
+                    stok_akhir= cr_stok.stok_akhir + int(request.POST['jml_masuk']),
+                    keterangan="Barang Masuk",
+                    foto_stok=request.FILES.get('foto_masuk'),
+                    jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                    merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                    tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
+                )
+            else:
+                stok_barang = Stok_barang.objects.create(
+                    tanggal=request.POST['tgl_masuk'],
+                    nm_barang=request.POST['nm_barang'],
+                    kd_barang=request.POST['kd_barang'],
+                    sn_barang=request.POST['sn_barang'],
+                    hrg_barang=request.POST['harga_satuan'],
+                    jumlah_stok=request.POST['jml_masuk'],
+                    stok_akhir=request.POST['jml_masuk'],
+                    keterangan="Barang Masuk",
+                    foto_stok=request.FILES.get('foto_masuk'),
+                    jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                    merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                    tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
+                )
+            stok_barang.save()
             return redirect('/inventaris/barangmasuk/list')
     else:
         form = Barang_masuk_form()

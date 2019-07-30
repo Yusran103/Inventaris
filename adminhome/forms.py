@@ -1,7 +1,7 @@
 from django.forms.models import ModelMultipleChoiceField
 from django.forms import Textarea, ModelForm
 from django import forms
-from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk
+from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Stok_barang
 
 # -------------+
 # FORM MERK    |
@@ -226,3 +226,23 @@ class Barang_masuk_form(ModelForm):
             'merk_id',
             'tipe_id'
             ]
+
+# ----------+
+# STOK FORM |
+# ----------+
+class Stok_form(ModelForm):
+    class Meta:
+        model = Stok_barang
+        fields = [
+            'tanggal',
+            'nm_barang',
+            'kd_barang',
+            'hrg_barang',
+            'jumlah_stok',
+            'stok_akhir',
+            'keterangan',
+            'jenis_id',
+            'merk_id',
+            'tipe_id'
+            ]
+

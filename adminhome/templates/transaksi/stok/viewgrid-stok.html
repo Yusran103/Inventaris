@@ -69,8 +69,8 @@
                                 <div class="row">
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <div class="container">
-                                            {% if stok.foto_masuk %}
-                                            <img src="{{stok.foto_masuk.url}}" class="img-responsive" width="100" height="100" />
+                                            {% if stok.foto_stok %}
+                                            <img src="{{stok.foto_stok.url}}" class="img-responsive" width="100" height="100"/>
                                             {% else %}
                                             <img src="{% static 'assets/images/images.png' %}" class="img-responsive" width="100" height="100" />
                                             {% endif %}
@@ -88,8 +88,8 @@
                                     <div class="col-sm-3 col-xs-4 col-lg-3">
                                         <div class="form-group">
                                             <h5><strong>Serial Number : </strong>{{stok.sn_barang}}</h5>
-                                            <h5><strong>Jumlah Stok : </strong>{{stok.jml_masuk}}</h5>
-                                            <h5><strong>Harga Satuan : </strong>{{stok.harga_satuan}}</h5>
+                                            <h5><strong>Jumlah Stok : </strong>{{stok.stok_akhir}}</h5>
+                                            <h5><strong>Harga Satuan : </strong>{{stok.hrg_barang}}</h5>
                                             <h5><strong>Merk : </strong>{{stok.merk_id}}</h5>
                                             <h5><strong>Jenis : </strong>{{stok.jenis_id}}</h5>
                                         </div>
