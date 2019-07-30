@@ -128,4 +128,4 @@ class Stok_barang(models.Model):
         db_table = "tb_stok"
     
     def __str__(self):
-        return self.nm_barang
+        return self.kd_barang

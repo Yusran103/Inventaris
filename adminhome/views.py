@@ -24,7 +24,7 @@ def dashboard(request):
 
 
 def gridstok(request):
-    daftar_stok = Stok_barang.objects.all().order_by('-id_stok')
+    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
     pagination = Paginator(daftar_stok,5)
 
     page = request.GET.get('page','')
@@ -33,7 +33,7 @@ def gridstok(request):
 
 
 def stok(request):
-    daftar_stok = Stok_barang.objects.all()
+    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
     pagination = Paginator(daftar_stok,10)
 
     page = request.GET.get('page','')
