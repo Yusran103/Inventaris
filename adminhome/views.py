@@ -3,7 +3,7 @@ from hashid_field import HashidAutoField
 from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Barangkeluar
 from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform , BarangkeluarForm, Barang_masuk_form
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.contrib import messages
 
 # -----------+
 # LOGIN      |
@@ -167,6 +167,7 @@ def editbarangkeluar(request,pk):
             tipe_id=request.POST['tipe_id'],
             foto_keluar=request.FILES.get('foto_keluar')
             barang_keluar.save()
+            messages.info(request, 'Data Barang keluar berhasil diedit!')
             return redirect('/inventaris/barangkeluar', pk=keluar.pk)
     else:
         form = BarangkeluarForm(instance=keluar)
@@ -202,6 +203,7 @@ def addbarangkeluar(request):
                 foto_keluar=request.FILES.get('foto_keluar')
             )
             form.save()
+            messages.info(request, 'Data Barang keluar berhasil ditambahkan!')
             return redirect('/inventaris/barangkeluar/list')
     else:
         form = BarangkeluarForm()
@@ -209,11 +211,13 @@ def addbarangkeluar(request):
         'form': form,
         'daftar_customer':customer,
         'daftar_barangmasuk':barangmasuk,
+        'messages':messages,
         })
 
 def deletebarangkeluar(request, pk):
     barang_keluar = Barangkeluar.objects.get(pk=pk)
     barang_keluar.delete()
+    messages.info(request, 'Data Barang keluar berhasil dihapus!')
     return redirect('/inventaris/barangkeluar')
 
 # -------------+

@@ -65,6 +65,17 @@
                     </center>
                     <!-- pagination atas-->
                     <br/>
+                    
+                    {% if messages %}
+                    <div class="col-sm-12">
+                        {% for message in messages %}
+                        <div class="callout callout-danger">
+                            <h4 {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</h4>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
                     <!-- KONTEN -->
                     <div class="row">
                         <div class="col-sm-12">
@@ -114,7 +125,27 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="/inventaris/barangkeluar/edit/{{ data.id }}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
-                                        <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger btn-sm confirm-delete"><i class="fa fa-trash"></i></a>
+                                        <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
+                                        <!-- Modal konfirmasi-delete -->
+                                        <div class="modal fade" id="myModal" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title">HAPUS??</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Apakah anda yakin ingin menghapus barang <strong>{{data.nama_barang}}</strong> ?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger">HAPUS</a>
+                                                            <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <!-- end modal -->
                                     </div>
                                 </div>
                             </div>
@@ -158,9 +189,4 @@
 {% endblock %}
 
 {% block extrajs %}
-<script>
-    $('.confirm-delete').on('click', function(e) {
-        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
-    })
-</script>
 {% endblock %}
