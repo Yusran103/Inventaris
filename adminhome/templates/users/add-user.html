@@ -7,37 +7,52 @@
 {% endblock%}
 
 {% block page_content %}
-
 <section class="content-header">
+    <h1>
+        <i class="fa fa-edit"></i> Tambah User
+    </h1>
+</section>
+<section class="content">
     <div class="row">
-        <!-- Horizontal Form -->
-        <div class="box box-info col-md-12">
-            <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-user-plus"></i><b> Tambah User</b></h3>
-            </div>
-            <!-- /.box-header -->
-            <!-- form start -->
-            {% if form.errors %}
-            <div class="alert alert-danger alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                {{ form.errors }}
-            </div>
-            {% endif %}
-            <div class="col-md-9 col-xs-9 col-lg-9">        
-                    <div class="box-body">
-                        <div class="form-group">
-                            <form method="post">
-
-                                {% csrf_token %}
-                                {% bootstrap_form form %}
-
-                                <button class="btn btn-success">Simpan</button>
-
-                            </form>
+        <div class="col-sm-12">
+            <div class="box box-success">
+                <div class="box-body">
+                    <form action="/register" method="POST" class="form-horizontal">
+                        {% csrf_token %}
+                        <div class="col-sm-8">
+                            <br>
+                            <div class="form-group">
+                                <label for="nm_lengkap" class="col-sm-3 control-label">{{form.nm_lengkap.label}} :</label>
+                                <div class="col-sm-8">
+                                    {{form.nm_lengkap}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="username" class="col-sm-3 control-label">{{form.username.label}} :</label>
+                                <div class="col-sm-8">
+                                    {{form.username}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-3 control-label">{{form.password.label}} :</label>
+                                <div class="col-sm-8">
+                                    {{form.password}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="level" class="col-sm-3 control-label">{{form.level.label}} :</label>
+                                <div class="col-sm-8">
+                                    {{form.level}}
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 pull-right">
+                                <input type="submit" value="Tambah" class="btn btn-primary confirm-add"></input>
+                                <a href="{% url 'supplier'%}" type="button" class="btn btn-danger">Kembali</a>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>  
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </section>

@@ -29,7 +29,7 @@
                 <div class="box-footer clearfix">
                     <div class="box-header with-border">
                         <i class="fa fa-users"></i>
-                        <h1 class="box-title">Daftar User</h1>
+                        <h1 class="box-title">Daftar User {{akun.first_name}} {{akun.last_name}}</h1>
                     </div>
                     <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
                         <input type="text" class="form-control" placeholder="Cari.....">
@@ -71,7 +71,9 @@
                                 <th>Nama</th>
                                 <th>Username</th>
                                 <th>Level</th>
+                                {% if request.session.level == 'SuperAdmin' %}
                                 <th>Aksi</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -82,12 +84,14 @@
                                 <td>{{ user.nm_lengkap }}</td>
                                 <td>{{ user.username }}</td>
                                 <td>{{ user.level }}</td>
+                                {% if request.session.level == 'SuperAdmin' %}
                                 <td>
                                     <a href="/inventaris/users/edit/{{ user.id_user }}" class="btn btn-info">
                                     <i class="fa fa-edit"></i></a>
                                     <a href="/inventaris/users/delete/{{ user.id_user }}" class="btn btn-danger confirm-delete">
                                     <i class="fa fa-trash"></i></a>
                                 </td>
+                                {% endif %}
                                 </tr>
                                 {% endfor %}
                                 {% else %}

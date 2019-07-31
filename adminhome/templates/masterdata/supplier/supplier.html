@@ -59,7 +59,9 @@
                                         <th>Nama</th>
                                         <th>Alamat</th>
                                         <th>No HP</th>
+                                        {% if request.session.level == 'SuperAdmin' %}
                                         <th>Aksi</th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,11 +72,13 @@
                                         <td>{{ supplier.nama_supplier }}</td>
                                         <td>{{ supplier.alamat_supplier }}</td>
                                         <td>{{ supplier.notlp_supplier }}</td>
+                                        {% if request.session.level == 'SuperAdmin' %}
                                         <td><a href="/inventaris/masterdata/supplier/edit/{{ supplier.id_supplier }}" class="btn btn-info"><i
                                             class="fa fa-edit"></i></a>
                                             <a href="/inventaris/masterdata/supplier/delete/{{ supplier.id_supplier }}" class="btn btn-danger confirm-delete"><i
                                                 class="fa fa-trash"></i></a>
                                             </td>
+                                        {% endif %}
                                         </tr>
                                         {% endfor %}
                                         {% else %}

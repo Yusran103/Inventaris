@@ -73,7 +73,9 @@
                                     <tr>
                                         <th width="50px">No</th>
                                         <th>Tipe</th>
+                                        {% if request.session.level == 'SuperAdmin' %}
                                         <th width="350px">Aksi</th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,11 +84,13 @@
                                     <tr>
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ tipe.nama_type }}</td>
+                                        {% if request.session.level == 'SuperAdmin' %}
                                         <td><a href="/inventaris/masterdata/tipe/edit/{{ tipe.id_type }}" class="btn btn-info"><i
                                             class="fa fa-edit"></i></a>
                                             <a href="/inventaris/masterdata/tipe/delete/{{ tipe.id_type }}" class="btn btn-danger confirm-delete"><i
                                                 class="fa fa-trash"></i></a>
                                             </td>
+                                        {% endif %}
                                         </tr>
                                         {% endfor %}
                                         {% else %}

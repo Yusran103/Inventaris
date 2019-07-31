@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer, user
-from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform, Loginform, SignUpForm
+from adminhome.models import merk_brg , jenis_brg , supplier , type_brg , customer
+from adminhome.forms import Merkform , Supplierform , Typeform, Jenisform, Customerform, Userform
 from django.core.paginator import Paginator
 from django.contrib import auth
 from adminhome.models import user
@@ -12,67 +12,62 @@ from django.conf import settings
 from django.utils.crypto import get_random_string
 from django.views.generic import View, FormView
 from django.utils.translation import gettext_lazy as _
-from .models import Activation
+import bcrypt
 
-class GuestOnlyView(View):
-    def dispatch(self, request, *args, **kwargs):
-        # Redirect to the index page if the user already authenticated
-        if request.user.is_authenticated:
-            return redirect(settings.LOGIN_REDIRECT_URL)
-
-        return super().dispatch(request, *args, **kwargs)
-
-class SignUpView(FormView):
-    template_name = 'users/add-user.html'
-    form_class = SignUpForm
-
-    def form_valid(self, form):
-        request = self.request
-        user = form.save(commit=False)
-
-        if settings.DISABLE_USERNAME:
-            # Set a temporary username
-            user.username = get_random_string()
-        else:
-            user.username = form.cleaned_data['username']
-
-        # Create a user record
-        user.save()
-
-        # Change the username to the "user_ID" form
-        if settings.DISABLE_USERNAME:
-            user.username = f'user_{user.id}'
-            user.save()
-        else:
-            raw_password = form.cleaned_data['password1']
-
-            user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
-
-            messages.success(request, _('You are successfully signed up!'))
-
-        return redirect('/inventaris/users')
-# -----------+
-# LOGIN      |
-# -----------+
+# ----------------+
+# LOGIN & AAD USER      |
+# ----------------+
 
 def index(request):
     return render(request, 'login.html')
 
-def login_request(request):
     if request.method == 'POST':
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect('/inventaris/')
-        else:
-            return HttpResponse('Invalid Credientials', status=401 )
+        form_data = request.POST
+        form = Supplierform(form_data)
+        if form.is_valid():
+            Supplier = supplier(
+                nama_supplier=request.POST['nama_supplier'],
+                alamat_supplier=request.POST['alamat_supplier'],
+                notlp_supplier=request.POST['notlp_supplier']
+            )
+            Supplier.save()
+            return redirect('/inventaris/masterdata/supplier')
+    else:
+        form = Supplierform()
+    return render(request, 'masterdata/supplier/supplier_tambah.html', {'form': form})
 
-def logout_request(request):
+def register(request):
+    if request.method == 'POST':
+        form_data = request.POST
+        form = Userform(form_data)
+        if form.is_valid():
+            hashed_password = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt())
+            akun = user(nm_lengkap=request.POST['nm_lengkap'], username=request.POST['username'], password=hashed_password.decode('utf-8'), level=request.POST['level'])
+            akun.save()
+            return redirect('/inventaris/users')
+    else:
+        form = Userform()
+    return render(request, 'users/add-user.html', {'form': form})
+
+def login_view(request):
+    if (user.objects.filter(username=request.POST['login_username']).exists()):
+        akun = user.objects.filter(username=request.POST['login_username'])[0]
+        if (bcrypt.checkpw(request.POST['login_password'].encode(), akun.password.encode())):
+            request.session['id_user'] = akun.id_user
+            request.session['username'] = akun.username  
+            request.session['level'] = akun.level            
+            return redirect('/inventaris/')
+    return redirect('/')
+
+def success(request):
+    akun = user.objects.get(id_user=request.session['id_user'])
+    context = {
+        "user": akun
+    }
+    return render(request, 'register/success.html', context)
+
+def logout_view(request):
     logout(request)
-    messages.info(request, "Logged out successfully")
     return redirect('/login/')
 
 # -----------+

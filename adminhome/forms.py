@@ -1,38 +1,10 @@
-from django.forms import Textarea, ModelForm 
+from django.forms import Textarea, ModelForm, Select
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 from adminhome.models import merk_brg, supplier, type_brg, jenis_brg, customer, user
-
-
-# -------------+
-# FORM LOGIN    |
-# -------------+
-class Loginform(ModelForm):
-    username = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-            'class':'form-control',
-            'placeholder':'Username'
-            }
-            ),
-        required=True
-        )
-
-    password = forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={
-            'class':'form-control',
-            'placeholder':'Password'
-            }
-            ),
-        required=True
-        )    
-    class Meta:
-        model = user
-        fields = ['username', 'password']
 
 # -------------+
 # FORM MERK    |
@@ -168,47 +140,30 @@ class Customerform(ModelForm):
 class Userform(ModelForm):
     class Meta:
         model = user
-        fields = ['nm_lengkap', 'username', 'level', 'password']
+        fields = ['nm_lengkap', 'username', 'password', 'level']
         labels = {
             'nm_lengkap':"Nama",
             'username':'Username',
-            'level':'Level',
             'password':'Password',
+            'level':'Level',
         }
         error_messages = {
             'nm_lengkap': {
-                'required': 'masukan nama'
+                'required': 'Nama belum terisi'
             },
             'username' : {
-                'required': "Anda harus masukan username"
+                'required': "Anda harus mengisi username"
             },
-            'level' : {
-                'required': "Anda harus memilih level"
+            'password' : {
+                'required': "Anda harus mengisi password"
             },
-            'password':{
-                'required': "Masukan password"
+            'level':{
+                'required': "Anda harus memilih level akun"
             }
         }
         widgets = {
-            'level':forms.Select (attrs={ 'class':'form-control' }),
-            'username':forms.TextInput (attrs={ 'class':'form-control' }),
-            'nm_lengkap':forms.TextInput (attrs={ 'class':'form-control' }),
-            'password': forms.PasswordInput(attrs={ 'class':'form-control' })
-
+            'nm_lengkap': forms.TextInput(attrs={'class':'form-control','placeholder':'masukan nama'}),
+            'username': forms.TextInput(attrs={'class':'form-control','placeholder':'masukan username'}),
+            'password': forms.PasswordInput(attrs={'class':'form-control','placeholder':'masukan password'}),
+            'level': forms.Select(attrs={'class':'form-control','placeholder':'pilih Level Akun'}),
         }
-
-class SignUpForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = settings.SIGN_UP_FIELDS
-
-    email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'))
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-
-        user = User.objects.filter(email__iexact=email).exists()
-        if user:
-            raise ValidationError(_('You can not use this email address.'))
-
-        return email

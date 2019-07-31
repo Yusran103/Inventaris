@@ -18,15 +18,16 @@ from django.urls import path
 from django.conf.urls import url
 from django.urls import path, include
 from adminhome import views as adminhome
-from homepage import views as homepage_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # LOGIN FROM
     path('accounts/', include('django.contrib.auth.urls')),
     path('', adminhome.index, name='login'),
-    url(r'^login/', homepage_views.login_view),
-    url(r'^logout/', homepage_views.logout_view),
+    url(r'^logout/', adminhome.logout_view),
+    url(r'^register$', adminhome.register),
+    url(r'^success$', adminhome.success),
+    url(r'^login$', adminhome.login_view),
     # FORGET PASSWORD
     path('changepassword/', adminhome.changepassword, name='changepassword'),
     # ADMIN DASHBOARD
@@ -56,7 +57,7 @@ urlpatterns = [
     
     # USERS
     path('inventaris/users', adminhome.viewuser, name='user'),
-    path('inventaris/users/tambah', adminhome.SignUpView.as_view(), name='user_add'),
+    path('inventaris/users/tambah', adminhome.register, name='user_add'),
     path('inventaris/users/edit/<int:pk>', adminhome.edituser, name='user_edit'),
     path('inventaris/users/delete/<int:pk>', adminhome.deleteuser,name='user_delete'),
     

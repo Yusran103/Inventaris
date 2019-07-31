@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -84,6 +85,24 @@ class barang_keluar(models.Model):
     class Meta:
         db_table = "tb_barang_keluar"
 
+class UserManager(models.Manager):
+    def validator(self, postData):
+        errors = {}
+        if (postData['first_name'].isalpha()) == False:
+            if len(postData['first_name']) < 2:
+                errors['first_name'] = "First name can not be shorter than 2 characters"
+
+        if (postData['last_name'].isalpha()) == False:
+            if len(postData['last_name']) < 2:
+                errors['last_name'] = "Last name can not be shorter than 2 characters"
+
+        if len(postData['email']) == 0:
+            errors['email'] = "You must enter an email"
+
+        if len(postData['password']) < 8:
+            errors['password'] = "Password is too short!"
+
+        return errors
 
 class user(models.Model):
     """docstring for user"""
@@ -94,19 +113,11 @@ class user(models.Model):
 
     id_user = models.AutoField(primary_key=True)
     nm_lengkap = models.CharField(max_length=25)
-    username = models.CharField(max_length=8)
-    password = models.CharField(max_length=8)
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=255)
     level = models.CharField(
         max_length=20, choices=USER_CHOICES, default='Admin')
-
-    def __unicode__(self):
-        return self.id_user
 
     class Meta:
         db_table = "tb_user"
 
-class Activation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    code = models.CharField(max_length=20, unique=True)
-    email = models.EmailField(blank=True)

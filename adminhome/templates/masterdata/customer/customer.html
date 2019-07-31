@@ -76,7 +76,9 @@
                                         <th>Nama</th>
                                         <th>Alamat</th>
                                         <th>No HP</th>
+                                        {% if request.session.level == 'SuperAdmin' %}
                                         <th>Aksi</th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -87,11 +89,13 @@
                                             <td>{{ customer.nama_customer }}</td>
                                             <td>{{ customer.alamat_customer }}</td>
                                             <td>{{ customer.notlp_customer }}</td>
+                                            {% if request.session.level == 'SuperAdmin' %}
                                             <td><a href="/inventaris/masterdata/customer/edit/{{ customer.id_customer }}" class="btn btn-info"><i
                                                 class="fa fa-edit"></i></a>
                                                 <a href="/inventaris/masterdata/customer/delete/{{ customer.id_customer }}" class="btn btn-danger confirm-delete"><i
                                                     class="fa fa-trash"></i></a>
                                                 </td>
+                                            {% endif %}
                                             </tr>
                                             {% endfor %}
                                             {% else %}
