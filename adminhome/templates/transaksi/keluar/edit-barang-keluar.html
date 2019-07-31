@@ -30,10 +30,10 @@
                                 <label for="caribarang" class="col-sm-3 control-label">Cari Barang : </label>
                                 <div class="col-sm-9" id="caribarang">
                                     <select id="mySelect" style="width: 100%" onclick="myFunction()">
+                                        <option value=" | | | | | ">----- Pilih Barang -----</option>    
                                         {% if daftar_barangmasuk %}
                                         {% for data in daftar_barangmasuk %}
-                                        <option value=" | | | | | | | ">----- Pilih Barang -----</option>    
-                                        <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.merk_id}}|{{data.jenis_id}}|{{data.tipe_id}}|{{data.harga_satuan}}">[{{data.kd_barang}}] {{data.nm_barang}}</option>
+                                        <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.harga_satuan}}|{{data.stok_akhir}}">[{{data.kd_barang}}] {{data.nm_barang}}</option>
                                         {% endfor %}
                                         {% else %}
                                         <option value="">Tidak Ada Data Barang Masuk</option>
@@ -44,7 +44,7 @@
                             <div class="form-group">
                                 <label for="namabarang" class="col-sm-3 control-label">Nama Barang : </label>
                                 <div class="col-sm-9">
-                                    {{form.nama_barang}} 
+                                    {{form.nama_barang}}
                                 </div>
                             </div>
                             
@@ -67,26 +67,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="merk" class="col-sm-3 control-label">Merk : </label>
-                                <div class="col-sm-9">
-                                    {{form.merk_id}}  
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="jenis" class="col-sm-3 control-label">Jenis : </label>
-                                <div class="col-sm-9">
-                                    {{form.jenis_id}} 
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="tipe" class="col-sm-3 control-label">Tipe : </label>
-                                <div class="col-sm-9">
-                                    {{form.tipe_id}} 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6" >
-                            <div class="form-group">
                                 <label for="jumlahkeluar" class="col-sm-3 control-label">Jumlah Keluar : </label>
                                 <div class="col-sm-9">
                                     {{form.jumlah}}
@@ -95,15 +75,25 @@
                             <div class="form-group">
                                 <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan : </label>
                                 <div class="col-sm-9">
-                                    {{form.harga_satuan}}
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Rp</span>
+                                        {{form.harga_satuan}}
+                                        <span class="input-group-addon">.00</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="totalbayar" class="col-sm-3 control-label">Total Bayar : </label>
                                 <div class="col-sm-9">
-                                    {{form.total_bayar}}
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Rp</span>
+                                        {{form.total_bayar}}
+                                        <span class="input-group-addon">.00</span>
+                                    </div>                                        
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-sm-6" >
                             <div class="form-group">
                                 <label for="ccustomer" class="col-sm-3 control-label">Cari Customer : </label>
                                 <div class="col-sm-9">
@@ -141,16 +131,6 @@
                                 <label for="foto" class="col-sm-3 control-label">Foto : </label>
                                 <div class="col-sm-9">
                                     {{form.foto_keluar}}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="foto" class="col-sm-3 control-label"></label>
-                                <div class="col-sm-9">
-                                    {% if data.foto_masuk %}
-                                    <img src="{{data.foto_masuk.url}}" class="img-responsive" width="150" height="150" />
-                                    {% else %}
-                                    <img src="{% static 'assets/images/noimage.png' %}" class="img-responsive img-thumbnail" width="150" height="150" />
-                                    {% endif %}
                                 </div>
                             </div>
                             

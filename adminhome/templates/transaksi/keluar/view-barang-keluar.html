@@ -1,6 +1,6 @@
 {% extends  "layout/admin/base-admin.html" %}
-
 {% load static %}
+{% load humanize %}
 
 {% block extrastyle %}
 {% endblock %}
@@ -30,7 +30,7 @@
                     <!-- pagination atas -->
                     <center>
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barangkeluar.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1" class="page-item">&laquo;</a>
@@ -70,6 +70,7 @@
                                     <th>Kode Barang</th>
                                     <th>Nama Barang</th>
                                     <th>Tanggal keluar</th>
+                                    <th>Harga Satuan</th>
                                     <th>Jumlah</th>
                                     <th>customer</th>
                                     <th>No Resi</th>
@@ -85,6 +86,7 @@
                                     <td>{{ data.kode_barang }}</td>  
                                     <td>{{ data.nama_barang }}</td>
                                     <td>{{ data.tanggal }}</td>
+                                    <td>Rp. {{ data.harga_satuan|intcomma }}</td>
                                     <td>{{ data.jumlah }}</td>
                                     <td>{{ data.customer_id }}</td>
                                     <td>{{ data.no_resi }}</td>
@@ -101,7 +103,7 @@
                                                             <h4 class="modal-title">HAPUS??</h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p>Apakah anda yakin ingin menghapus barang <strong>{{data.nama_barang}}</strong> ?</p>
+                                                            <p>Apakah anda yakin ingin menghapus barang <strong>{{data.nama_barang}}</strong> dengan no. resi <strong>{{data.no_resi}}</strong> ?</p>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger">HAPUS</a>
@@ -130,7 +132,7 @@
                     <!-- pagination bawah -->
                     <center>
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barangkeluar.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1" class="page-item">&laquo;</a>
@@ -156,4 +158,5 @@
 {% endblock %}
 
 {% block extrajs %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 {% endblock %}

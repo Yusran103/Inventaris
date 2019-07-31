@@ -95,12 +95,9 @@ class Barangkeluar(models.Model):
     jumlah = models.IntegerField()
     harga_satuan = models.IntegerField()
     total_bayar = models.IntegerField()
-    alamat_customer = models.TextField()
-    jenis_id = models.CharField(max_length=100)
-    merk_id = models.CharField(max_length=100)
-    tipe_id = models.CharField(max_length=100)
 
-    customer_id = models.CharField(max_length=100)
+    alamat_customer = models.CharField(max_length=100)
+    customer_id = models.ForeignKey(Customer, on_delete=models.DO_NOTHING,db_column='customer_id')
     foto_keluar = models.ImageField(upload_to='foto/', blank=True, null=True)
 
     class Meta:
@@ -114,6 +111,27 @@ class Barangkeluar(models.Model):
         self.foto_keluar.delete()
         super().delete(*args, **kwargs)
 
+class Stok_barang(models.Model):
+    id_stok = models.AutoField(primary_key=True)
+    tanggal = models.DateField()
+    nm_barang= models.CharField(max_length=100)
+    kd_barang = models.CharField(max_length=100)
+    hrg_barang = models.IntegerField()
+    jumlah_stok = models.IntegerField(default=0)
+    stok_akhir = models.IntegerField(default=0)
+    keterangan = models.CharField(max_length=100)
+    foto_stok = models.ImageField(upload_to='foto/',blank=True , null=True)
+    sn_barang = models.CharField(max_length=20) 
+
+    jenis_id = models.ForeignKey(Jenis_brg, on_delete=models.DO_NOTHING,db_column='jenis_id')
+    merk_id = models.ForeignKey(Merk_brg, on_delete=models.DO_NOTHING,db_column='merk_id')
+    tipe_id = models.ForeignKey(Tipe_brg, on_delete=models.DO_NOTHING,db_column='tipe_id')
+
+    class Meta:
+        db_table = "tb_stok"
+    
+    def __str__(self):
+        return self.kd_barang
 
 class User(models.Model):
     """docstring for user"""

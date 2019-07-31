@@ -1,6 +1,6 @@
 from django.forms import Textarea, ModelForm
 from django import forms
-from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Barangkeluar
+from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Barangkeluar, Stok_barang
 
 
 # -------------+
@@ -209,7 +209,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Harga Satuan',
-                'id':'demo7',
+                'id':'demo4',
                 # 'disabled':''
             }
         ),
@@ -253,53 +253,9 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
-    customer_id = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'No. Resi',
-                'id':'demo8',
-                # 'disabled':''
-            }
-        ),
-        required=True
-    )
-
-    merk_id = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'No. Resi',
-                'id':'demo4',
-                # 'disabled':''
-            }
-        ),
-        required=True
-    )
-
-    jenis_id = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'No. Resi',
-                'id':'demo5',
-                # 'disabled':''
-            }
-        ),
-        required=True
-    )
-
-    tipe_id = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'No. Resi',
-                'id':'demo6',
-                # 'disabled':''
-            }
-        ),
-        required=True
-    )
+    customer_id = forms.ModelChoiceField(
+        queryset = Customer.objects.all()
+        )
 
     # foto_keluar = forms.FileField(
     # )
@@ -401,6 +357,25 @@ class Barang_masuk_form(ModelForm):
             'supplier_id',
             'no_resi',
             'foto_masuk',
+            'jenis_id',
+            'merk_id',
+            'tipe_id'
+            ]
+
+# ----------+
+# STOK FORM |
+# ----------+
+class Stok_form(ModelForm):
+    class Meta:
+        model = Stok_barang
+        fields = [
+            'tanggal',
+            'nm_barang',
+            'kd_barang',
+            'hrg_barang',
+            'jumlah_stok',
+            'stok_akhir',
+            'keterangan',
             'jenis_id',
             'merk_id',
             'tipe_id'

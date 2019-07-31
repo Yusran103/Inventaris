@@ -1,5 +1,6 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block extrastyle %}
 <style>
@@ -30,7 +31,7 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Stok Barang</h1>
                     </div>
-                    <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                    <div class="input-group input-group-md input-group-sm col-md-4 col-xs-6 col-lg-4 pull-left">
                         <input type="text" class="form-control" placeholder="Cari.....">
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
@@ -42,61 +43,93 @@
                     <br/>
                     <br/>
                     <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
+                        <nav aria-label="Page navigation example" style="display: inline-block">
+                            <ul class="pagination pagination-lg pagination-sm pagination-md justify-content-center">
+                                {% if daftar_stok.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_stok.previous_page_number }}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_stok.number }} of {{ daftar_stok.paginator.num_pages }}.</span></li>
+                                {% if daftar_stok.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_stok.next_page_number }}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_stok.paginator.num_pages }}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     </center>
-                    <br/>
                     <!-- KONTEN -->
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 col-lg-12">
+                            {% if daftar_stok %}
+                            {% for stok in daftar_stok %}
                             <div class="box box-warning">
                                 <br>
                                 <div class="row">
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <div class="container">
-                                            <img src="/static/assets/images/logo.png" class="img-responsive" width="120" height="120" />
+                                            {% if stok.foto_stok %}
+                                            <img src="{{stok.foto_stok.url}}" class="img-responsive img-thumbnail" width="100" height="100"/>
+                                            {% else %}
+                                            <img src="{% static 'assets/images/images.png' %}" class="img-responsive img-thumbnail" width="100" height="100" />
+                                            {% endif %}
+                                            <br/>
                                         </div>
                                     </div>
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <div class="form-group">
                                             <h5><strong>Nama Barang :</strong></h5>
-                                            <p>Mikrotik</p>
+                                            <p>{{stok.nm_barang}}</p>
                                             <h5><strong>Kode Barang :</strong></h5>
-                                            <p>BRG-1</p>
+                                            <p>{{stok.kd_barang}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-3 col-xs-4 col-lg-3">
                                         <div class="form-group">
-                                            <h5>Serial Number : <strong>112233</strong></h5>
-                                            <h5>Jumlah Stok : <strong>6</strong></h5>
-                                            <h5>Harga Satuan : <strong>Rp. 1.200.000,-</strong></h5>
-                                            <h5>Merk : <strong>Mikrotik</strong></h5>
-                                            <h5>Jenis : <strong>Router</strong></h5>
+                                            <h5><strong>Serial Number : </strong>{{stok.sn_barang}}</h5>
+                                            <h5><strong>Harga Satuan : </strong>Rp. {{stok.hrg_barang|intcomma}}</h5>
+                                            <h5><strong>Merk : </strong>{{stok.merk_id}}</h5>
+                                            <h5><strong>Jenis : </strong>{{stok.jenis_id}}</h5>
                                         </div>
+                                    </div>
+                                    <div class="col-sm-3 col-xs-4 col-lg-3">
+                                            <h4><strong>Jumlah Stok : </strong>{{stok.stok_akhir}}</h4>
                                     </div>
                                 </div>
                             </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="box box-warning">
+                                <br/>  
+                                <span><center>Tidak ada data stok saat ini...</center></span>
+                                <br/>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <!--END KONTEN  -->
                     <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
-                    </center>   
+                        <nav aria-label="Page navigation example" style="display: inline-block">
+                            <ul class="pagination pagination-lg pagination-sm pagination-md justify-content-center">
+                                {% if daftar_stok.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_stok.previous_page_number }}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_stok.number }} of {{ daftar_stok.paginator.num_pages }}.</span></li>
+                                {% if daftar_stok.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_stok.next_page_number }}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_stok.paginator.num_pages }}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </center>
                 </div>
             </div>
         </div>
