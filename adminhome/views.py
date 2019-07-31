@@ -67,6 +67,7 @@ def editbarangmasuk(request,pk):
     masuk = Barang_masuk.objects.get(pk=pk)
     if request.method == "POST":
         form = Barang_masuk_form(request.POST,request.FILES, instance=masuk)
+        form2 = Stok_form()
         if form.is_valid():
             barang_masuk = form.save(commit=False)
             kd_barang=request.POST['kd_barang'],
@@ -81,6 +82,15 @@ def editbarangmasuk(request,pk):
             merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
             tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
             barang_masuk.save()
+            
+            stok = form2.save(commit=False)
+            kd_barang=request.POST['kd_barang'],
+            nm_barang=request.POST['nm_barang'],
+            sn_barang=request.POST['sn_barang'],
+            jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+            merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+            tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
+            stok.save()
             return redirect('/inventaris/barangmasuk', pk=masuk.pk)
     else:
         form = Barang_masuk_form(instance=masuk)
@@ -112,6 +122,7 @@ def simpantambahbarangmasuk(request):
             form.save()
             
             if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kd_barang')):
+                # AMBIL DATA STOK AKHIR PALING BARU
                 cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kd_barang')).latest('id_stok')
                 stok_barang = Stok_barang.objects.create(
                     tanggal=request.POST['tgl_masuk'],
@@ -267,6 +278,10 @@ def laporankeluar(request):
 
 def laporanstok(request):
     return render(request, 'laporan/laporan-barang-stok.html')
+
+def print_laporan(request):
+    stok_barang = Stok_barang.objects.all()
+    return render(request, 'laporan/print.html',{'stok':stok_barang})
 
 # -------------+
 # USERS        |

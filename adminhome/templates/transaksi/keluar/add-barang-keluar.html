@@ -30,12 +30,12 @@
                                 <div class="col-sm-9" id="namabarang">
                                     <select id="mySelect" style="width: 100%" onclick="myFunction()">
                                         {% if masuk %}
-                                        <option value=" | | | | | | ">Pilih Barang</option>
+                                        <option value=" | | | | | | | ">Pilih Barang</option>
                                         {% for list_Masuk in masuk %}
-                                        <option value="{{list_Masuk.nm_barang}}|{{list_Masuk.kd_barang}}|{{list_Masuk.sn_barang}}|{{list_Masuk.hrg_barang}}|{{list_Masuk.merk_id}}|{{list_Masuk.jenis_id}}|{{list_Masuk.tipe_id}}">{{list_Masuk.nm_barang}}</option>
+                                        <option value="{{list_Masuk.nm_barang}}|{{list_Masuk.kd_barang}}|{{list_Masuk.sn_barang}}|{{list_Masuk.hrg_barang}}|{{list_Masuk.merk_id}}|{{list_Masuk.jenis_id}}|{{list_Masuk.tipe_id}}|{{list_Masuk.stok_akhir}}">{{list_Masuk.nm_barang}}</option>
                                         {% endfor %}
                                         {% else %}
-                                        <option value=" | | | | | | ">Tidak Ada barang Masuk</option>
+                                        <option value=" | | | | | | | ">Tidak Ada barang Masuk</option>
                                         {% endif %}
                                     </select>
                                     
@@ -171,6 +171,7 @@
         var e = y[4];
         var f = y[5];
         var g = y[6];
+        var h = y[7];
         $("#demo").val(a);
         $("#demo1").val(b);
         $("#demo2").val(c);
@@ -178,6 +179,10 @@
         $("#demo4").val(e);
         $("#demo5").val(f);
         $("#demo6").val(g);
+        
+        $("#jumlah").attr({
+            "max" : h
+        });
     };
     
     // Auto total Bayar by id

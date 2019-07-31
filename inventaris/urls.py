@@ -52,6 +52,7 @@ urlpatterns = [
     path('inventaris/laporan/barangmasuk',adminhome.laporanmasuk, name='laporan_masuk'),
     path('inventaris/laporan/barangkeluar',adminhome.laporankeluar, name='laporan_keluar'),
     path('inventaris/laporan/stok', adminhome.laporanstok, name='laporan_stok'),
+    path('inventaris/laporan/print', adminhome.print_laporan, name='laporan_print'),
     
     # USERS
     path('inventaris/users', adminhome.viewuser, name='user'),

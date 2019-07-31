@@ -1,0 +1,71 @@
+{% extends  "layout/Laporan/template_print.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+<section class="content-header">
+    <h1 style="text-align: center">Laporan Stok Barang</h1>
+    <h4 style="text-align: center">CV. Adisatya IT Consultant</h4>
+    <div class="container">
+        <br/>
+        <table class="table table-bordered table-striped">
+            <thead style="font-size: 13px">
+                <tr>
+                    <th>No</th>
+                    <th>tanggal</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Harga Satuan</th>
+                    <th>Barang Masuk</th>
+                    <th>Barang Keluar</th>
+                    <th>Persediaan Terakhir</th>
+                    <th>Merk</th>
+                    <th>Jenis</th>
+                    <th>Tipe</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody style="font-size: 13px">
+                {% if stok %}
+                {% for daftar_stok in stok %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ daftar_stok.tanggal}}</td>
+                    <td>{{ daftar_stok.kd_barang }}</td>
+                    <td>{{ daftar_stok.nm_barang }}</td>
+                    <td>{{ daftar_stok.hrg_barang }}</td>
+                    {% if daftar_stok.keterangan == "Barang Masuk"%}
+                    <td>{{ daftar_stok.jumlah_stok }}</td>
+                    <td>0</td>
+                    {% else %}
+                    <td>0</td>
+                    <td>{{ daftar_stok.jumlah_stok }}</td>
+                    {% endif %}
+                    <td>{{ daftar_stok.stok_akhir }}</td>
+                    <td>{{ daftar_stok.merk_id }}</td>
+                    <td>{{ daftar_stok.jenis_id }}</td>
+                    <td>{{ daftar_stok.tipe_id }}</td>
+                    <td>{{ daftar_stok.keterangan }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="10"><center>Tidak ada data Stok saat ini...</center></td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <a href="javascript:window.print()">Print this page</a>
+    </div>
+</section>
+{% endblock %}
+{% block extrajs%}
+<script>
+    $.each($('td'),function(index,data){
+        var id = $(data).attr('id');
+        $('#'+id).addClass('form-control selectpicker')
+        $('#'+id).attr('data-live-search',true)
+    });
+</script>
+{% endblock %}
