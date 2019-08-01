@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404 ,redirect
-from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang
+from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang, Barang_keluar
 from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form, Stok_form
 from django.core.paginator import Paginator
 
@@ -261,7 +261,10 @@ def editbarangkeluar(request):
 
 def tambahbarangkeluar(request):
     barang_masuk = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
-    return render(request, 'transaksi/keluar/add-barang-keluar.html',{'masuk' : barang_masuk})
+    jenis = Jenis_brg.objects.all()
+    merk = Merk_brg.objects.all()
+    tipe = Tipe_brg.objects.all()
+    return render(request, 'transaksi/keluar/add-barang-keluar.html',{'masuk' : barang_masuk,'jenis':jenis,'merk':merk,'tipe':tipe})
 
 # -------------+
 # LAPORAN      |
@@ -279,9 +282,32 @@ def laporankeluar(request):
 def laporanstok(request):
     return render(request, 'laporan/laporan-barang-stok.html')
 
-def print_laporan(request):
-    stok_barang = Stok_barang.objects.all()
-    return render(request, 'laporan/print.html',{'stok':stok_barang})
+def print_laporan_stok(request):
+    judul = "Laporan Stok Barang"
+    tanggal = request.POST.get('tanggal')
+    pecah = tanggal.split('-')
+    tahun = pecah[0]
+    bulan = pecah[1]
+    stok_barang = Stok_barang.objects.filter(tanggal__icontains=tanggal).order_by('tanggal')
+    return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
+
+def print_laporan_masuk(request):
+    judul = "Laporan Barang Masuk"
+    tanggal = request.POST.get('tanggal')
+    pecah = tanggal.split('-')
+    tahun = pecah[0]
+    bulan = pecah[1]
+    stok_barang = Barang_masuk.objects.filter(tgl_masuk__icontains=tanggal).order_by('tgl_masuk')
+    return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
+
+def print_laporan_keluar(request):
+    judul = "Laporan Barang Keluar"
+    tanggal = request.POST.get('tanggal')
+    pecah = tanggal.split('-')
+    tahun = pecah[0]
+    bulan = pecah[1]
+    stok_barang = Barang_keluar.objects.filter(tgl_keluar__icontains=tanggal).order_by('tgl_keluar')
+    return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
 # -------------+
 # USERS        |

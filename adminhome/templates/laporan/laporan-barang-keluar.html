@@ -13,7 +13,8 @@
         <!-- /.box-header -->
         <!-- form start -->
         <div class="col-md-9">        
-            <form class="form-horizontal">
+            <form action="{% url 'print_keluar' %}" method="POST" class="form-horizontal">
+                {% csrf_token %}
                 <div class="box-body">
                     <div class="form-group">
                         <label for="tanggalmasuk" class="col-sm-2 control-label">Tanggal : </label>
@@ -22,14 +23,12 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker">
+                                <input type="month" name="tanggal" date class="form-control pull-right" required autocomplete="off">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-offset-2">
-                        <form action="">
-                            <button class="btn btn-primary"> Cari</button>
-                        </form>
+                        <input type="submit" value="cari" class="btn btn-primary"></input>
                     </div> 
                 </div>
             </form>

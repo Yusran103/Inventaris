@@ -13,37 +13,28 @@
         <!-- /.box-header -->
         <!-- form start -->
         <div class="col-md-9">        
-            <form class="form-horizontal">
+            <form action="{% url 'print_masuk' %}" method="POST" class="form-horizontal">
+                {% csrf_token %}
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="tanggalmasuk" class="col-sm-2 control-label">Bulan : </label>
-                        <div class="col-sm-4">
+                        <label for="tanggalmasuk" class="col-sm-2 control-label">Tanggal : </label>
+                        <div class="col-sm-5">
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control" autocomplete="off" placeholder="Masukan bulan dan tahun" id="datepicker1">
+                                <input type="month" name="tanggal" date class="form-control pull-right" required autocomplete="off">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-offset-2">
-                        <form action="">
-                            <button class="btn btn-primary"> Cari</button>
-                        </form>
+                        <input type="submit" value="cari" class="btn btn-primary"></input>
                     </div> 
                 </div>
             </form>
-        </div>
     </div>
 </section>
 {% endblock %}
 {% block extrajs%}
-<script>
-    $('#datepicker1').datepicker({
-        autoclose: true,
-        format: "mm-yyyy",
-        startView: "months", 
-        minViewMode: "months"
-    });
-</script>
+
 {% endblock %}
