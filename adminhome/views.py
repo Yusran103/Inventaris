@@ -218,6 +218,7 @@ def tambahbarangmasuk(request):
                     tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
                 )
             stok_barang.save()
+
             return redirect('/inventaris/barangmasuk/list')
     else:
         form = Barang_masuk_form()
@@ -276,9 +277,9 @@ def editbarangkeluar(request,pk):
             total_bayar=request.POST['total_bayar'],
             customer_id=request.POST['customer_id'],
             alamat_customer=request.POST['alamat_customer'],
-            merk_id=request.POST['merk_id'],
-            jenis_id=request.POST['jenis_id'],
-            tipe_id=request.POST['tipe_id'],
+            jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+            merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+            tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
             foto_keluar=request.FILES.get('foto_keluar')
             barang_keluar.save()
 
@@ -303,7 +304,8 @@ def editbarangkeluar(request,pk):
         })
 
 def addbarangkeluar(request):
-    stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
+    # stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
+    
     customer = Customer.objects.all()
     barangmasuk = Barang_masuk.objects.all()
 
@@ -321,6 +323,10 @@ def addbarangkeluar(request):
                 harga_satuan=request.POST['harga_satuan'],
                 total_bayar=request.POST['total_bayar'],
                 customer_id=Customer.objects.get(pk=request.POST.get('customer_id')),
+
+                jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
                 alamat_customer=request.POST['alamat_customer'],
                 foto_keluar=request.FILES.get('foto_keluar')
             )
@@ -337,7 +343,10 @@ def addbarangkeluar(request):
                     jumlah_stok=request.POST['jumlah'],
                     stok_akhir= cr_stok.stok_akhir - int(request.POST['jumlah']),
                     keterangan="Barang Keluar",
-                    foto_stok=request.FILES.get('foto_keluar')
+                    foto_stok=request.FILES.get('foto_keluar'),
+                    jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                    merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                    tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
                 )
             else:
                 stok_barang = Stok_barang.objects.create(
@@ -349,7 +358,10 @@ def addbarangkeluar(request):
                     jumlah_stok=request.POST['jumlah'],
                     stok_akhir=request.POST['jumlah'],
                     keterangan="Barang Keluar",
-                    foto_stok=request.FILES.get('foto_keluar')
+                    foto_stok=request.FILES.get('foto_keluar'),
+                    jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                    merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                    tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
                 )
             stok_barang.save()
 
@@ -383,7 +395,7 @@ def simpantambahbarangkeluar(request):
                 jumlah=request.POST['jumlah'],
                 harga_satuan=request.POST['harga_satuan'],
                 total_bayar=request.POST['total_bayar'],
-                customer_id=Customer.objects.get(pk=request.POST.get('customer_id')),
+                customer_id=request.POST['customer_id'],
                 alamat_customer=request.POST['alamat_customer'],
                 jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
                 merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),

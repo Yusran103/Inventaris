@@ -83,7 +83,7 @@ DATABASES = {
         # MYSQL
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # nama database
-        'NAME': 'inventaris',
+        'NAME': 'inventariss',
         'USER': 'postgres',
         'PASSWORD': 'ruindigosold',
         'HOST':'localhost',

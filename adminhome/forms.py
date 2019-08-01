@@ -1,4 +1,4 @@
-from django.forms import Textarea, ModelForm
+from django.forms import Textarea, ModelForm, Select
 from django import forms
 from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Barangkeluar, Stok_barang
 
@@ -192,6 +192,18 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
+    no_resi = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Resi',
+                'id':'demo3',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
     jumlah = forms.IntegerField(
         widget=forms.NumberInput(
             attrs={
@@ -241,20 +253,66 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
-    no_resi = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'No. Resi',
-                'id':'demo3',
-                # 'disabled':''
-            }
-        ),
-        required=True
-    )
+    # merk_id = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class':'form-control',
+    #             'placeholder':'Merk',
+    #             'id':'demo5'
+    #             # 'disabled':''
+    #         }
+    #     ),
+    #     required=True
+    # )
+
+    # jenis_id = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class':'form-control',
+    #             'placeholder':'Jenis',
+    #             'id':'demo6'
+    #             # 'disabled':''
+    #         }
+    #     ),
+    #     required=True
+    # )
+
+    # tipe_id = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class':'form-control',
+    #             'placeholder':'Tipe',
+    #             'id':'demo7'
+    #             # 'disabled':''
+    #         }
+    #     ),
+    #     required=True
+    # )
 
     customer_id = forms.ModelChoiceField(
-        queryset = Customer.objects.all()
+        queryset = Customer.objects.all(),
+        # to_field_name="nama_jenis",
+        widget=Select(
+            attrs={
+                'class':'form-control',
+                'id':'demo8'})
+        )
+
+    jenis_id = forms.ModelChoiceField(
+        queryset = Jenis_brg.objects.all(),
+        # to_field_name="nama_jenis",
+        widget=Select(
+            attrs={
+                'class':'form-control',
+                'id':'demo6'})
+        )
+    merk_id = forms.ModelChoiceField(
+        queryset = Merk_brg.objects.all(),
+        # to_field_name="nama_merk"
+        )
+    tipe_id = forms.ModelChoiceField(
+        queryset = Tipe_brg.objects.all(),
+        # to_field_name="nama_tipe"
         )
 
     # foto_keluar = forms.FileField(
@@ -337,13 +395,16 @@ class Barang_masuk_form(ModelForm):
     # foto_masuk = forms.FileField(
     #     )
     jenis_id = forms.ModelChoiceField(
-        queryset = Jenis_brg.objects.all()
+        queryset = Jenis_brg.objects.all(),
+        # to_field_name="nama_jenis"
         )
     merk_id = forms.ModelChoiceField(
-        queryset = Merk_brg.objects.all()
+        queryset = Merk_brg.objects.all(),
+        # to_field_name="nama_merk"
         )
     tipe_id = forms.ModelChoiceField(
-        queryset = Tipe_brg.objects.all()
+        queryset = Tipe_brg.objects.all(),
+        # to_field_name="nama_tipe"
         )
     
     class Meta:

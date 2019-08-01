@@ -32,10 +32,10 @@
                                     <label for="caribarang" class="col-sm-3 control-label">Cari Barang : </label>
                                     <div class="col-sm-9" id="caribarang">
                                         <select id="mySelect" style="width: 100%" onclick="myFunction()">
-                                            <option value=" | | | | | ">----- Pilih Barang -----</option>    
+                                            <option value=" | | | | | | | ">----- Pilih Barang -----</option>    
                                             {% if daftar_barangmasuk %}
                                             {% for data in daftar_barangmasuk %}
-                                            <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.harga_satuan}}|{{data.stok_akhir}}">[{{data.kd_barang}}] {{data.nm_barang}}</option>
+                                            <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.harga_satuan}}|{{data.merk_id}}|{{data.jenis_id}}|{{data.tipe_id}}">[{{data.kd_barang}}] {{data.nm_barang}}</option>
                                             {% endfor %}
                                             {% else %}
                                             <option value="">Tidak Ada Data Barang Masuk</option>
@@ -69,6 +69,29 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="noresi" class="col-sm-3 control-label">Merk : </label>
+                                    <div class="col-sm-9">
+                                        {{form.merk_id}}  
+                                        <!-- <input type="text" class="form-control" id="demo5"> -->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="noresi" class="col-sm-3 control-label">Jenis : </label>
+                                    <div class="col-sm-9">
+                                        {{form.jenis_id}}  
+                                        <!-- <input type="text" class="form-control" id="demo6"> -->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="noresi" class="col-sm-3 control-label">Tipe : </label>
+                                    <div class="col-sm-9">
+                                        {{form.tipe_id}}  
+                                        <!-- <input type="text" class="form-control" id="demo7"> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" >
+                                <div class="form-group">
                                     <label for="jumlahkeluar" class="col-sm-3 control-label">Jumlah Keluar : </label>
                                     <div class="col-sm-9">
                                         {{form.jumlah}}
@@ -94,8 +117,6 @@
                                         </div>                                        
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6" >
                                 <div class="form-group">
                                     <label for="ccustomer" class="col-sm-3 control-label">Cari Customer : </label>
                                     <div class="col-sm-9">
@@ -174,58 +195,64 @@
         var c = y[2];
         var d = y[3];
         var e = y[4];
-        // var f = y[5];
+        var f = y[5];
+        var g = y[6];
+        var h = y[7];
         $("#demo").val(a);
         $("#demo1").val(b);
         $("#demo2").val(c);
         $("#demo3").val(d);
         $("#demo4").val(e);
+        $("#demo5").val(f);
+        $("#demo6").val(g);
+        $("#demo7").val(h);
         // $("#jumlah").attr({
-        //     "max" : f
-        // });
-        
-    };
-    
-    // autofill customer
-    function customer() {
-        var x = document.getElementById("caricustomer").value;
-        var y = x.split("|");
-        var a = y[0];
-        var b = y[1];
-        $("#demo8").val(a);
-        $("#demo9").val(b);
-    }
-    
-    // Jumlah
-    $("#jumlah").keyup(function(){
-        var ambiljumlah = document.getElementById("jumlah").value;
-        var ambilharga = document.getElementById("demo4").value;
-        var jumlah = parseInt(ambiljumlah);
-        var harga = parseInt(ambilharga);
-        var total = harga*jumlah;
-        $("#totalbayar").val(total);
-    });
-    
-    // dual save button
-    $(function() {
-        $('#s1').click(function(e){
-            e.preventDefault();
-            $('#form1').attr('action', "{% url 'barangkeluar_add' %}");
-            $('#form1').submit();
-        });
-        $('#s2').click(function(e){
-            e.preventDefault();
-            $('#form1').attr('action',  "{% url 'barangkeluar_addcreate' %}");
+            //     "max" : f
+            // });
             
-            $('#form1').submit();
-            alert('Data Berhasil di Tambah');
+        };
+        
+        // autofill customer
+        function customer() {
+            var x = document.getElementById("caricustomer").value;
+            var y = x.split("|");
+            var a = y[0];
+            var b = y[1];
+            $("#demo8").val(a);
+            $("#demo9").val(b);
+        }
+        
+        // Jumlah
+        $("#jumlah").keyup(function(){
+            var ambiljumlah = document.getElementById("jumlah").value;
+            var ambilharga = document.getElementById("demo4").value;
+            var jumlah = parseInt(ambiljumlah);
+            var harga = parseInt(ambilharga);
+            var total = harga*jumlah;
+            $("#totalbayar").val(total);
         });
-    });
+        
+        // dual save button
+        $(function() {
+            $('#s1').click(function(e){
+                e.preventDefault();
+                $('#form1').attr('action', "{% url 'barangkeluar_add' %}");
+                $('#form1').submit();
+            });
+            $('#s2').click(function(e){
+                e.preventDefault();
+                $('#form1').attr('action',  "{% url 'barangkeluar_addcreate' %}");
+                
+                $('#form1').submit();
+                alert('Data Berhasil di Tambah');
+            });
+        });
+        
+        // datepicker
+        $('#date').datepicker({
+            format : "yyyy-mm-dd",
+            autoclose: true,
+        });
+    </script>
+    {% endblock %}
     
-    // datepicker
-    $('#date').datepicker({
-        format : "yyyy-mm-dd",
-        autoclose: true,
-    });
-</script>
-{% endblock %}

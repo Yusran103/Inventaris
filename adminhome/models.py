@@ -75,7 +75,6 @@ class Barang_masuk(models.Model):
     merk_id = models.ForeignKey(Merk_brg,on_delete=models.CASCADE,db_column='merk_id')
     tipe_id = models.ForeignKey(Tipe_brg,on_delete=models.CASCADE,db_column='tipe_id')
     
-
     class Meta:
         db_table = "tb_barang_masuk"
     
@@ -96,8 +95,12 @@ class Barangkeluar(models.Model):
     harga_satuan = models.IntegerField()
     total_bayar = models.IntegerField()
 
+    jenis_id = models.ForeignKey(Jenis_brg,on_delete=models.CASCADE,db_column='jenis_id')
+    merk_id = models.ForeignKey(Merk_brg,on_delete=models.CASCADE,db_column='merk_id')
+    tipe_id = models.ForeignKey(Tipe_brg,on_delete=models.CASCADE,db_column='tipe_id')
+    
     alamat_customer = models.CharField(max_length=100)
-    customer_id = models.ForeignKey(Customer, on_delete=models.DO_NOTHING,db_column='customer_id')
+    customer_id =  models.ForeignKey(Customer,on_delete=models.CASCADE,db_column='customer_id')
     foto_keluar = models.ImageField(upload_to='foto/', blank=True, null=True)
 
     class Meta:
@@ -117,7 +120,7 @@ class Stok_barang(models.Model):
     nm_barang= models.CharField(max_length=100)
     kd_barang = models.CharField(max_length=100)
     hrg_barang = models.IntegerField()
-    jumlah_stok = models.IntegerField(default=0)
+    jumlah_stok = models.IntegerField(default=0, null=True, blank=True)
     stok_akhir = models.IntegerField(default=0)
     keterangan = models.CharField(max_length=100)
     foto_stok = models.ImageField(upload_to='foto/',blank=True , null=True)
