@@ -332,8 +332,8 @@ def addbarangkeluar(request):
             )
             form.save()
 
-            if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kd_barang')):
-                cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kd_barang')).latest('id_stok')
+            if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kode_barang')):
+                cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kode_barang')).latest('id_stok')
                 stok_barang = Stok_barang.objects.create(
                     tanggal=request.POST['tanggal'],
                     nm_barang=request.POST['nama_barang'],
@@ -342,21 +342,6 @@ def addbarangkeluar(request):
                     hrg_barang=request.POST['harga_satuan'],
                     jumlah_stok=request.POST['jumlah'],
                     stok_akhir= cr_stok.stok_akhir - int(request.POST['jumlah']),
-                    keterangan="Barang Keluar",
-                    foto_stok=request.FILES.get('foto_keluar'),
-                    jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-                    merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-                    tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
-                )
-            else:
-                stok_barang = Stok_barang.objects.create(
-                    tanggal=request.POST['tanggal'],
-                    nm_barang=request.POST['nama_barang'],
-                    kd_barang=request.POST['kode_barang'],
-                    sn_barang=request.POST['serialnumber'],
-                    hrg_barang=request.POST['harga_satuan'],
-                    jumlah_stok=request.POST['jumlah'],
-                    stok_akhir=request.POST['jumlah'],
                     keterangan="Barang Keluar",
                     foto_stok=request.FILES.get('foto_keluar'),
                     jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
@@ -404,8 +389,8 @@ def simpantambahbarangkeluar(request):
             )
             form.save()
 
-            if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kd_barang')):
-                cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kd_barang')).latest('id_stok')
+            if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kode_barang')):
+                cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kode_barang')).latest('id_stok')
                 stok_barang = Stok_barang.objects.create(
                     tanggal=request.POST['tanggal'],
                     nm_barang=request.POST['nama_barang'],
@@ -414,21 +399,6 @@ def simpantambahbarangkeluar(request):
                     hrg_barang=request.POST['harga_satuan'],
                     jumlah_stok=request.POST['jumlah'],
                     stok_akhir= cr_stok.stok_akhir - int(request.POST['jumlah']),
-                    keterangan="Barang Keluar",
-                    foto_stok=request.FILES.get('foto_keluar'),
-                    jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-                    merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-                    tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
-                )
-            else:
-                stok_barang = Stok_barang.objects.create(
-                    tanggal=request.POST['tanggal'],
-                    nm_barang=request.POST['nama_barang'],
-                    kd_barang=request.POST['kode_barang'],
-                    sn_barang=request.POST['serialnumber'],
-                    hrg_barang=request.POST['harga_satuan'],
-                    jumlah_stok=request.POST['jumlah'],
-                    stok_akhir=request.POST['jumlah'],
                     keterangan="Barang Keluar",
                     foto_stok=request.FILES.get('foto_keluar'),
                     jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
