@@ -21,7 +21,7 @@ def dashboard(request):
 # STOK       |
 # -----------+
 def gridstok(request):
-    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
+    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
     pagination = Paginator(daftar_stok,5)
 
     page = request.GET.get('page','')
@@ -29,7 +29,7 @@ def gridstok(request):
     return render(request, 'transaksi/stok/viewgrid-stok.html', {'daftar_stok': barang_stok_pg})
 
 def stok(request):
-    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
+    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
     pagination = Paginator(daftar_stok,10)
 
     page = request.GET.get('page','')
@@ -264,6 +264,8 @@ def editbarangkeluar(request,pk):
 
     if request.method == "POST":
         form = BarangkeluarForm(request.POST,request.FILES, instance=keluar)
+        form2 = Stok_form()
+        cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kode_barang')).latest('id_stok')
         if form.is_valid():
             barang_keluar = form.save(commit=False)
             nama_barang=request.POST['nama_barang'],
@@ -284,9 +286,15 @@ def editbarangkeluar(request,pk):
             barang_keluar.save()
 
             stok = form2.save(commit=False)
-            kd_barang=request.POST['kode_barang'],
+            tanggal=request.POST['tanggal'],
             nm_barang=request.POST['nama_barang'],
+            kd_barang=request.POST['kode_barang'],
             sn_barang=request.POST['serialnumber'],
+            hrg_barang=request.POST['harga_satuan'],
+            jumlah_stok=request.POST['jumlah'],
+            stok_akhir= cr_stok.stok_akhir - int(request.POST['jumlah']),
+            keterangan="Barang Keluar",
+            foto_stok=request.FILES.get('foto_keluar'),
             jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
             merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
             tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
