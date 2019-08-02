@@ -30,19 +30,23 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Barang Masuk</h1>
                     </div>
-                    <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
-                        <input type="text" class="form-control" placeholder="Cari.....">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
+                    <form action="{% url 'barangmasuk_grid_cari' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                            <input type="text" name="cari" value="{{barang_masuk}}" class="form-control" placeholder="Cari ......">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                    
                     <div class="pull-right col-md-4">
                         <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/list"><i class="fa fa-th-list"></i></a>
                     </div>
-                    <br/>
+                    
                     <center>
-                        <nav aria-label="Page navigation example" style="display: inline-block">
+                        <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-lg justify-content-center">
                                 {% if daftar_barang_masuk.has_previous %}
                                 <li class="page-item">
@@ -63,6 +67,7 @@
                     <!-- KONTEN -->
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 col-lg-12">
+                            <p style="display: inline-block">Hasil Pencarian : {{barang_masuk}}</p>
                             {% if daftar_barang_masuk %}
                             {% for barang_masuk in daftar_barang_masuk %}
                             <div class="box box-warning">

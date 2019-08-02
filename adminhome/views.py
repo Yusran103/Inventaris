@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404 ,redirect
 from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang, Barang_keluar
 from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form, Stok_form
 from django.core.paginator import Paginator
+from django.db.models import Q
+
 
 # -----------+
 # LOGIN      |
@@ -43,7 +45,14 @@ def stok(request):
 # ------------+
 # BARANG MASUK|
 # ------------+
-
+def caribarangmasukgrid(request):
+    barangmasuk = request.POST.get('cari')
+    print(barangmasuk)
+    daftar_barang = Barang_masuk.objects.filter(nm_barang__icontains=barangmasuk)|Barang_masuk.objects.filter(kd_barang__icontains=barangmasuk)|Barang_masuk.objects.filter(sn_barang__icontains=barangmasuk).order_by('kd_barang')
+    pagination = Paginator(daftar_barang,10)
+    page = request.GET.get('page','')
+    barang_masuk_pg = pagination.get_page(page)
+    return render(request, 'transaksi/masuk/viewgrid-barang-masuk.html', {'daftar_barang_masuk': barang_masuk_pg,'barang_masuk':barangmasuk})
 
 def barangmasuk(request):
     daftar_barang = Barang_masuk.objects.all().order_by('-id_brg_masuk')
@@ -67,7 +76,6 @@ def editbarangmasuk(request,pk):
     masuk = Barang_masuk.objects.get(pk=pk)
     if request.method == "POST":
         form = Barang_masuk_form(request.POST,request.FILES, instance=masuk)
-        form2 = Stok_form()
         if form.is_valid():
             barang_masuk = form.save(commit=False)
             kd_barang=request.POST['kd_barang'],
@@ -82,15 +90,6 @@ def editbarangmasuk(request,pk):
             merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
             tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
             barang_masuk.save()
-            
-            stok = form2.save(commit=False)
-            kd_barang=request.POST['kd_barang'],
-            nm_barang=request.POST['nm_barang'],
-            sn_barang=request.POST['sn_barang'],
-            jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-            merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-            tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
-            stok.save()
             return redirect('/inventaris/barangmasuk', pk=masuk.pk)
     else:
         form = Barang_masuk_form(instance=masuk)
@@ -128,7 +127,6 @@ def simpantambahbarangmasuk(request):
                     tanggal=request.POST['tgl_masuk'],
                     nm_barang=request.POST['nm_barang'],
                     kd_barang=request.POST['kd_barang'],
-                    sn_barang=request.POST['sn_barang'],
                     hrg_barang=request.POST['harga_satuan'],
                     jumlah_stok=request.POST['jml_masuk'],
                     stok_akhir= cr_stok.stok_akhir + int(request.POST['jml_masuk']),
@@ -143,7 +141,6 @@ def simpantambahbarangmasuk(request):
                     tanggal=request.POST['tgl_masuk'],
                     nm_barang=request.POST['nm_barang'],
                     kd_barang=request.POST['kd_barang'],
-                    sn_barang=request.POST['sn_barang'],
                     hrg_barang=request.POST['harga_satuan'],
                     jumlah_stok=request.POST['jml_masuk'],
                     stok_akhir=request.POST['jml_masuk'],
@@ -198,7 +195,6 @@ def tambahbarangmasuk(request):
                     tanggal=request.POST['tgl_masuk'],
                     nm_barang=request.POST['nm_barang'],
                     kd_barang=request.POST['kd_barang'],
-                    sn_barang=request.POST['sn_barang'],
                     hrg_barang=request.POST['harga_satuan'],
                     jumlah_stok=request.POST['jml_masuk'],
                     stok_akhir= cr_stok.stok_akhir + int(request.POST['jml_masuk']),
@@ -213,7 +209,6 @@ def tambahbarangmasuk(request):
                     tanggal=request.POST['tgl_masuk'],
                     nm_barang=request.POST['nm_barang'],
                     kd_barang=request.POST['kd_barang'],
-                    sn_barang=request.POST['sn_barang'],
                     hrg_barang=request.POST['harga_satuan'],
                     jumlah_stok=request.POST['jml_masuk'],
                     stok_akhir=request.POST['jml_masuk'],
@@ -259,7 +254,7 @@ def editbarangkeluar(request):
     return render(request, 'transaksi/keluar/edit-barang-keluar.html')
 
 
-def tambahbarangkeluar(request):
+def tambahbarangkeluar(request): 
     barang_masuk = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
     jenis = Jenis_brg.objects.all()
     merk = Merk_brg.objects.all()
