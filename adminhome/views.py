@@ -23,10 +23,47 @@ def dashboard(request):
 # -----------+
 # STOK       |
 # -----------+
-
+def caristokgrid(request):
+    stok = request.GET.get('cari')
+    daftar_barang = Stok_barang.objects.filter(
+            Q(nm_barang__icontains=stok) | Q(kd_barang__icontains=stok)
+        ).order_by('kd_barang', '-id_stok').distinct('kd_barang')
+    pagination = Paginator(daftar_barang,5)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_stok': posts,
+        'stok':stok
+    }
+    return render(request, 'transaksi/stok/viewgrid-stok.html', context)
+def caristoklist(request):
+    stok = request.GET.get('cari')
+    daftar_barang = Stok_barang.objects.filter(
+            Q(nm_barang__icontains=stok) | Q(kd_barang__icontains=stok)
+        ).order_by('kd_barang', '-id_stok').distinct('kd_barang')
+    pagination = Paginator(daftar_barang,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_stok': posts,
+        'stok':stok
+    }
+    return render(request, 'transaksi/stok/view-stok.html', context)
 
 def gridstok(request):
-    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
+    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
     pagination = Paginator(daftar_stok,5)
 
     page = request.GET.get('page','')
@@ -35,7 +72,7 @@ def gridstok(request):
 
 
 def stok(request):
-    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
+    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
     pagination = Paginator(daftar_stok,10)
 
     page = request.GET.get('page','')
@@ -68,7 +105,6 @@ def caribarangmasukgrid(request):
 
 def caribarangmasuk(request):
     barangmasuk = request.GET.get('cari')
-    print(barangmasuk)
     daftar_barang = Barang_masuk.objects.filter(
             Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
             Q(sn_barang__icontains=barangmasuk)

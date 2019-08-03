@@ -46,7 +46,7 @@
                     <br/>
                     <div style="text-align: center">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-md justify-content-center">
+                            <ul class="pagination pagination-lg justify-content-center">
                                 {% if daftar_barang_masuk.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
@@ -99,7 +99,7 @@
                                 {% endfor %}
                                 {% elif barang_masuk != None %}
                                 <tr>
-                                    <td colspan="8"><center>Barang Tersebut tidak ada </center></td>
+                                    <td colspan="8"><center>Barang Tersebut tidak ada...</center></td>
                                 </tr>
                                 {% else %}
                                 <tr>

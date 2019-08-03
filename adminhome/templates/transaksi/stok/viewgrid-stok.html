@@ -30,12 +30,14 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Stok Barang</h1>
                     </div>
-                    <div class="input-group input-group-md input-group-sm col-md-4 col-xs-6 col-lg-4 pull-left">
-                        <input type="text" class="form-control" placeholder="Cari.....">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
+                    <form action="{% url 'stok_grid_cari' %}" method="GET">
+                        <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
                     <div class="pull-right col-md-4">
                         <a class="btn btn-primary pull-right" href="/inventaris/stok/list"><i class="fa fa-list"></i></a>
                     </div>
@@ -63,6 +65,9 @@
                     <!-- KONTEN -->
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 col-lg-12">
+                            {% if stok != None %}
+                            <p style="display: inline-block">Hasil Pencarian : {{request.GET.cari}}</p>
+                            {% endif %}
                             {% if daftar_stok %}
                             {% for stok in daftar_stok %}
                             <div class="box box-warning">
@@ -97,6 +102,12 @@
                                 </div>
                             </div>
                             {% endfor %}
+                            {% elif stok != None %}
+                            <div class="box box-warning">
+                                <br/>  
+                                <span><center>Barang Tersebut tidak ada...</center></span>
+                                <br/>
+                            </div>
                             {% else %}
                             <div class="box box-warning">
                                 <br/>  

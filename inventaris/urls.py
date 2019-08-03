@@ -48,6 +48,8 @@ urlpatterns = [
     
     # STOK
     path('inventaris/stok', adminhome.gridstok, name='stok_grid'),
+    path('inventaris/stok/cari', adminhome.caristokgrid, name='stok_grid_cari'),
+    path('inventaris/stok/list/cari', adminhome.caristoklist, name='stok_cari'),
     path('inventaris/stok/list', adminhome.stok, name='stok_list'),
     
     # LAPORAN

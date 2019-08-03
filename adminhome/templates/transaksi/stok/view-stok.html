@@ -31,12 +31,14 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Stok Barang</h1>
                     </div>
-                    <div class="input-group input-group-md input-group-sm col-md-4 col-xs-6 col-lg-4 pull-left">
-                        <input type="text" class="form-control" placeholder="Cari.....">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
+                    <form action="{% url 'stok_cari' %}" method="GET">
+                        <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
                     <div class="pull-right col-md-4">
                         <a class="btn btn-primary pull-right" href="/inventaris/stok"><i class="fa fa-pencil-square-o"></i></a>
                     </div>
@@ -47,21 +49,24 @@
                             <ul class="pagination pagination-lg pagination-md pagination-sm justify-content-center">
                                 {% if daftar_stok.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_stok.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_stok.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_stok.number }} of {{ daftar_stok.paginator.num_pages }}.</span></li>
                                 {% if daftar_stok.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_stok.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_stok.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_stok.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_stok.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
                     </center>
                     <div class="col-sm-12">
+                        {% if stok != None %}
+                        <p style="display: inline-block">Hasil Pencarian : {{request.GET.cari}}</p>
+                        {% endif %}
                         <table id="example" class="table table-striped table-bordered">
                             <thead class="thead-dark">
                                 <tr>
@@ -76,24 +81,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                    {% if daftar_stok %}
-                                    {% for stok in daftar_stok %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ stok.kd_barang }}</td>
-                                        <td>{{ stok.nm_barang }}</td>
-                                        <td>{{ stok.stok_akhir }}</td>
-                                        <td>{{ stok.hrg_barang }}</td>
-                                        <td>{{ stok.merk_id }}</td>
-                                        <td>{{ stok.jenis_id }}</td>
-                                        <td>{{ stok.tipe_id }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="9"><center>Tidak ada data stok saat ini...</center></td>
-                                    </tr>
-                                    {% endif %}
+                                {% if daftar_stok %}
+                                {% for stok in daftar_stok %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ stok.kd_barang }}</td>
+                                    <td>{{ stok.nm_barang }}</td>
+                                    <td>{{ stok.stok_akhir }}</td>
+                                    <td>{{ stok.hrg_barang }}</td>
+                                    <td>{{ stok.merk_id }}</td>
+                                    <td>{{ stok.jenis_id }}</td>
+                                    <td>{{ stok.tipe_id }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% elif stok != None %}
+                                <tr>
+                                    <td colspan="9"><center>Barang tersebut tidak ada...</center></td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="9"><center>Tidak ada data stok saat ini...</center></td>
+                                </tr>
+                                {% endif %}
                             </tbody>
                         </table> 
                     </div>
@@ -102,15 +111,15 @@
                             <ul class="pagination pagination-lg pagination-md pagination-sm justify-content-center">
                                 {% if daftar_stok.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_stok.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_stok.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_stok.number }} of {{ daftar_stok.paginator.num_pages }}.</span></li>
                                 {% if daftar_stok.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_stok.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_stok.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_stok.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_stok.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
