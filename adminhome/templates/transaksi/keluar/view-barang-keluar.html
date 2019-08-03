@@ -55,16 +55,19 @@
                     {% if messages %}
                     <div class="col-sm-12">
                         {% for message in messages %}
-                        <div class="callout callout-info">
-                            <h4 {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</h4>
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4 {% if message.tags %} class="{{ message.tags }}"{% endif %}><i class="icon fa fa-check"></i> {{ message }}</h4>
                         </div>
                         {% endfor %}
                     </div>
                     {% endif %}
                     
                     {% if barang_keluar != None %}
-                    <div class="callout callout-success">
-                        <h4 style="display: inline-block">Hasil Pencarian : {{barang_keluar}}</h4>
+                    <div class="alert bg-light-blue-active alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4 style="display: inline-block"><i class="icon fa fa-info"></i>Hasil Pencarian !!</h4>
+                        <p>{{barang_keluar}}</p>
                     </div>
                     {% endif %}
                     

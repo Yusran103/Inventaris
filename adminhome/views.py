@@ -378,7 +378,7 @@ def addbarangkeluar(request):
                 jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
                 merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
                 tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
-                alamat_customer=request.POST['alamat_customer'],
+                alamat_customer=Customer.objects.get(pk=request.POST.get('customer_id')),
                 foto_keluar=request.FILES.get('foto_keluar')
             )
             form.save()
