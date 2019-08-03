@@ -3,20 +3,7 @@
 
 {% block extrastyle %}
 <style>
-    .pagination a {
-        color: black;
-        float: left;
-        padding: 4px 8px;
-        text-decoration: none;
-        transition: background-color .3s;
-    }
     
-    .pagination a.active {
-        background-color: dodgerblue;
-        color: white;
-    }
-    
-    .pagination a:hover:not(.active) {background-color: #ddd;}
 </style>
 {% endblock%}
 
@@ -30,10 +17,9 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Barang Masuk</h1>
                     </div>
-                    <form action="{% url 'barangmasuk_grid_cari' %}" method="POST">
-                        {% csrf_token %}
+                    <form action="{% url 'barangmasuk_grid_cari' %}" method="GET">
                         <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
-                            <input type="text" name="cari" value="{{barang_masuk}}" class="form-control" placeholder="Cari ......">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
                             <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
                             </span>
@@ -44,30 +30,33 @@
                         <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/list"><i class="fa fa-th-list"></i></a>
                     </div>
+                    <br/>
                     
-                    <center>
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barang_masuk.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_barang_masuk.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barang_masuk.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_barang_masuk.number }} of {{ daftar_barang_masuk.paginator.num_pages }}.</span></li>
                                 {% if daftar_barang_masuk.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_barang_masuk.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_barang_masuk.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
                     <!-- KONTEN -->
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 col-lg-12">
-                            <p style="display: inline-block">Hasil Pencarian : {{barang_masuk}}</p>
+                            {% if barang_masuk != None %}
+                            <p style="display: inline-block">Hasil Pencarian : {{request.GET.cari}}</p>
+                            {% endif %}
                             {% if daftar_barang_masuk %}
                             {% for barang_masuk in daftar_barang_masuk %}
                             <div class="box box-warning">
@@ -108,6 +97,12 @@
                                 <br/>
                             </div>
                             {% endfor %}
+                            {% elif barang_masuk != None %}
+                            <div class="box box-warning">
+                                <br/>  
+                                <span><center>Barang Tersebut tidak ada...</center></span>
+                                <br/>
+                            </div>
                             {% else %}
                             <div class="box box-warning">
                                 <br/>  
@@ -118,25 +113,25 @@
                         </div>
                     </div>
                     <!--END KONTEN  -->
-                    <center>
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barang_masuk.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_barang_masuk.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barang_masuk.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_barang_masuk.number }} of {{ daftar_barang_masuk.paginator.num_pages }}.</span></li>
                                 {% if daftar_barang_masuk.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_barang_masuk.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_barang_masuk.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>   
+                    </div>
                 </div>
             </div>
         </div>

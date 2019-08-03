@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404 ,redirect
 from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang, Barang_keluar
 from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form, Stok_form
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
 
@@ -46,14 +46,47 @@ def stok(request):
 # BARANG MASUK|
 # ------------+
 def caribarangmasukgrid(request):
-    barangmasuk = request.POST.get('cari')
-    print(barangmasuk)
-    daftar_barang = Barang_masuk.objects.filter(nm_barang__icontains=barangmasuk)|Barang_masuk.objects.filter(kd_barang__icontains=barangmasuk)|Barang_masuk.objects.filter(sn_barang__icontains=barangmasuk).order_by('kd_barang')
-    pagination = Paginator(daftar_barang,10)
-    page = request.GET.get('page','')
-    barang_masuk_pg = pagination.get_page(page)
-    return render(request, 'transaksi/masuk/viewgrid-barang-masuk.html', {'daftar_barang_masuk': barang_masuk_pg,'barang_masuk':barangmasuk})
+    barangmasuk = request.GET.get('cari')
+    daftar_barang = Barang_masuk.objects.filter(
+            Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
+            Q(sn_barang__icontains=barangmasuk)
+        ).order_by('kd_barang')
+    pagination = Paginator(daftar_barang,5)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_barang_masuk': posts,
+        'barang_masuk':barangmasuk
+    }
+    return render(request, 'transaksi/masuk/viewgrid-barang-masuk.html', context)
 
+def caribarangmasuk(request):
+    barangmasuk = request.GET.get('cari')
+    print(barangmasuk)
+    daftar_barang = Barang_masuk.objects.filter(
+            Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
+            Q(sn_barang__icontains=barangmasuk)
+        ).order_by('kd_barang')
+    pagination = Paginator(daftar_barang,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_barang_masuk': posts,
+        'barang_masuk':barangmasuk
+    }
+    return render(request, 'transaksi/masuk/view-barang-masuk.html', context)
 def barangmasuk(request):
     daftar_barang = Barang_masuk.objects.all().order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,10)
@@ -375,14 +408,6 @@ def deletemerk(request,pk):
     Merk.delete()
     return redirect('/inventaris/masterdata/merk')
 
-def searchmerk(request):
-    ''' This could be your actual view or a new one '''
-    # Your code
-    if request.method == 'GET': # If the form is submitted
-        search_query = request.GET.get('search_box_merk', None)
-        # Do whatever you need with the word the user looked for
-
-    # Your code
 def viewjenis(request):
     daftar_jenis = Jenis_brg.objects.all().order_by('-id_jenis')
     pagination = Paginator(daftar_jenis,10)

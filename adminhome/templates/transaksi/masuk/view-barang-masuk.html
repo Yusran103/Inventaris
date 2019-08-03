@@ -31,11 +31,11 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Barang Masuk</h1>
                     </div>
-                    <form action="">
+                    <form action="{% url 'barangmasuk_cari' %}" method="GET">
                         <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
-                            <input type="text" class="form-control" placeholder="Cari.....">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
                             <span class="input-group-btn">
-                                <input type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></input>
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
                             </span>
                         </div>
                     </form>
@@ -45,25 +45,28 @@
                     </div>
                     <br/>
                     <div style="text-align: center">
-                        <nav aria-label="Page navigation example" style="display: inline-block">
-                            <ul class="pagination pagination-lg justify-content-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barang_masuk.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_barang_masuk.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barang_masuk.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_barang_masuk.number }} of {{ daftar_barang_masuk.paginator.num_pages }}.</span></li>
                                 {% if daftar_barang_masuk.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_barang_masuk.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_barang_masuk.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barang_masuk.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
                     </div>
                     <div class="col-sm-12">
+                        {% if barang_masuk != None %}
+                        <p style="display: inline-block">Hasil Pencarian : {{barang_masuk}}</p>
+                        {% endif %}
                         <table id="example" class="table table-striped table-bordered">
                             <thead class="thead-dark">
                                 <tr>
@@ -94,6 +97,10 @@
                                     </td>
                                 </tr>
                                 {% endfor %}
+                                {% elif barang_masuk != None %}
+                                <tr>
+                                    <td colspan="8"><center>Barang Tersebut tidak ada </center></td>
+                                </tr>
                                 {% else %}
                                 <tr>
                                     <td colspan="8"><center>Tidak ada data barang masuk saat ini...</center></td>
