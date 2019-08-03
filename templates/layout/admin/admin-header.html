@@ -19,8 +19,8 @@
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" href="#">{{ request.session.level }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                            <li role="presentation"><a href="/changepassword">Ubah password</a></li>
-                        <li role="presentation"><a href="/">Logout </a></li>
+                            <li role="presentation"><a href="/changepassword/{{ request.session.id_user }}">Ubah password</a></li>
+                        <li role="presentation"><a href="/inventaris/logout">Logout </a></li>
                     </ul>
                 </li>
                 <!-- Control Sidebar Toggle Button -->

@@ -18,18 +18,20 @@ from django.urls import path
 from django.conf.urls import url
 from django.urls import path, include
 from adminhome import views as adminhome
+from django.conf.urls import url, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # LOGIN FROM
     path('accounts/', include('django.contrib.auth.urls')),
     path('', adminhome.index, name='login'),
-    url(r'^logout/', adminhome.logout_view),
+    path('inventaris/logout', adminhome.logout_view, name='logout'),
     url(r'^register$', adminhome.register),
-    url(r'^success$', adminhome.success),
     url(r'^login$', adminhome.login_view),
     # FORGET PASSWORD
-    path('changepassword/', adminhome.changepassword, name='changepassword'),
+    path('changepassword/<int:pk>', adminhome.changepassword, name='changepassword'),
     # ADMIN DASHBOARD
     path('inventaris/', adminhome.dashboard, name='dashboard'),
     # BARANG MASUK
@@ -60,6 +62,7 @@ urlpatterns = [
     path('inventaris/users/tambah', adminhome.register, name='user_add'),
     path('inventaris/users/edit/<int:pk>', adminhome.edituser, name='user_edit'),
     path('inventaris/users/delete/<int:pk>', adminhome.deleteuser,name='user_delete'),
+    path('inventaris/users/cari', adminhome.cariuser,name='user_cari'),
     
     # MASTERDATA
     # MERK
@@ -67,28 +70,33 @@ urlpatterns = [
     path('inventaris/masterdata/merk/tambah',adminhome.addmerk, name='merk_add'),
     path('inventaris/masterdata/merk/edit/<int:pk>', adminhome.editmerk,name='merk_edit'),
     path('inventaris/masterdata/merk/delete/<int:pk>', adminhome.deletemerk,name='merk_delete'),
+    path('inventaris/masterdata/merk/cari', adminhome.carimerk,name='merk_cari'),
     
     # JENIS
     path('inventaris/masterdata/jenis', adminhome.viewjenis, name='jenis'),
     path('inventaris/masterdata/jenis/tambah',adminhome.addjenis, name='jenis_add'),
     path('inventaris/masterdata/jenis/edit/<int:pk>', adminhome.editjenis,name='jenis_edit'),
     path('inventaris/masterdata/jenis/delete/<int:pk>', adminhome.deletejenis,name='jenis_delete'),
+    path('inventaris/masterdata/jenis/cari', adminhome.carijenis,name='jenis_cari'),
     
     # SUPPLIER 
     path('inventaris/masterdata/supplier', adminhome.viewsupplier, name='supplier'),
     path('inventaris/masterdata/supplier/tambah',adminhome.addsupplier, name='supplier_add'),
     path('inventaris/masterdata/supplier/edit/<int:pk>', adminhome.editsupplier,name='supplier_edit'),
     path('inventaris/masterdata/supplier/delete/<int:pk>', adminhome.deletesupplier,name='merk_delete'),
+    path('inventaris/masterdata/supplier/cari', adminhome.carisuplier,name='suplier_cari'),
     
     # CUSTOMER
     path('inventaris/masterdata/customer', adminhome.viewcustomer, name='customer'),
     path('inventaris/masterdata/customer/tambah',adminhome.addcustomer, name='customer_add'),
     path('inventaris/masterdata/customer/edit/<int:pk>', adminhome.editcustomer,name='customer_edit'),
     path('inventaris/masterdata/customer/delete/<int:pk>', adminhome.deletecustomer,name='customer_delete'),
+    path('inventaris/masterdata/customer/cari', adminhome.caricustomer,name='customer_cari'),
     
     # TIPE
     path('inventaris/masterdata/tipe', adminhome.viewtipe, name='tipe'),
     path('inventaris/masterdata/tipe/tambah',adminhome.addtipe, name='tipe_add'),
     path('inventaris/masterdata/tipe/edit/<int:pk>', adminhome.edittipe,name='tipe_edit'),
     path('inventaris/masterdata/tipe/delete/<int:pk>', adminhome.deletetipe,name='tipe_delete'),
+    path('inventaris/masterdata/tipe/cari', adminhome.caritipe,name='tipe_cari'),
 ]

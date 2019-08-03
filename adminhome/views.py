@@ -12,29 +12,67 @@ from django.conf import settings
 from django.utils.crypto import get_random_string
 from django.views.generic import View, FormView
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.decorators import login_required
 import bcrypt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
-# ----------------+
-# LOGIN & AAD USER      |
-# ----------------+
+#---------+
+# LOGIN   |
+# --------+
 
 def index(request):
     return render(request, 'login.html')
 
-    if request.method == 'POST':
-        form_data = request.POST
-        form = Supplierform(form_data)
-        if form.is_valid():
-            Supplier = supplier(
-                nama_supplier=request.POST['nama_supplier'],
-                alamat_supplier=request.POST['alamat_supplier'],
-                notlp_supplier=request.POST['notlp_supplier']
-            )
-            Supplier.save()
-            return redirect('/inventaris/masterdata/supplier')
-    else:
-        form = Supplierform()
-    return render(request, 'masterdata/supplier/supplier_tambah.html', {'form': form})
+def login_view(request):
+    if (user.objects.filter(username=request.POST['login_username']).exists()):
+        akun = user.objects.filter(username=request.POST['login_username'])[0]
+        if (bcrypt.checkpw(request.POST['login_password'].encode(), akun.password.encode())):
+            request.session['nm_lengkap'] = akun.nm_lengkap
+            request.session['username'] = akun.username  
+            request.session['level'] = akun.level
+            request.session['password'] = akun.password
+            request.session['id_user'] = akun.id_user            
+            return redirect('/inventaris/')
+        else:
+            messages.add_message(request, messages.INFO, 'Username atau password Anda salah')
+    return render(request, 'login.html')
+
+#-----------+
+#    USER   |
+# ----------+
+
+def logout_view(request):
+    logout(request)
+    return render(request, 'login.html')
+
+def cariuser(request):
+    pengguna = request.GET.get('cari')
+    daftar_user = user.objects.filter(
+            Q(nm_lengkap__icontains=pengguna) | Q(username__icontains=pengguna) |
+            Q(level__icontains=pengguna)
+        ).order_by('nm_lengkap')
+    pagination = Paginator(daftar_user,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_users': posts,
+        'users':pengguna
+    }
+    return render(request, 'users/view-user.html', context)
+
+def viewuser(request):
+    daftar_user = user.objects.all()
+    pagination = Paginator(daftar_user,10)
+    page = request.GET.get('page','')
+    user_pg = pagination.get_page(page)
+    return render(request, 'users/view-user.html',{'daftar_users': user_pg})
 
 def register(request):
     if request.method == 'POST':
@@ -49,36 +87,53 @@ def register(request):
         form = Userform()
     return render(request, 'users/add-user.html', {'form': form})
 
-def login_view(request):
-    if (user.objects.filter(username=request.POST['login_username']).exists()):
-        akun = user.objects.filter(username=request.POST['login_username'])[0]
-        if (bcrypt.checkpw(request.POST['login_password'].encode(), akun.password.encode())):
-            request.session['id_user'] = akun.id_user
-            request.session['username'] = akun.username  
-            request.session['level'] = akun.level            
+def edituser(request,pk):
+    User = user.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Userform(request.POST, instance=User)
+        if form.is_valid():
+            User = form.save(commit=False)
+            nm_lengkap = request.POST['nm_lengkap']
+            username = request.POST['username']
+            level = request.POST['level']
+            password = request.POST['password']
+            User.save()
+            return redirect('/inventaris/users', pk=User.pk)
+    else:
+        form = Userform(instance=User)
+    return render(request, 'users/edit-user.html', {'form': form, 'user' : User})
+
+def deleteuser(request,pk):
+    User = user.objects.get(pk=pk)
+    User.delete()
+    return redirect('/inventaris/users')
+
+def changepassword(request,pk):
+    User = user.objects.get(pk = request.session['id_user'])
+    if request.method == "POST":
+        form = Userform(request.POST, instance=User)
+        if form.is_valid():
+            hashed_password = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt())
+            akun = User(password=hashed_password.decode('utf-8'))
+            akun.save()
             return redirect('/inventaris/')
-    return redirect('/')
-
-def success(request):
-    akun = user.objects.get(id_user=request.session['id_user'])
-    context = {
-        "user": akun
-    }
-    return render(request, 'register/success.html', context)
-
-def logout_view(request):
-    logout(request)
-    return redirect('/login/')
+    else:
+        form = Userform(instance=User)
+    return render(request, 'changepassword.html', {'form': form, 'user' : User})
 
 # -----------+
 # DASHBOARD  |
 # -----------+
 
-
 def dashboard(request):
-    for key, value in request.session.items():
-        print('{} => {}'.format(key, value))
-    return render(request, 'dashboard.html')
+    Ssn = request.session
+    if Ssn is not None :
+        for key, value in request.session.items():
+            print('{} => {}'.format(key, value))
+        return render(request, 'dashboard.html')
+    else :
+        return render(request, 'login.html')
+        
 
 # -----------+
 # STOK       |
@@ -149,53 +204,37 @@ def laporankeluar(request):
 def laporanstok(request):
     return render(request, 'laporan/laporan-barang-stok.html')
 
-# -------------+
-# USERS        |
-# -------------+
-def viewuser(request):
-    daftar_user = user.objects.all()
-    pagination = Paginator(daftar_user,5)
-    page = request.GET.get('page','')
-    user_pg = pagination.get_page(page)
-    return render(request, 'users/view-user.html',{'daftar_user': user_pg})
-
-def edituser(request,pk):
-    User = user.objects.get(pk=pk)
-    if request.method == "POST":
-        form = Userform(request.POST, instance=User)
-        if form.is_valid():
-            User = form.save(commit=False)
-            nm_lengkap = request.POST['nm_lengkap']
-            username = request.POST['username']
-            level = request.POST['level']
-            password = request.POST['password']
-            User.save()
-            return redirect('/inventaris/users', pk=User.pk)
-    else:
-        form = Userform(instance=User)
-    return render(request, 'users/edit-user.html', {'form': form, 'user' : User})
-
-def deleteuser(request,pk):
-    User = user.objects.get(pk=pk)
-    User.delete()
-    return redirect('/inventaris/users')
-
 # ---------------+
 # CHANGE PASSWORD|
 # ---------------+
-
-
-def changepassword(request):
-    return render(request, 'changepassword.html')
 
 # -------------+
 # MASTER DATA  |
 # -------------+
 
+def carimerk(request):
+    merk = request.GET.get('cari')
+    daftar_merk = merk_brg.objects.filter(
+            Q(nama_merk__icontains=merk)
+        ).order_by('nama_merk')
+    pagination = Paginator(daftar_merk,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_merk': posts,
+        'key_merk':merk
+    }
+    return render(request, 'masterdata/merk/merk.html', context)
 
 def viewmerk(request):
     daftar_merk = merk_brg.objects.all()
-    pagination = Paginator(daftar_merk,5)
+    pagination = Paginator(daftar_merk,10)
 
     page = request.GET.get('page','')
     merk_pg = pagination.get_page(page)
@@ -235,17 +274,33 @@ def deletemerk(request,pk):
     Merk.delete()
     return redirect('/inventaris/masterdata/merk')
 
-def searchmerk(request):
-    ''' This could be your actual view or a new one '''
-    # Your code
-    if request.method == 'GET': # If the form is submitted
-        search_query = request.GET.get('search_box_merk', None)
-        # Do whatever you need with the word the user looked for
+# ------------+
+#     jENIS   |
+# ------------+
 
-    # Your code
+def carijenis(request):
+    jenis = request.GET.get('cari')
+    daftar_jenis = jenis_brg.objects.filter(
+            Q(nama_jenis__icontains=jenis)
+        ).order_by('nama_jenis')
+    pagination = Paginator(daftar_jenis,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_jenis': posts,
+        'key_jenis':jenis
+    }
+    return render(request, 'masterdata/jenis/jenis.html', context)
+
 def viewjenis(request):
     daftar_jenis = jenis_brg.objects.all()
-    pagination = Paginator(daftar_jenis,5)
+    pagination = Paginator(daftar_jenis,10)
 
     page = request.GET.get('page','')
     jenis_pg = pagination.get_page(page)
@@ -283,9 +338,34 @@ def deletejenis(request,pk):
     jenis.delete()
     return redirect('/inventaris/masterdata/jenis')
 
+# ------------+
+#    SUPLIER  |
+# ------------+
+
+def carisuplier(request):
+    suplier = request.GET.get('cari')
+    daftar_supplier = supplier.objects.filter(
+            Q(nama_supplier__icontains=suplier) | Q(alamat_supplier__icontains=suplier) |
+            Q(notlp_supplier__icontains=suplier)
+        ).order_by('nama_supplier')
+    pagination = Paginator(daftar_supplier,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_supplier': posts,
+        'key_suplier':suplier
+    }
+    return render(request, 'masterdata/supplier/supplier.html', context)
+
 def viewsupplier(request):
     daftar_supplier = supplier.objects.all()
-    pagination = Paginator(daftar_supplier,5)
+    pagination = Paginator(daftar_supplier,10)
 
     page = request.GET.get('page','')
     supplier_pg = pagination.get_page(page)
@@ -327,9 +407,34 @@ def deletesupplier(request,pk):
     Supplier.delete()
     return redirect('/inventaris/masterdata/supplier')
 
+# ------------+
+#   CUSTOMER  |
+# ------------+
+
+def caricustomer(request):
+    customers = request.GET.get('cari')
+    daftar_customer = customer.objects.filter(
+            Q(nama_customer__icontains=customers) | Q(alamat_customer__icontains=customers) |
+            Q(notlp_customer__icontains=customers)
+        ).order_by('nama_customer')
+    pagination = Paginator(daftar_customer,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_customer': posts,
+        'key_customer':customers
+    }
+    return render(request, 'masterdata/customer/customer.html', context)
+
 def viewcustomer(request):
     daftar_customer = customer.objects.all()
-    pagination = Paginator(daftar_customer,5)
+    pagination = Paginator(daftar_customer,10)
     page = request.GET.get('page','')
     customer_pg = pagination.get_page(page)
     return render(request, 'masterdata/customer/customer.html',{'daftar_customer': customer_pg})
@@ -370,9 +475,33 @@ def deletecustomer(request,pk):
     Customer.delete()
     return redirect('/inventaris/masterdata/customer')
 
+# ----------+
+#    TIPE   |
+# ----------+
+
+def caritipe(request):
+    tipe = request.GET.get('cari')
+    daftar_tipe = type_brg.objects.filter(
+            Q(nama_type__icontains=tipe)
+        ).order_by('nama_type')
+    pagination = Paginator(daftar_tipe,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_tipe': posts,
+        'key_tipe':tipe
+    }
+    return render(request, 'masterdata/tipe/tipe.html', context)
+
 def viewtipe(request):
     daftar_tipe = type_brg.objects.all()
-    pagination = Paginator(daftar_tipe,5)
+    pagination = Paginator(daftar_tipe,10)
 
     page = request.GET.get('page','')
     tipe_pg = pagination.get_page(page)

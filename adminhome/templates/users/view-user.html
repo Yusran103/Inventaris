@@ -29,41 +29,46 @@
                 <div class="box-footer clearfix">
                     <div class="box-header with-border">
                         <i class="fa fa-users"></i>
-                        <h1 class="box-title">Daftar User {{akun.first_name}} {{akun.last_name}}</h1>
+                        <h1 class="box-title">Daftar User</h1>
                     </div>
-                    <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
-                        <input type="text" class="form-control" placeholder="Cari.....">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
+                    <form action="{% url 'user_cari' %}" method="GET">
+                        <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
                     <div class="pull-right col-md-4">
                         <a class="btn btn-primary pull-right" href="/inventaris/users/tambah"><i class="fa fa-user-plus"></i> Tambah</a>
                     </div>
                     <br/>
                     <br/>
                     <!-- paginate atas -->
-                    <center>
+
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
-                                {% if daftar_user.has_previous %}
+                            <ul class="pagination pagination-md justify-content-center">
+                                {% if daftar_users.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_user.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_users.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
-                                <li class="page-item disabled"><span class="current">Page {{ daftar_user.number }} of {{ daftar_user.paginator.num_pages }}.</span></li>
-                                {% if daftar_user.has_next %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_users.number }} of {{ daftar_users.paginator.num_pages }}.</span></li>
+                                {% if daftar_users.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_user.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_user.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_users.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_users.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
+
                     <!-- tutup paginate atas -->
                     <br/>
+                    <p style="display: inline-block">Hasil Pencarian : {{users}}</p>
                     <table id="example" class="table table-striped table-bordered">
                         <thead class="thead-dark">
                             <tr>
@@ -77,13 +82,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if daftar_user %}
-                            {% for user in daftar_user %}
+                            {% if daftar_users %}
+                            {% for users in daftar_users %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ user.nm_lengkap }}</td>
-                                <td>{{ user.username }}</td>
-                                <td>{{ user.level }}</td>
+                                <td>{{ users.nm_lengkap }}</td>
+                                <td>{{ users.username }}</td>
+                                <td>{{ users.level }}</td>
                                 {% if request.session.level == 'SuperAdmin' %}
                                 <td>
                                     <a href="/inventaris/users/edit/{{ user.id_user }}" class="btn btn-info">
@@ -102,25 +107,25 @@
                             </tbody>
                         </table> 
                         <!-- paginate bawah -->
-                        <center>
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination pagination-lg justify-content-center">
-                                    {% if daftar_user.has_previous %}
-                                    <li class="page-item">
-                                        <a href="?page=1" class="page-item">&laquo;</a>
-                                        <a href="?page={{ daftar_user.previous_page_number }}" class="page-item">&lt;</a>
-                                    </li>
-                                    {% endif %}
-                                    <li class="page-item disabled"><span class="current">Page {{ daftar_user.number }} of {{ daftar_user.paginator.num_pages }}.</span></li>
-                                    {% if daftar_user.has_next %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ daftar_user.next_page_number }}">&gt;</a>
-                                        <a class="page-link" href="?page={{ daftar_user.paginator.num_pages }}">&raquo;</a>
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                            </nav>
-                        </center>
+                       <div style="text-align: center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
+                                {% if daftar_users.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_users.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_users.number }} of {{ daftar_users.paginator.num_pages }}.</span></li>
+                                {% if daftar_users.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_users.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_users.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
                         <!-- paginate bawah tutup -->
                     </div>
                 </div>
