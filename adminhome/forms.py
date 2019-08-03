@@ -37,7 +37,6 @@ class Jenisform(ModelForm):
         model = Jenis_brg
         fields = ['nama_jenis']
 
-
 # -------------+
 # TIPE FORM    |
 # -------------+
@@ -309,14 +308,23 @@ class BarangkeluarForm(ModelForm):
     merk_id = forms.ModelChoiceField(
         queryset = Merk_brg.objects.all(),
         # to_field_name="nama_merk"
+        widget=Select(
+            attrs={
+                'class':'form-control',
+                'id':'demo5'})
         )
     tipe_id = forms.ModelChoiceField(
         queryset = Tipe_brg.objects.all(),
         # to_field_name="nama_tipe"
+        widget=Select(
+            attrs={
+                'class':'form-control',
+                'id':'demo7'})
         )
 
-    # foto_keluar = forms.FileField(
-    # )
+    foto_keluar = forms.FileField(
+        required=True
+    )
 
     class Meta:
         model = Barangkeluar

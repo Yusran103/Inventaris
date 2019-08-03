@@ -31,12 +31,14 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Barang Keluar</h1>
                     </div>
-                    <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
-                        <input type="text" class="form-control" placeholder="Cari.....">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
+                    <form action="{% url 'barangkeluar_grid_cari' %}" method="GET">
+                        <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
                     <div class="pull-right col-md-4">
                         <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/list"><i class="fa fa-th-list"></i></a>
@@ -44,28 +46,27 @@
                     <br/>
                     <br/>
                     <!-- pagination atas -->
-                    <center>
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barangkeluar.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
                                 {% if daftar_barangkeluar.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
                     <!-- pagination atas-->
                     <br/>
-                    
                     {% if messages %}
                     <div class="col-sm-12">
                         {% for message in messages %}
@@ -73,6 +74,12 @@
                             <h4 {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</h4>
                         </div>
                         {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if barang_keluar != None %}
+                    <div class="callout callout-success">
+                        <h4 style="display: inline-block">Hasil Pencarian : {{barang_keluar}}</h4>
                     </div>
                     {% endif %}
                     
@@ -145,48 +152,53 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        <!-- end modal -->
+                                            <!-- end modal -->
+                                        </div>
                                     </div>
                                 </div>
+                                {% endfor %}
+                                {% elif barang_keluar != None %}
+                                <tr>
+                                    <td colspan="8"><center>Barang Tersebut tidak ada </center></td>
+                                </tr>
+                                
+                                {% else %}
+                                <div class="box box-warning">
+                                    <br/>  
+                                    <span><center>Tidak ada data barang keluar saat ini...</center></span>
+                                    <br/>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endfor %}
-                            {% else %}
-                            <div class="box box-warning">
-                                <br/>  
-                                <span><center>Tidak ada data barang keluar saat ini...</center></span>
-                                <br/>
-                            </div>
-                            {% endif %}
                         </div>
+                        <!--END KONTEN  -->
+                        <!-- pagination bawah -->
+                        <div style="text-align: center">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-md justify-content-center">
+                                    {% if daftar_barangkeluar.has_previous %}
+                                    <li class="page-item">
+                                        <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                        <a href="?page={{ daftar_barangkeluar.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
+                                    {% if daftar_barangkeluar.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                        <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                        <!-- pagination bawah -->  
                     </div>
-                    <!--END KONTEN  -->
-                    <!-- pagination bawah -->
-                    <center>
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-md justify-content-center">
-                                {% if daftar_barangkeluar.has_previous %}
-                                <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}" class="page-item">&lt;</a>
-                                </li>
-                                {% endif %}
-                                <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
-                                {% if daftar_barangkeluar.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}">&raquo;</a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    </center>
-                    <!-- pagination bawah -->  
                 </div>
             </div>
         </div>
-    </div>
-</section>
-{% endblock %}
-
-{% block extrajs %}
-{% endblock %}
+    </section>
+    {% endblock %}
+    
+    {% block extrajs %}
+    {% endblock %}

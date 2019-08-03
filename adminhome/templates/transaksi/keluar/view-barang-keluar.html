@@ -15,12 +15,14 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Barang Keluar</h1>
                     </div>
-                    <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
-                        <input type="text" class="form-control" placeholder="Cari.....">
+                    <form action="{% url 'barangkeluar_cari' %}" method="GET">
+                        <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
+                        </div>
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
                         </span>
-                    </div>
+                    </form>
                     <div class="pull-right col-md-4">
                         <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar"><i class="fa fa-pencil-square-o"></i></a>
@@ -28,25 +30,25 @@
                     <br/>
                     <br/>
                     <!-- pagination atas -->
-                    <center>
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barangkeluar.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
                                 {% if daftar_barangkeluar.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
                     <!-- pagination atas-->
                     <br/>
                     
@@ -60,6 +62,11 @@
                     </div>
                     {% endif %}
                     
+                    {% if barang_keluar != None %}
+                    <div class="callout callout-success">
+                        <h4 style="display: inline-block">Hasil Pencarian : {{barang_keluar}}</h4>
+                    </div>
+                    {% endif %}
                     
                     <div class="col-sm-12">
                         <table id="data" class="table table-bordered table-striped table-responsive no-padding">
@@ -73,7 +80,7 @@
                                     <th>Harga Satuan</th>
                                     <th>Jumlah</th>
                                     <th>customer</th>
-                                    <th>No Resi</th>
+                                    <th>No Serial</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -89,7 +96,7 @@
                                     <td>Rp. {{ data.harga_satuan|intcomma }}</td>
                                     <td>{{ data.jumlah }}</td>
                                     <td>{{ data.customer_id }}</td>
-                                    <td>{{ data.no_resi }}</td>
+                                    <td>{{ data.serialnumber }}</td>
                                     <td>
                                         <a href="/inventaris/barangkeluar/edit/{{ data.id }}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
                                         <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
@@ -117,9 +124,15 @@
                                     </td>
                                 </tr>
                                 {% endfor %}
+                                
+                                {% elif barang_keluar != None %}
+                                <tr>
+                                    <td colspan="10"><center>Barang Tersebut tidak ada </center></td>
+                                </tr>
+                                
                                 {% else %}
                                 <tr>
-                                    <td colspan="9">
+                                    <td colspan="10">
                                         <center>
                                             Tidak ada data barang keluar saat ini...
                                         </center>
@@ -130,25 +143,25 @@
                         </table>
                     </div>
                     <!-- pagination bawah -->
-                    <center>
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barangkeluar.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
                                 {% if daftar_barangkeluar.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
                     <!-- pagination bawah -->  
                 </div>
             </div>

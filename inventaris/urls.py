@@ -44,6 +44,9 @@ urlpatterns = [
     path('inventaris/barangkeluar/simpantambah',adminhome.simpantambahbarangkeluar, name='barangkeluar_addcreate'),
     path('inventaris/barangkeluar/edit/<int:pk>', adminhome.editbarangkeluar,name='barangkeluar_edit'),
     path('inventaris/barangkeluar/delete/<int:pk>', adminhome.deletebarangkeluar,name='barangkeluar_delete'),
+    path('inventaris/barangkeluar/cari', adminhome.caribarangkeluargrid,name='barangkeluar_grid_cari'),
+    path('inventaris/barangkeluar/list/cari', adminhome.caribarangkeluar,name='barangkeluar_cari'),
+
     
     # STOK
     path('inventaris/stok', adminhome.gridstok, name='stok_grid'),

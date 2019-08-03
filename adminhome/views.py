@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404 ,redirect
 from hashid_field import HashidAutoField
 from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Barangkeluar, Stok_barang
 from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform , BarangkeluarForm, Barang_masuk_form, Stok_form
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.db.models import Q
 
 # -----------+
 # LOGIN      |
@@ -239,9 +240,51 @@ def deletebarangmasuk(request,pk):
 # -------------+
 # BARANG KELUAR|
 # -------------+
+def caribarangkeluargrid(request):
+    barangkeluar = request.GET.get('cari')
+    daftar_barang = Barangkeluar.objects.filter(
+            Q(nama_barang__icontains=barangkeluar) | Q(kode_barang__icontains=barangkeluar) |
+            Q(serialnumber__icontains=barangkeluar)
+        ).order_by('kode_barang')
+    pagination = Paginator(daftar_barang,5)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_barangkeluar': posts,
+        'barang_keluar':barangkeluar
+    }
+    return render(request, 'transaksi/keluar/viewgrid-barang-keluar.html', context)
+
+def caribarangkeluar(request):
+    barangkeluar = request.GET.get('cari')
+    daftar_barang = Barangkeluar.objects.filter(
+            Q(nama_barang__icontains=barangkeluar) | Q(kode_barang__icontains=barangkeluar) |
+            Q(serialnumber__icontains=barangkeluar)
+        ).order_by('kode_barang')
+    pagination = Paginator(daftar_barang,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_barangkeluar': posts,
+        'barang_keluar':barangkeluar
+    }
+    return render(request, 'transaksi/keluar/view-barang-keluar.html', context)
+
 def viewbarangkeluar(request):
     daftar_barangkeluar = Barangkeluar.objects.all().order_by('-id')
-    pagination = Paginator(daftar_barangkeluar,5)
+    pagination = Paginator(daftar_barangkeluar,10)
 
     page = request.GET.get('page','')
     barangkeluar_pg = pagination.get_page(page)
