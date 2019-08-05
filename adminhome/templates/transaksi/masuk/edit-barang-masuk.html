@@ -100,7 +100,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 pull-right">
-                    <input type="submit" value="Edit" class="btn btn-lg btn-primary"></input>
+                    <input type="submit" value="Edit" onclick="return confirm('apakah anda yakin ingin mengubah data tersebut?')" class="btn btn-lg btn-primary"></input>
                     <br/>
                     <br/>
                     <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" class="btn btn-lg btn-danger confirm-delete">Hapus</a>

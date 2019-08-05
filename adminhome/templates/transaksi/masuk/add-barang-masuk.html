@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block extrastyle %}
+<link rel="stylesheet" href="{% static 'swal/sweetalert2.css' %}">
 <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap-select.css">
 {% endblock%}
 
@@ -117,19 +118,26 @@
 {% endblock %}
 {% block extrajs%}
 <script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
+<script src="{% static 'swal/sweetalert2.all.js' %}"></script>
 <script>
     $(function() {
         $('#s1').click(function(e){
             e.preventDefault();
-            $('#form1').attr('action', "{% url 'barangmasuk_add' %}");
-            $('#form1').submit();
+            var r = confirm("Apakan anda yakin?");
+            if (r == true) {
+                $('#form1').attr('action', "{% url 'barangmasuk_add' %}");
+                $('#form1').submit();
+                alert('Sukses Menambah Data')
+            } 
         });
         $('#s2').click(function(e){
             e.preventDefault();
-            $('#form1').attr('action',  "{% url 'barangmasuk_addcreate' %}");
-            
-            $('#form1').submit();
-            alert('Data Berhasil di Tambah');
+            var r = confirm("Apakan anda yakin?");
+            if (r == true) {
+                $('#form1').attr('action',  "{% url 'barangmasuk_addcreate' %}");
+                $('#form1').submit();
+                alert('Sukses Menambah Data')
+            } 
         });
     });
     
@@ -152,30 +160,5 @@
             formatCurrency($(this), "blur");
         }
     });
-    
-    // var rupiah = document.getElementById('rupiah');
-    // rupiah.addEventListener('keyup', function(e){
-    //     // tambahkan 'Rp.' pada saat form di ketik
-    //     // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-    //     rupiah.value = formatRupiah(this.value, 'Rp. ');
-    // });
-    
-    // /* Fungsi formatRupiah */
-    // function formatRupiah(angka, prefix){
-    //     var number_string = angka.replace(/[^,\d]/g, '').toString(),
-    //     split   		= number_string.split(','),
-    //     sisa     		= split[0].length % 3,
-    //     rupiah     		= split[0].substr(0, sisa),
-    //     ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
-        
-    //     // tambahkan titik jika yang di input sudah menjadi angka ribuan
-    //     if(ribuan){
-    //         separator = sisa ? '.' : '';
-    //         rupiah += separator + ribuan.join('.');
-    //     }
-        
-    //     rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-    //     return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-    // }
 </script>
 {% endblock %}
