@@ -378,7 +378,7 @@ def addbarangkeluar(request):
                 jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
                 merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
                 tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
-                alamat_customer=Customer.objects.get(pk=request.POST.get('customer_id')),
+                alamat_customer=request.POST['alamat_customer'],
                 foto_keluar=request.FILES.get('foto_keluar')
             )
             form.save()
@@ -489,6 +489,15 @@ def laporankeluar(request):
 
 def laporanstok(request):
     return render(request, 'laporan/laporan-barang-stok.html')
+
+def print_laporan_keluar(request):
+    judul = "Laporan Barang Keluar"
+    tanggal = request.POST.get('tanggal')
+    pecah = tanggal.split('-')
+    tahun = pecah[0]
+    bulan = pecah[1]
+    stok_barang = Barangkeluar.objects.filter(tanggal__icontains=tanggal).order_by('tanggal')
+    return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
 # -------------+
 # USERS        |

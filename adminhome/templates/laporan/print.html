@@ -1,0 +1,187 @@
+{% extends  "layout/Laporan/template_print.html" %}
+
+{% load static %}
+
+{% block page_content %}
+<style>
+    @media print {
+        #printPageButton {
+            display: none;
+        }
+    }
+</style>
+<section class="content-header">
+    <h1 style="text-align: center">{{judul}}</h1>
+    <h4 style="text-align: center">CV. Adisatya IT Consultant</h4>
+    <div class="container">
+        <br/>
+        {% if bulan == "01" %}
+        <p style="text-align: left">Bulan : Januari {{tahun}}</p>
+        {% elif bulan == "02" %}
+        <p style="text-align: left">Bulan : Februari {{tahun}}</p>
+        {% elif bulan == "03" %}
+        <p style="text-align: left">Bulan : Maret {{tahun}}</p>
+        {% elif bulan == "04" %}
+        <p style="text-align: left">Bulan : April {{tahun}}</p>
+        {% elif bulan == "05" %}
+        <p style="text-align: left">Bulan : Mei {{tahun}}</p>
+        {% elif bulan == "06" %}
+        <p style="text-align: left">Bulan : Juni {{tahun}}</p>
+        {% elif bulan == "07" %}
+        <p style="text-align: left">Bulan : Juli {{tahun}}</p>
+        {% elif bulan == "08" %}
+        <p style="text-align: left">Bulan : Agustus {{tahun}}</p>
+        {% elif bulan == "09" %}
+        <p style="text-align: left">Bulan : September {{tahun}}</p>
+        {% elif bulan == "10" %}
+        <p style="text-align: left">Bulan : Oktober {{tahun}}</p>
+        {% elif bulan == "11" %}
+        <p style="text-align: left">Bulan : November {{tahun}}</p>
+        {% elif bulan == "12" %}
+        <p style="text-align: left">Bulan : Desember {{tahun}}</p>
+        {% endif %}
+        {% if judul == "Laporan Stok Barang" %}
+        <table class="table table-bordered table-striped">
+            <thead style="font-size: 11px">
+                <tr>
+                    <th>No</th>
+                    <th>tanggal</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Harga Satuan</th>
+                    <th>Barang Masuk</th>
+                    <th>Barang Keluar</th>
+                    <th>Persediaan Terakhir</th>
+                    <th>Merk</th>
+                    <th>Jenis</th>
+                    <th>Tipe</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody style="font-size: 11px">
+                {% if stok %}
+                {% for daftar_stok in stok %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ daftar_stok.tanggal}}</td>
+                    <td>{{ daftar_stok.kd_barang }}</td>
+                    <td>{{ daftar_stok.nm_barang }}</td>
+                    <td>{{ daftar_stok.hrg_barang }}</td>
+                    {% if daftar_stok.keterangan == "Barang Masuk"%}
+                    <td>{{ daftar_stok.jumlah_stok }}</td>
+                    <td>0</td>
+                    {% else %}
+                    <td>0</td>
+                    <td>{{ daftar_stok.jumlah_stok }}</td>
+                    {% endif %}
+                    <td>{{ daftar_stok.stok_akhir }}</td>
+                    <td>{{ daftar_stok.merk_id }}</td>
+                    <td>{{ daftar_stok.jenis_id }}</td>
+                    <td>{{ daftar_stok.tipe_id }}</td>
+                    <td>{{ daftar_stok.keterangan }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="12"><center>Tidak ada data Stok pada bulan tersebut...</center></td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        {% elif judul == "Laporan Barang Masuk" %}
+        <table class="table table-bordered table-striped">
+            <thead style="font-size: 11px">
+                <tr>
+                    <th>No</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Tanggal Masuk</th>
+                    <th>Jumlah</th>
+                    <th>Supplier</th>
+                    <th>No Resi</th>
+                    <th>Serial Number</th>
+                    <th>Merk</th>
+                    <th>Jenis</th>
+                    <th>Tipe</th>
+                </tr>
+            </thead>
+            <tbody style="font-size: 11px">
+                {% if stok %}
+                {% for daftar_stok in stok %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ daftar_stok.kd_barang}}</td>
+                    <td>{{ daftar_stok.nm_barang }}</td>
+                    <td>{{ daftar_stok.tgl_masuk }}</td>
+                    <td>{{ daftar_stok.jml_masuk }}</td>
+                    <td>{{ daftar_stok.supplier_id }}</td>
+                    <td>{{ daftar_stok.no_resi }}</td>
+                    <td>{{ daftar_stok.sn_barang }}</td>
+                    <td>{{ daftar_stok.merk_id }}</td>
+                    <td>{{ daftar_stok.jenis_id }}</td>
+                    <td>{{ daftar_stok.tipe_id }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="11"><center>Tidak ada data barang masuk pada bulan tersebut...</center></td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        {% elif judul == "Laporan Barang Keluar" %}
+        <table class="table table-bordered table-striped">
+            <thead style="font-size: 11px">
+                <tr>
+                    <th>No</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Tanggal Keluar</th>
+                    <th>Jumlah</th>
+                    <th>Harga</th>
+                    <th>Total Bayar</th>
+                    <th>Customer</th>
+                    <th>Alamat Customer</th>
+                    <th>No Resi</th>
+                    <th>Serial Number</th>
+                    <th>Merk</th>
+                    <th>Jenis</th>
+                    <th>Tipe</th>
+                </tr>
+            </thead>
+            <tbody style="font-size: 11px">
+                {% if stok %}
+                {% for daftar_stok in stok %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ daftar_stok.kode_barang}}</td>
+                    <td>{{ daftar_stok.nama_barang }}</td>
+                    <td>{{ daftar_stok.tanggal }}</td>
+                    <td>{{ daftar_stok.jumlah }}</td>
+                    <td>{{ daftar_stok.harga_satuan }}</td>
+                    <td>{{ daftar_stok.total_bayar }}</td>
+                    <td>{{ daftar_stok.customer_id }}</td>
+                    <td>{{ daftar_stok.alamat_customer }}</td>
+                    <td>{{ daftar_stok.no_resi }}</td>
+                    <td>{{ daftar_stok.serialnumber }}</td>
+                    <td>{{ daftar_stok.merk_id }}</td>
+                    <td>{{ daftar_stok.jenis_id }}</td>
+                    <td>{{ daftar_stok.tipe_id }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="14"><center>Tidak ada data barang keluar pada bulan tersebut...</center></td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        {% endif %}
+    </tbody>
+</table>
+<a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">Print this page</a>
+</div>
+</section>
+{% endblock %}
+{% block extrajs%}
+{% endblock %}
