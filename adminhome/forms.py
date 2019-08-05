@@ -252,7 +252,7 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
-    # merk_id = forms.CharField(
+    # merk_id = forms.CharField(       
     #     widget=forms.TextInput(
     #         attrs={
     #             'class':'form-control',

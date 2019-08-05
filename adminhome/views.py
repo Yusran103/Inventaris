@@ -356,7 +356,21 @@ def editbarangkeluar(request,pk):
 
 def addbarangkeluar(request):
     # stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
-    
+    nama_merk = 'nama_merk'
+    obj_merk= Merk_brg.objects.first()
+    field_object_merk = Merk_brg._meta.get_field(nama_merk)
+
+    nama_jenis = 'nama_jenis'
+    obj_jenis = Jenis_brg.objects.first()
+    field_object_jenis = Jenis_brg._meta.get_field(nama_jenis)
+
+    nama_tipe = 'nama_tipe'
+    obj_tipe = Tipe_brg.objects.first()
+    field_object_tipe = Tipe_brg._meta.get_field(nama_tipe)
+
+    jenis = Jenis_brg.objects.all()
+    merk = Merk_brg.objects.all()
+    tipe = Tipe_brg.objects.all()
     customer = Customer.objects.all()
     barangmasuk = Barang_masuk.objects.all()
 
@@ -375,10 +389,14 @@ def addbarangkeluar(request):
                 total_bayar=request.POST['total_bayar'],
                 customer_id=Customer.objects.get(pk=request.POST.get('customer_id')),
 
-                jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-                merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-                tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
-                alamat_customer=request.POST['alamat_customer'],
+                # jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                # merk_id = Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                # tipe_id = Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
+
+                jenis_id = field_object_jenis.value_from_object(obj_jenis),
+                merk_id = field_object_merk.value_from_object(obj_merk),
+                tipe_id = field_object_tipe.value_from_object(obj_tipe),
+                alamat_customer = request.POST['alamat_customer'],
                 foto_keluar=request.FILES.get('foto_keluar')
             )
             form.save()
@@ -410,7 +428,10 @@ def addbarangkeluar(request):
         'daftar_customer':customer,
         'daftar_barangmasuk':barangmasuk,
         'messages':messages,
-        'daftar_stok':stok
+        'daftar_stok':stok,
+        'daftar_jenis':jenis,
+        'daftar_merk':merk,
+        'daftar_tipe':tipe,
         })
 
 def simpantambahbarangkeluar(request):
