@@ -165,9 +165,24 @@ def editbarangmasuk(request,pk):
             tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
             barang_masuk.save()
 
-            # RAW UPDATE(LAST CHOICE)
+            # RAW UPDATE for STOK(LAST CHOICE)
             cursor = connection.cursor()
-            cursor.execute("update tb_stok set nm_barang='%s',hrg_barang='%s' where kd_barang='%s'"%(request.POST['nm_barang'],request.POST['harga_satuan'],request.POST['kd_barang']))
+            cursor.execute(
+                """update tb_stok set 
+                    nm_barang='%s',
+                    hrg_barang='%s',
+                    jenis_id='%s',
+                    merk_id='%s',
+                    tipe_id='%s' where kd_barang='%s'"""
+                    %(
+                        request.POST['nm_barang'],
+                        request.POST['harga_satuan'],
+                        Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                        Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                        Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
+                        request.POST['kd_barang']
+                    )
+                )
             # Still UnClear 
             
             messages.success(request, 'Berhasil merubah %s'%(request.POST['nm_barang']))
