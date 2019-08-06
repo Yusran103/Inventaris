@@ -11,7 +11,8 @@ class Merkform(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Nama Merk'
+                'placeholder':'Isikan Nama Merk',
+                'autofocus': 'True'
                 }
             ),
             required=True
@@ -28,7 +29,8 @@ class Jenisform(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Nama Jenis'
+                'placeholder':'Isikan Nama Jenis',
+                'autofocus': 'True'
                 }
             ),
             required=True
@@ -47,7 +49,8 @@ class Tipeform(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Nama Tipe'
+                'placeholder':'Isikan Nama Tipe',
+                'autofocus': 'True'
                 }
             ),
             required=True
@@ -64,7 +67,8 @@ class Supplierform(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Nama Supplier'
+                'placeholder':'Isikan Nama Supplier',
+                'autofocus': 'True'
                 }
             ),
             required=True
@@ -101,7 +105,8 @@ class Customerform(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Nama Customer'
+                'placeholder':'Isikan Nama Customer',
+                'autofocus': 'True'
                 }
             ),
             required=True
@@ -139,7 +144,8 @@ class Barang_masuk_form(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Kode Barang'
+                'placeholder':'Isikan Kode Barang',
+                'autofocus': 'True'
                 }
             ),
         )
@@ -164,7 +170,7 @@ class Barang_masuk_form(ModelForm):
             attrs={
                 'class':'form-control tgl_masuk',
                 'placeholder':'Isikan Tanggal masuk Barang',
-                'id':'datepicker'
+                'id':'datepicker',
                 }
             ),
         )
@@ -179,7 +185,7 @@ class Barang_masuk_form(ModelForm):
             ),
         )
     supplier_id = forms.ModelChoiceField(
-        queryset = Supplier.objects.all()
+        queryset = Supplier.objects.filter(is_deleted='0')
         )
     no_resi = forms.CharField(
         widget=forms.TextInput(
@@ -194,20 +200,20 @@ class Barang_masuk_form(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Isikan Harga Barang',
-                'id':'rupiah'
+                'id':'rupiah',
                 }
             ),
         )
     # foto_masuk = forms.FileField(
     #     )
     jenis_id = forms.ModelChoiceField(
-        queryset = Jenis_brg.objects.all()
+        queryset = Jenis_brg.objects.filter(is_deleted='0')
         )
     merk_id = forms.ModelChoiceField(
-        queryset = Merk_brg.objects.all()
+        queryset = Merk_brg.objects.filter(is_deleted='0')
         )
     tipe_id = forms.ModelChoiceField(
-        queryset = Tipe_brg.objects.all()
+        queryset = Tipe_brg.objects.filter(is_deleted='0')
         )
     
     class Meta:

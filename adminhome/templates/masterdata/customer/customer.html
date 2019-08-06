@@ -68,6 +68,16 @@
                     
                     <!-- konten -->
                     <div class="row">
+                        {% if messages %}
+                        <div class="col-sm-12">
+                            {% for message in messages %}
+                            <div class="alert alert-success alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4 {% if message.tags %} class="{{ message.tags }}"{% endif %}><i class="icon fa fa-check"></i> {{ message }}</h4>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                         <div class="col-sm-12">
                             <table id="data" class="table table-bordered table-striped table-responsive no-padding">
                                 <thead>
@@ -80,64 +90,64 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        {% if daftar_customer %}
-                                        {% for customer in daftar_customer %}
+                                    {% if daftar_customer %}
+                                    {% for customer in daftar_customer %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ customer.nama_customer }}</td>
+                                        <td>{{ customer.alamat_customer }}</td>
+                                        <td>{{ customer.notlp_customer }}</td>
+                                        <td><a href="/inventaris/masterdata/customer/edit/{{ customer.id_customer }}" class="btn btn-info"><i
+                                            class="fa fa-edit"></i></a>
+                                            <a href="/inventaris/masterdata/customer/delete/{{ customer.id_customer }}" class="btn btn-danger confirm-delete"><i
+                                                class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
                                         <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ customer.nama_customer }}</td>
-                                            <td>{{ customer.alamat_customer }}</td>
-                                            <td>{{ customer.notlp_customer }}</td>
-                                            <td><a href="/inventaris/masterdata/customer/edit/{{ customer.id_customer }}" class="btn btn-info"><i
-                                                class="fa fa-edit"></i></a>
-                                                <a href="/inventaris/masterdata/customer/delete/{{ customer.id_customer }}" class="btn btn-danger confirm-delete"><i
-                                                    class="fa fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                            {% else %}
-                                            <tr>
-                                                <td colspan="5"><center>Tidak ada data customer saat ini...</center></td>
-                                            </tr>
-                                            {% endif %}
-                                </tbody>
-                            </table>
+                                            <td colspan="5"><center>Tidak ada data customer saat ini...</center></td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+                        <!-- end konten -->
+                        
+                        <!-- pagination bawah -->
+                        <center>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-lg justify-content-center">
+                                    {% if daftar_customer.has_previous %}
+                                    <li class="page-item">
+                                        <a href="?page=1" class="page-item">&laquo;</a>
+                                        <a href="?page={{ daftar_customer.previous_page_number }}" class="page-item">&lt;</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="page-item disabled"><span class="current">Page {{ daftar_customer.number }} of {{ daftar_customer.paginator.num_pages }}.</span></li>
+                                    {% if daftar_customer.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ daftar_customer.next_page_number }}">&gt;</a>
+                                        <a class="page-link" href="?page={{ daftar_customer.paginator.num_pages }}">&raquo;</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </center>
+                        <!-- end pagination bawah -->
+                        
                     </div>
-                    <!-- end konten -->
-                    
-                    <!-- pagination bawah -->
-                    <center>
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
-                                {% if daftar_customer.has_previous %}
-                                <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_customer.previous_page_number }}" class="page-item">&lt;</a>
-                                </li>
-                                {% endif %}
-                                <li class="page-item disabled"><span class="current">Page {{ daftar_customer.number }} of {{ daftar_customer.paginator.num_pages }}.</span></li>
-                                {% if daftar_customer.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_customer.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_customer.paginator.num_pages }}">&raquo;</a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    </center>
-                    <!-- end pagination bawah -->
-                    
                 </div>
             </div>
         </div>
-    </div>
-</section>
-{% endblock %}
-{% block extrajs %}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-<script>
-    $('.confirm-delete').on('click', function(e) {
-        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
-    })
-</script>
-{% endblock %}
+    </section>
+    {% endblock %}
+    {% block extrajs %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script>
+        $('.confirm-delete').on('click', function(e) {
+            return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+        })
+    </script>
+    {% endblock %}

@@ -6,6 +6,7 @@ class Jenis_brg(models.Model):
     """docstring for jenis"""
     id_jenis = models.AutoField(primary_key=True)
     nama_jenis = models.CharField(max_length=100)
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
 
     class Meta:
         db_table = "tb_jenis_brg"
@@ -18,6 +19,7 @@ class Supplier(models.Model):
     nama_supplier = models.CharField(max_length=100)
     alamat_supplier = models.CharField(max_length=100)
     notlp_supplier = models.CharField(max_length=100)
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
     class Meta:
         db_table = "tb_supplier"
     
@@ -29,7 +31,7 @@ class Customer(models.Model):
     nama_customer = models.CharField(max_length=100)
     alamat_customer = models.CharField(max_length=100)
     notlp_customer= models.CharField(max_length=100)
-    
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
     class Meta:
         db_table = "tb_customer"
     
@@ -40,6 +42,7 @@ class Merk_brg(models.Model):
     """docstring for merk"""
     id_merk = models.AutoField(primary_key=True)
     nama_merk = models.CharField(max_length=100)
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
     class Meta:
         db_table = "tb_merk_brg"
     
@@ -50,7 +53,7 @@ class Tipe_brg(models.Model):
     """docstring for jenis"""
     id_tipe = models.AutoField(primary_key=True)
     nama_tipe = models.CharField(max_length=100)
-
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
     class Meta:
         db_table = "tb_tipe_brg"
     
@@ -67,8 +70,9 @@ class Barang_masuk(models.Model):
     jml_masuk = models.IntegerField()
     harga_satuan = models.IntegerField()
     no_resi = models.CharField(max_length=100,blank=True)
-    foto_masuk = models.ImageField(upload_to='foto/',blank=True , null=True) 
-    
+    foto_masuk = models.ImageField(upload_to='foto/',blank=True , null=True, unique=False) 
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
+
     supplier_id = models.ForeignKey(Supplier,on_delete=models.CASCADE,db_column='supplier_id')
     jenis_id = models.ForeignKey(Jenis_brg,on_delete=models.CASCADE,db_column='jenis_id')
     merk_id = models.ForeignKey(Merk_brg,on_delete=models.CASCADE,db_column='merk_id')
@@ -96,6 +100,7 @@ class Barang_keluar(models.Model):
     foto_keluar = models.ImageField(upload_to='foto/')
     kd_brg_keluar = models.CharField(max_length=10)
     nm_brg_keluar = models.CharField(max_length=100)
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
 
     customer_id = models.ForeignKey(Customer,on_delete=models.DO_NOTHING,db_column='customer_id')
     jenis_id = models.ForeignKey(Jenis_brg, on_delete=models.DO_NOTHING,db_column='jenis_id')
@@ -117,7 +122,7 @@ class Stok_barang(models.Model):
     jumlah_stok = models.IntegerField(default=0)
     stok_akhir = models.IntegerField(default=0)
     keterangan = models.CharField(max_length=100)
-    foto_stok = models.ImageField(upload_to='foto/',blank=True , null=True)
+    foto_stok = models.ImageField(upload_to='foto/',blank=True , null=True, unique=True)
 
     jenis_id = models.ForeignKey(Jenis_brg, on_delete=models.DO_NOTHING,db_column='jenis_id')
     merk_id = models.ForeignKey(Merk_brg, on_delete=models.DO_NOTHING,db_column='merk_id')
@@ -142,9 +147,10 @@ class User(models.Model):
     password = models.CharField(max_length=8)
     level = models.CharField(
         max_length=20, choices=USER_CHOICES, default='Admin')
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
 
-    def __unicode__(self):
-        return self.id_user
+    def __str__(self):
+        return self.nm_lengkap
 
     class Meta:
         db_table = "tb_user"
