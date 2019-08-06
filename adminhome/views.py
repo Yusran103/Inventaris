@@ -168,7 +168,8 @@ def editbarangmasuk(request,pk):
             # RAW UPDATE(LAST CHOICE)
             cursor = connection.cursor()
             cursor.execute("update tb_stok set nm_barang='%s',hrg_barang='%s' where kd_barang='%s'"%(request.POST['nm_barang'],request.POST['harga_satuan'],request.POST['kd_barang']))
-
+            # Still UnClear 
+            
             messages.success(request, 'Berhasil merubah %s'%(request.POST['nm_barang']))
             return redirect('/inventaris/barangmasuk', pk=masuk.pk)
     else:
