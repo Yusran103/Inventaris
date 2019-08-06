@@ -318,7 +318,8 @@ def tambahbarangmasuk(request):
 def deletebarangmasuk(request,pk):
     barang_masuk = Barang_masuk.objects.get(pk=pk)
     messages.success(request, 'Berhasil menghapus %s'%(barang_masuk.nm_barang))
-    barang_masuk.delete()
+    cursor = connection.cursor()
+    cursor.execute("update tb_barang_masuk set is_deleted='1' where id_brg_masuk='%s'"%(barang_masuk.id_brg_masuk))
     return redirect('/inventaris/barangmasuk')
 
 # -------------+
@@ -419,7 +420,7 @@ def changepassword(request):
 
 
 def viewmerk(request):
-    daftar_merk = Merk_brg.objects.all().order_by('-id_merk')
+    daftar_merk = Merk_brg.objects.filter(is_deleted='0').order_by('-id_merk')
     pagination = Paginator(daftar_merk,10)
 
     page = request.GET.get('page','')
@@ -461,7 +462,8 @@ def editmerk(request,pk):
 def deletemerk(request,pk):
     Merk = Merk_brg.objects.get(pk=pk)
     messages.warning(request, 'Berhasil menghapus %s'%(Merk.nama_merk))
-    Merk.delete()
+    cursor = connection.cursor()
+    cursor.execute("update tb_merk_brg set is_deleted='1' where id_merk='%s'"%(Merk.id_merk))
     return redirect('/inventaris/masterdata/merk',{'messages':messages})
 
 def viewjenis(request):
@@ -512,7 +514,7 @@ def deletejenis(request,pk):
     return redirect('/inventaris/masterdata/jenis',{'messages':messages})
 
 def viewsupplier(request):
-    daftar_supplier = Supplier.objects.all().order_by('-id_supplier')
+    daftar_supplier = Supplier.objects.filter(is_deleted='0').order_by('-id_supplier')
     pagination = Paginator(daftar_supplier,10)
 
     page = request.GET.get('page','')
@@ -556,11 +558,14 @@ def editsupplier(request,pk):
 def deletesupplier(request,pk):
     supplier = Supplier.objects.get(pk=pk)
     messages.success(request, 'Berhasil menghapus %s'%(supplier.nama_supplier))
-    supplier.delete()
+    
+    cursor = connection.cursor()
+    cursor.execute("update tb_supplier set is_deleted='1' where id_supplier='%s'"%(supplier.id_supplier))
+    
     return redirect('/inventaris/masterdata/supplier',{'messages':messages})
 
 def viewcustomer(request):
-    daftar_customer = Customer.objects.all().order_by('-id_customer')
+    daftar_customer = Customer.objects.filter(is_deleted='0').order_by('-id_customer')
     pagination = Paginator(daftar_customer,10)
     page = request.GET.get('page','')
     customer_pg = pagination.get_page(page)
@@ -603,11 +608,14 @@ def editcustomer(request,pk):
 def deletecustomer(request,pk):
     customer = Customer.objects.get(pk=pk)
     messages.success(request, 'Berhasil menghapus %s'%(customer.nama_customer))
-    customer.delete()
+    
+    cursor = connection.cursor()
+    cursor.execute("update tb_customer set is_deleted='1' where id_customer='%s'"%(customer.id_customer))
+    
     return redirect('/inventaris/masterdata/customer',{'messages':messages})
 
 def viewtipe(request):
-    daftar_tipe = Tipe_brg.objects.all().order_by('-id_tipe')
+    daftar_tipe = Tipe_brg.objects.filter(is_deleted='0').order_by('-id_tipe')
     pagination = Paginator(daftar_tipe,10)
 
     page = request.GET.get('page','')
@@ -647,5 +655,6 @@ def edittipe(request,pk):
 def deletetipe(request,pk):
     tipe = Tipe_brg.objects.get(pk=pk)
     messages.success(request, 'Berhasil menghapus %s'%(tipe.nama_tipe))
-    tipe.delete()
+    cursor = connection.cursor()
+    cursor.execute("update tb_tipe_brg set is_deleted='1' where id_tipe='%s'"%(tipe.id_tipe))
     return redirect('/inventaris/masterdata/tipe',{'messages':messages})
