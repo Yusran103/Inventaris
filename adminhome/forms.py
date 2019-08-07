@@ -148,7 +148,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Kode Barang',
-                'id':'demo',
+                # 'id':'demo',
                 # 'disabled':''
             }
         ),
@@ -160,7 +160,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Kode Barang',
-                'id':'demo1',
+                # 'id':'demo1',
                 # 'disabled':''
             }
         ),
@@ -184,7 +184,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Serial Number Barang',
-                'id':'demo2',
+                # 'id':'demo2',
                 # 'disable':''
             }
         ),
@@ -196,7 +196,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'No. Resi',
-                'id':'demo3',
+                # 'id':'demo3',
                 # 'disabled':''
             }
         ),
@@ -220,7 +220,7 @@ class BarangkeluarForm(ModelForm):
             attrs={
                 'class':'form-control',
                 'placeholder':'Harga Satuan',
-                'id':'demo4',
+                # 'id':'demo4',
                 # 'disabled':''
             }
         ),
@@ -245,7 +245,7 @@ class BarangkeluarForm(ModelForm):
                 'class':'form-control',
                 'placeholder':'Alamat Customer',
                 'rows':'3',
-                'id':'demo9'
+                # 'id':'demo9'
                 # 'disabled':''
             }
         ),
@@ -294,7 +294,8 @@ class BarangkeluarForm(ModelForm):
         widget=Select(
             attrs={
                 'class':'form-control',
-                'id':'demo8'})
+                # 'id':'demo8'
+                })
         )
 
     jenis_id = forms.ModelChoiceField(
@@ -302,24 +303,30 @@ class BarangkeluarForm(ModelForm):
         # to_field_name="nama_jenis",
         widget=Select(
             attrs={
-                'class':'form-control',
-                'id':'demo6'})
+                'style':'width: 100%',
+                # 'class':'form-control',
+                # 'id':'demo6'
+                })
         )
     merk_id = forms.ModelChoiceField(
         queryset = Merk_brg.objects.all(),
         # to_field_name="nama_merk"
         widget=Select(
             attrs={
-                'class':'form-control',
-                'id':'demo5'})
+                'style':'width: 100%',
+                # 'class':'form-control',
+                # 'id':'demo5'
+                })
         )
     tipe_id = forms.ModelChoiceField(
         queryset = Tipe_brg.objects.all(),
         # to_field_name="nama_tipe"
         widget=Select(
             attrs={
-                'class':'form-control',
-                'id':'demo7'})
+                'style':'width: 100%',
+                # 'class':'form-control',
+                # 'id':'demo7'
+                })
         )
 
     foto_keluar = forms.FileField(

@@ -184,28 +184,8 @@
     $('#caricustomer').select2({
         theme: "bootstrap 4"
     });
-    
-    // autofill barang
-    function myFunction() {
-        var x = document.getElementById("mySelect").value;
-        var y = x.split("|");
-        var a = y[0];
-        var b = y[1];
-        var c = y[2];
-        var d = y[3];
-        var e = y[4];
-        var f = y[5];
-        var g = y[6];
-        var h = y[7];
-        $("#demo").val(a);
-        $("#demo1").val(b);
-        $("#demo2").val(c);
-        $("#demo3").val(d);
-        $("#demo4").val(e);
-        $("#demo5").val(f);
-        $("#demo6").val(g);
-        $('#demo7').val(h);
-    };
+
+    $('#id_no_bukti,#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#id_customer_id,#date').attr('readonly',true);
     
     // autofill customer
     function customer() {
