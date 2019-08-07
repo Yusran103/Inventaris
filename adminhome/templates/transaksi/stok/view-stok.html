@@ -1,6 +1,6 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
-
+{% load humanize %}
 {% block extrastyle %}
 <style>
     .pagination a {
@@ -88,7 +88,7 @@
                                     <td>{{ stok.kd_barang }}</td>
                                     <td>{{ stok.nm_barang }}</td>
                                     <td>{{ stok.stok_akhir }}</td>
-                                    <td>{{ stok.hrg_barang }}</td>
+                                    <td>Rp. {{ stok.hrg_barang|intcomma }},-</td>
                                     <td>{{ stok.merk_id }}</td>
                                     <td>{{ stok.jenis_id }}</td>
                                     <td>{{ stok.tipe_id }}</td>

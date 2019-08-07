@@ -5,7 +5,7 @@ from django.db import models
 class Jenis_brg(models.Model):
     """docstring for jenis"""
     id_jenis = models.AutoField(primary_key=True)
-    nama_jenis = models.CharField(max_length=100)
+    nama_jenis = models.CharField(max_length=100,unique=True)
     is_deleted = models.CharField(max_length=100,blank=True , null=True)
 
     class Meta:
@@ -16,9 +16,9 @@ class Jenis_brg(models.Model):
 
 class Supplier(models.Model):
     id_supplier = models.AutoField(primary_key=True)
-    nama_supplier = models.CharField(max_length=100)
+    nama_supplier = models.CharField(max_length=100,unique=True)
     alamat_supplier = models.CharField(max_length=100)
-    notlp_supplier = models.CharField(max_length=100)
+    notlp_supplier = models.CharField(max_length=100,unique=True)
     is_deleted = models.CharField(max_length=100,blank=True , null=True)
     class Meta:
         db_table = "tb_supplier"
@@ -28,7 +28,7 @@ class Supplier(models.Model):
 
 class Customer(models.Model):
     id_customer = models.AutoField(primary_key=True)
-    nama_customer = models.CharField(max_length=100)
+    nama_customer = models.CharField(max_length=100,unique=True)
     alamat_customer = models.CharField(max_length=100)
     notlp_customer= models.CharField(max_length=100)
     is_deleted = models.CharField(max_length=100,blank=True , null=True)
@@ -41,7 +41,7 @@ class Customer(models.Model):
 class Merk_brg(models.Model):
     """docstring for merk"""
     id_merk = models.AutoField(primary_key=True)
-    nama_merk = models.CharField(max_length=100)
+    nama_merk = models.CharField(max_length=100,unique=True)
     is_deleted = models.CharField(max_length=100,blank=True , null=True)
     class Meta:
         db_table = "tb_merk_brg"
@@ -52,7 +52,7 @@ class Merk_brg(models.Model):
 class Tipe_brg(models.Model):
     """docstring for jenis"""
     id_tipe = models.AutoField(primary_key=True)
-    nama_tipe = models.CharField(max_length=100)
+    nama_tipe = models.CharField(max_length=100,unique=True)
     is_deleted = models.CharField(max_length=100,blank=True , null=True)
     class Meta:
         db_table = "tb_tipe_brg"

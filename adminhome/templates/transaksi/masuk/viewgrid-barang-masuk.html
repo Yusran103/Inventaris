@@ -1,6 +1,6 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
-
+{% load humanize %}
 {% block extrastyle %}
 <style>
     
@@ -96,7 +96,7 @@
                                             <h5><strong>Jumlah :</strong> {{barang_masuk.jml_masuk}}</h5>
                                             <h5><strong>Supplier :</strong> {{barang_masuk.supplier_id}}</h5>
                                             <h5><strong>No Resi :</strong> {{barang_masuk.no_resi}}</h5>
-                                            <h5><strong>Harga Barang :</strong> {{barang_masuk.harga_satuan}}</h5>
+                                            <h5><strong>Harga Barang :</strong> Rp.{{barang_masuk.harga_satuan|intcomma}},-</h5>
                                         </div>
                                     </div>
                                     <div class="col-sm-2 pull-right">

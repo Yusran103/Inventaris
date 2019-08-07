@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.contrib import messages
 from django.db import connection
+from django.http import HttpResponse
 
 
 # -----------+
@@ -89,7 +90,7 @@ def caribarangmasukgrid(request):
     barangmasuk = request.GET.get('cari')
     daftar_barang = Barang_masuk.objects.filter(
             Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
-            Q(sn_barang__icontains=barangmasuk) | Q(is_deleted='0')
+            Q(sn_barang__icontains=barangmasuk) | Q(is_deleted='False')
         ).order_by('kd_barang')
     pagination = Paginator(daftar_barang,5)
     page = request.GET.get('page')
@@ -110,7 +111,7 @@ def caribarangmasuk(request):
     barangmasuk = request.GET.get('cari')
     daftar_barang = Barang_masuk.objects.filter(
             Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
-            Q(sn_barang__icontains=barangmasuk) | Q(is_deleted='0')
+            Q(sn_barang__icontains=barangmasuk) | Q(is_deleted='False')
         ).order_by('kd_barang')
     pagination = Paginator(daftar_barang,10)
     page = request.GET.get('page')
@@ -128,7 +129,7 @@ def caribarangmasuk(request):
     return render(request, 'transaksi/masuk/view-barang-masuk.html', context)
 
 def barangmasuk(request):
-    daftar_barang = Barang_masuk.objects.filter(is_deleted='0').order_by('-id_brg_masuk')
+    daftar_barang = Barang_masuk.objects.filter(is_deleted='False').order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,10)
 
     page = request.GET.get('page','')
@@ -137,7 +138,7 @@ def barangmasuk(request):
 
 
 def barangmasukgrid(request):
-    daftar_barang = Barang_masuk.objects.filter(is_deleted='0').order_by('-id_brg_masuk')
+    daftar_barang = Barang_masuk.objects.filter(is_deleted='False').order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,5)
 
     page = request.GET.get('page','')
@@ -177,9 +178,9 @@ def editbarangmasuk(request,pk):
                     %(
                         request.POST['nm_barang'],
                         request.POST['harga_satuan'],
-                        Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-                        Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-                        Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
+                        request.POST.get('jenis_id'),
+                        request.POST.get('merk_id'),
+                        request.POST.get('tipe_id'),
                         request.POST['kd_barang']
                     )
                 )
@@ -192,10 +193,10 @@ def editbarangmasuk(request,pk):
     return render(request, 'transaksi/masuk/edit-barang-masuk.html', {'form': form, 'barang_masuk' : masuk,'messages':messages})
 
 def simpantambahbarangmasuk(request):
-    jenis = Jenis_brg.objects.filter(is_deleted='0')
-    merk = Merk_brg.objects.filter(is_deleted='0')
-    tipe = Tipe_brg.objects.filter(is_deleted='0')
-    supplier = Supplier.objects.filter(is_deleted='0')
+    jenis = Jenis_brg.objects.filter(is_deleted='False')
+    merk = Merk_brg.objects.filter(is_deleted='False')
+    tipe = Tipe_brg.objects.filter(is_deleted='False')
+    supplier = Supplier.objects.filter(is_deleted='False')
 
     if request.method == 'POST':
         form = Barang_masuk_form(request.POST , request.FILES)
@@ -213,7 +214,7 @@ def simpantambahbarangmasuk(request):
                 jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
                 merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
                 tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
-                is_deleted='0'
+                is_deleted='False'
             )
             form.save()
             
@@ -263,10 +264,10 @@ def simpantambahbarangmasuk(request):
     })
 
 def tambahbarangmasuk(request):
-    jenis = Jenis_brg.objects.filter(is_deleted='0')
-    merk = Merk_brg.objects.filter(is_deleted='0')
-    tipe = Tipe_brg.objects.filter(is_deleted='0')
-    supplier = Supplier.objects.filter(is_deleted='0')
+    jenis = Jenis_brg.objects.filter(is_deleted='False')
+    merk = Merk_brg.objects.filter(is_deleted='False')
+    tipe = Tipe_brg.objects.filter(is_deleted='False')
+    supplier = Supplier.objects.filter(is_deleted='False')
     if request.method == 'POST':
         form = Barang_masuk_form(request.POST , request.FILES)
         if form.is_valid():
@@ -283,7 +284,7 @@ def tambahbarangmasuk(request):
                 jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
                 merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
                 tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
-                is_deleted='0'
+                is_deleted='False'
             )
             form.save()
             
@@ -333,9 +334,27 @@ def tambahbarangmasuk(request):
 
 def deletebarangmasuk(request,pk):
     barang_masuk = Barang_masuk.objects.get(pk=pk)
+    # stok = Barang_masuk.jml_masuk
+    # jumlahstok = Stok_barang.objects.filter(kd_barang=barang_masuk.kd_barang).order_by('kd_barang', '-id_stok').distinct('kd_barang')
+    if Stok_barang.objects.filter(kd_barang__icontains=barang_masuk.kd_barang):
+        cr_stok = Stok_barang.objects.filter(kd_barang=barang_masuk.kd_barang).latest('id_stok')
+        stok_barang = Stok_barang.objects.create(
+            tanggal=barang_masuk.tgl_masuk,
+            nm_barang=barang_masuk.nm_barang,
+            kd_barang=barang_masuk.kd_barang,
+            hrg_barang=barang_masuk.harga_satuan,
+            jumlah_stok=barang_masuk.jml_masuk,
+            stok_akhir= cr_stok.stok_akhir - int(barang_masuk.jml_masuk),
+            keterangan="Hapus Barang Masuk",
+            foto_stok=barang_masuk.foto_masuk,
+            jenis_id=barang_masuk.jenis_id,
+            merk_id=barang_masuk.merk_id,
+            tipe_id=barang_masuk.tipe_id
+        )   
+        stok_barang.save()
     messages.success(request, 'Berhasil menghapus %s'%(barang_masuk.nm_barang))
     cursor = connection.cursor()
-    cursor.execute("update tb_barang_masuk set is_deleted='1' where id_brg_masuk='%s'"%(barang_masuk.id_brg_masuk))
+    cursor.execute("update tb_barang_masuk set is_deleted='True' where id_brg_masuk='%s'"%(barang_masuk.id_brg_masuk))
     return redirect('/inventaris/barangmasuk')
 
 # -------------+
@@ -382,27 +401,48 @@ def laporanstok(request):
 def print_laporan_stok(request):
     judul = "Laporan Stok Barang"
     tanggal = request.POST.get('tanggal')
-    pecah = tanggal.split('-')
-    tahun = pecah[0]
-    bulan = pecah[1]
+    url = '/inventaris/laporan/stok'
+    resp_body = '<script>alert("Bulan di butuhkan");\
+            window.location="%s"</script>' % url
+
+    if tanggal == None:
+        return HttpResponse(resp_body)
+    else:
+        pecah = tanggal.split('-')
+        tahun = pecah[0]
+        bulan = pecah[1]
     stok_barang = Stok_barang.objects.filter(tanggal__icontains=tanggal).order_by('tanggal')
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
 def print_laporan_masuk(request):
     judul = "Laporan Barang Masuk"
     tanggal = request.POST.get('tanggal')
-    pecah = tanggal.split('-')
-    tahun = pecah[0]
-    bulan = pecah[1]
+    url = '/inventaris/laporan/barangmasuk'
+    resp_body = '<script>alert("Bulan di butuhkan");\
+            window.location="%s"</script>' % url
+
+    if tanggal == None:
+        return HttpResponse(resp_body)
+    else:
+        pecah = tanggal.split('-')
+        tahun = pecah[0]
+        bulan = pecah[1]
     stok_barang = Barang_masuk.objects.filter(tgl_masuk__icontains=tanggal).order_by('tgl_masuk')
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
 def print_laporan_keluar(request):
     judul = "Laporan Barang Keluar"
     tanggal = request.POST.get('tanggal')
-    pecah = tanggal.split('-')
-    tahun = pecah[0]
-    bulan = pecah[1]
+    url = '/inventaris/laporan/barangkeluar'
+    resp_body = '<script>alert("Bulan di butuhkan");\
+            window.location="%s"</script>' % url
+
+    if tanggal == None:
+        return HttpResponse(resp_body)
+    else:
+        pecah = tanggal.split('-')
+        tahun = pecah[0]
+        bulan = pecah[1]
     stok_barang = Barang_keluar.objects.filter(tgl_keluar__icontains=tanggal).order_by('tgl_keluar')
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
@@ -436,7 +476,7 @@ def changepassword(request):
 
 
 def viewmerk(request):
-    daftar_merk = Merk_brg.objects.filter(is_deleted='0').order_by('-id_merk')
+    daftar_merk = Merk_brg.objects.filter(is_deleted='False').order_by('-id_merk')
     pagination = Paginator(daftar_merk,10)
 
     page = request.GET.get('page','')
@@ -451,7 +491,7 @@ def addmerk(request):
         if form.is_valid():
             Merk = Merk_brg(
                 nama_merk=request.POST['nama_merk'],
-                is_deleted='0'
+                is_deleted='False'
             )
             Merk.save()
             messages.success(request, 'Berhasil menambah %s'%(request.POST['nama_merk']))
@@ -479,11 +519,11 @@ def deletemerk(request,pk):
     Merk = Merk_brg.objects.get(pk=pk)
     messages.warning(request, 'Berhasil menghapus %s'%(Merk.nama_merk))
     cursor = connection.cursor()
-    cursor.execute("update tb_merk_brg set is_deleted='1' where id_merk='%s'"%(Merk.id_merk))
+    cursor.execute("update tb_merk_brg set is_deleted='True' where id_merk='%s'"%(Merk.id_merk))
     return redirect('/inventaris/masterdata/merk',{'messages':messages})
 
 def viewjenis(request):
-    daftar_jenis = Jenis_brg.objects.filter(is_deleted='0').order_by('-id_jenis')
+    daftar_jenis = Jenis_brg.objects.filter(is_deleted='False').order_by('-id_jenis')
     pagination = Paginator(daftar_jenis,10)
 
     page = request.GET.get('page','')
@@ -497,7 +537,7 @@ def addjenis(request):
         if form.is_valid():
             jenis = Jenis_brg(
                 nama_jenis=request.POST['nama_jenis'],
-                is_deleted='0'
+                is_deleted='False'
             )
             jenis.save()
             messages.success(request, 'Berhasil menambah %s'%(request.POST['nama_jenis']))
@@ -524,13 +564,13 @@ def deletejenis(request,pk):
     jenis = Jenis_brg.objects.get(pk=pk)
     # RAW (LAST CHOICE)
     cursor = connection.cursor()
-    cursor.execute("update tb_jenis_brg set is_deleted='1' where id_jenis='%s'"%(jenis.id_jenis))
+    cursor.execute("update tb_jenis_brg set is_deleted='True' where id_jenis='%s'"%(jenis.id_jenis))
 
     messages.success(request, 'Berhasil menghapus %s'%(jenis.nama_jenis))
     return redirect('/inventaris/masterdata/jenis',{'messages':messages})
 
 def viewsupplier(request):
-    daftar_supplier = Supplier.objects.filter(is_deleted='0').order_by('-id_supplier')
+    daftar_supplier = Supplier.objects.filter(is_deleted='False').order_by('-id_supplier')
     pagination = Paginator(daftar_supplier,10)
 
     page = request.GET.get('page','')
@@ -546,7 +586,7 @@ def addsupplier(request):
                 nama_supplier=request.POST['nama_supplier'],
                 alamat_supplier=request.POST['alamat_supplier'],
                 notlp_supplier=request.POST['notlp_supplier'],
-                is_deleted='0'
+                is_deleted='False'
             )
             supplier.save()
             messages.success(request, 'Berhasil menambah %s'%(request.POST['nama_supplier']))
@@ -576,12 +616,12 @@ def deletesupplier(request,pk):
     messages.success(request, 'Berhasil menghapus %s'%(supplier.nama_supplier))
     
     cursor = connection.cursor()
-    cursor.execute("update tb_supplier set is_deleted='1' where id_supplier='%s'"%(supplier.id_supplier))
+    cursor.execute("update tb_supplier set is_deleted='True' where id_supplier='%s'"%(supplier.id_supplier))
     
     return redirect('/inventaris/masterdata/supplier',{'messages':messages})
 
 def viewcustomer(request):
-    daftar_customer = Customer.objects.filter(is_deleted='0').order_by('-id_customer')
+    daftar_customer = Customer.objects.filter(is_deleted='False').order_by('-id_customer')
     pagination = Paginator(daftar_customer,10)
     page = request.GET.get('page','')
     customer_pg = pagination.get_page(page)
@@ -596,7 +636,7 @@ def addcustomer(request):
                 nama_customer= request.POST['nama_customer'],
                 alamat_customer=request.POST['alamat_customer'],
                 notlp_customer=request.POST['notlp_customer'],
-                is_deleted='0'
+                is_deleted='False'
             )
             messages.success(request, 'Berhasil menambah %s'%(request.POST['nama_customer']))
             customer.save()
@@ -626,12 +666,12 @@ def deletecustomer(request,pk):
     messages.success(request, 'Berhasil menghapus %s'%(customer.nama_customer))
     
     cursor = connection.cursor()
-    cursor.execute("update tb_customer set is_deleted='1' where id_customer='%s'"%(customer.id_customer))
+    cursor.execute("update tb_customer set is_deleted='True' where id_customer='%s'"%(customer.id_customer))
     
     return redirect('/inventaris/masterdata/customer',{'messages':messages})
 
 def viewtipe(request):
-    daftar_tipe = Tipe_brg.objects.filter(is_deleted='0').order_by('-id_tipe')
+    daftar_tipe = Tipe_brg.objects.filter(is_deleted='False').order_by('-id_tipe')
     pagination = Paginator(daftar_tipe,10)
 
     page = request.GET.get('page','')
@@ -645,7 +685,7 @@ def addtipe(request):
         if form.is_valid():
             Tipe = Tipe_brg(
                 nama_tipe=request.POST['nama_tipe'],
-                is_deleted='0'
+                is_deleted='False'
             )
             Tipe.save()
             messages.success(request, 'Berhasil menambah %s'%(request.POST['nama_tipe']))
@@ -672,5 +712,5 @@ def deletetipe(request,pk):
     tipe = Tipe_brg.objects.get(pk=pk)
     messages.success(request, 'Berhasil menghapus %s'%(tipe.nama_tipe))
     cursor = connection.cursor()
-    cursor.execute("update tb_tipe_brg set is_deleted='1' where id_tipe='%s'"%(tipe.id_tipe))
+    cursor.execute("update tb_tipe_brg set is_deleted='True' where id_tipe='%s'"%(tipe.id_tipe))
     return redirect('/inventaris/masterdata/tipe',{'messages':messages})

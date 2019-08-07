@@ -144,8 +144,7 @@ class Barang_masuk_form(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Kode Barang',
-                'autofocus': 'True'
+                'placeholder':'Isikan Kode Barang'
                 }
             ),
         )
@@ -153,7 +152,8 @@ class Barang_masuk_form(ModelForm):
         widget= forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Nama Barang'
+                'placeholder':'Isikan Nama Barang',
+                'autofocus': 'True'
                 }
             ),
         )
@@ -185,7 +185,7 @@ class Barang_masuk_form(ModelForm):
             ),
         )
     supplier_id = forms.ModelChoiceField(
-        queryset = Supplier.objects.filter(is_deleted='0')
+        queryset = Supplier.objects.filter(is_deleted='False')
         )
     no_resi = forms.CharField(
         widget=forms.TextInput(
@@ -207,13 +207,13 @@ class Barang_masuk_form(ModelForm):
     # foto_masuk = forms.FileField(
     #     )
     jenis_id = forms.ModelChoiceField(
-        queryset = Jenis_brg.objects.filter(is_deleted='0')
+        queryset = Jenis_brg.objects.filter(is_deleted='False')
         )
     merk_id = forms.ModelChoiceField(
-        queryset = Merk_brg.objects.filter(is_deleted='0')
+        queryset = Merk_brg.objects.filter(is_deleted='False')
         )
     tipe_id = forms.ModelChoiceField(
-        queryset = Tipe_brg.objects.filter(is_deleted='0')
+        queryset = Tipe_brg.objects.filter(is_deleted='False')
         )
     
     class Meta:
