@@ -1,6 +1,7 @@
 {% extends  "layout/Laporan/template_print.html" %}
 
 {% load static %}
+{% load humanize %}
 
 {% block page_content %}
 <style>
@@ -66,8 +67,8 @@
                     <td>{{ daftar_stok.tanggal}}</td>
                     <td>{{ daftar_stok.kd_barang }}</td>
                     <td>{{ daftar_stok.nm_barang }}</td>
-                    <td>{{ daftar_stok.hrg_barang }}</td>
-                    {% if daftar_stok.keterangan == "Barang Masuk"%}
+                    <td>Rp.{{ daftar_stok.hrg_barang|intcomma }}</td>
+                    {% if daftar_stok.keterangan == "Barang Masuk" or daftar_stok.keterangan == "Hapus Barang Keluar" %}
                     <td>{{ daftar_stok.jumlah_stok }}</td>
                     <td>0</td>
                     {% else %}
@@ -88,6 +89,12 @@
                 {% endif %}
             </tbody>
         </table>
+        <a id="printPageButton" class="btn btn-success" href="javascript:window.print()">
+            Print this page
+        </a>
+        <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_stok' %}">
+            Kembali
+        </a>
         {% elif judul == "Laporan Barang Masuk" %}
         <table class="table table-bordered table-striped">
             <thead style="font-size: 11px">
@@ -129,6 +136,12 @@
                 {% endif %}
             </tbody>
         </table>
+        <a id="printPageButton" class="btn btn-success" href="javascript:window.print()">
+            Print this page
+        </a>
+        <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_masuk' %}">
+            Kembali
+        </a>
         {% elif judul == "Laporan Barang Keluar" %}
         <table class="table table-bordered table-striped">
             <thead style="font-size: 11px">
@@ -176,11 +189,14 @@
                 {% endif %}
             </tbody>
         </table>
+        <a id="printPageButton" class="btn btn-success" href="javascript:window.print()">
+            Print this page
+        </a>
+        <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_keluar' %}">
+            Kembali
+        </a>
         {% endif %}
-    </tbody>
-</table>
-<a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">Print this page</a>
-</div>
+    </div>
 </section>
 {% endblock %}
 {% block extrajs%}

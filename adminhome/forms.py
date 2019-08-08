@@ -173,7 +173,8 @@ class BarangkeluarForm(ModelForm):
                 'class':'form-control pull-right',
                 'placeholder':'Tanggal Keluar',
                 'data-date-format':"yyyy/mm/dd",
-                'id':'date'
+                'id':'date',
+                'autocomplete':'off',
             }
         ),
         required=True
@@ -252,44 +253,8 @@ class BarangkeluarForm(ModelForm):
         required=True
     )
 
-    # merk_id = forms.CharField(       
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'class':'form-control',
-    #             'placeholder':'Merk',
-    #             'id':'demo5'
-    #             # 'disabled':''
-    #         }
-    #     ),
-    #     required=True
-    # )
-
-    # jenis_id = forms.CharField(
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'class':'form-control',
-    #             'placeholder':'Jenis',
-    #             'id':'demo6'
-    #             # 'disabled':''
-    #         }
-    #     ),
-    #     required=True
-    # )
-
-    # tipe_id = forms.CharField(
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'class':'form-control',
-    #             'placeholder':'Tipe',
-    #             'id':'demo7'
-    #             # 'disabled':''
-    #         }
-    #     ),
-    #     required=True
-    # )
-
     customer_id = forms.ModelChoiceField(
-        queryset = Customer.objects.all(),
+        queryset = Customer.objects.filter(is_deleted='False'),
         # to_field_name="nama_jenis",
         widget=Select(
             attrs={
@@ -300,7 +265,7 @@ class BarangkeluarForm(ModelForm):
         )
 
     jenis_id = forms.ModelChoiceField(
-        queryset = Jenis_brg.objects.all(),
+        queryset = Jenis_brg.objects.filter(is_deleted='False'),
         # to_field_name="nama_jenis",
         widget=Select(
             attrs={
@@ -311,7 +276,7 @@ class BarangkeluarForm(ModelForm):
         )
 
     merk_id = forms.ModelChoiceField(
-        queryset = Merk_brg.objects.all(),
+        queryset = Merk_brg.objects.filter(is_deleted='False'),
         # to_field_name="nama_merk"
         widget=Select(
             attrs={
@@ -322,7 +287,7 @@ class BarangkeluarForm(ModelForm):
         )
 
     tipe_id = forms.ModelChoiceField(
-        queryset = Tipe_brg.objects.all(),
+        queryset = Tipe_brg.objects.filter(is_deleted='False'),
         # to_field_name="nama_tipe"
         widget=Select(
             attrs={

@@ -33,7 +33,7 @@
                                         <option value=" | | | | | | | ">----- Pilih Barang -----</option>    
                                         {% if daftar_barangmasuk %}
                                         {% for data in daftar_barangmasuk %}
-                                        <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.harga_satuan}}|{{data.merk_id}}|{{data.jenis_id}}|{{data.tipe_id}}">[{{data.sn_barang}}] {{data.nm_barang}}</option>
+                                        <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.harga_satuan}}|{{data.merk_id.id_merk}}|{{data.jenis_id.id_jenis}}|{{data.tipe_id.id_tipe}}">[{{data.sn_barang}}] {{data.nm_barang}}</option>
                                         {% endfor %}
                                         {% else %}
                                         <option value="">Tidak Ada Data Barang Masuk</option>
@@ -115,21 +115,21 @@
                                     </div>                                        
                                 </div>
                             </div>
-                            <!-- <div class="form-group">
+                            <div class="form-group">
                                 <label for="ccustomer" class="col-sm-3 control-label">Cari Customer : </label>
                                 <div class="col-sm-9">
                                     <select id="caricustomer" style="width: 100%" onclick="customer()">
+                                        <option value=" | ">---- Pilih Customer ----</option>
                                         {%if daftar_customer%}
                                         {% for data in daftar_customer %}
-                                        <option value=" | | ">---- Pilih Customer ----</option>
-                                        <option value="{{data.nama_customer}}|{{data.alamat_customer}}">{{ forloop.counter }}. {{data.nama_customer}}</option>
+                                        <option value="{{data.id_customer}}|{{data.alamat_customer}}">{{ forloop.counter }}. {{data.nama_customer}}</option>
                                         {% endfor %}
                                         {% else %}
                                         <option value="">Tidak Ada Data Customer</option>
                                         {% endif %}
                                     </select>   
                                 </div>
-                            </div> -->
+                            </div>
                             <div class="form-group">
                                 <label for="customer" class="col-sm-3 control-label">Customer : </label>
                                 <div class="col-sm-9">
@@ -176,17 +176,17 @@
 <script type="text/javascript" src="http://cdn.jsdelivr.net/select2/3.4.6/select2.min.js"></script>
 <script type="text/javascript" src="http://globaltradeconcierge.com/javascripts/bootstrap.min.js"></script>
 <script>
-    $('#id_no_bukti,#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#id_customer_id,#date,#jumlah,#totalbayar').attr('readonly',true);
+    $('#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#jumlah,#totalbayar').attr('readonly',true);
     
     // select 2
-    $('#mySelect,#id_merk_id,#id_jenis_id,#id_tipe_id,').select2({
+    $('#mySelect').select2({
         theme: "bootstrap 4"
     });
     
     $('#caricustomer').select2({
         theme: "bootstrap 4"
     });
-
+    
     // autofill customer
     function customer() {
         var x = document.getElementById("caricustomer").value;
