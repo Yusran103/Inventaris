@@ -427,7 +427,7 @@ def print_laporan_masuk(request):
         pecah = tanggal.split('-')
         tahun = pecah[0]
         bulan = pecah[1]
-    stok_barang = Barang_masuk.objects.filter(tgl_masuk__icontains=tanggal).order_by('tgl_masuk')
+    stok_barang = Barang_masuk.objects.filter(tgl_masuk__icontains=tanggal,is_deleted='False').order_by('tgl_masuk')
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
 def print_laporan_keluar(request):
@@ -443,7 +443,7 @@ def print_laporan_keluar(request):
         pecah = tanggal.split('-')
         tahun = pecah[0]
         bulan = pecah[1]
-    stok_barang = Barang_keluar.objects.filter(tgl_keluar__icontains=tanggal).order_by('tgl_keluar')
+    stok_barang = Barang_keluar.objects.filter(tgl_keluar__icontains=tanggal,is_deleted='False').order_by('tgl_keluar')
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
 # -------------+

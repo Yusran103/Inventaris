@@ -68,7 +68,7 @@
                     <td>{{ daftar_stok.kd_barang }}</td>
                     <td>{{ daftar_stok.nm_barang }}</td>
                     <td>Rp.{{ daftar_stok.hrg_barang|intcomma }}</td>
-                    {% if daftar_stok.keterangan == "Barang Masuk"%}
+                    {% if daftar_stok.keterangan == "Barang Masuk" or daftar_stok.keterangan == "Hapus Barang Keluar" %}
                     <td>{{ daftar_stok.jumlah_stok }}</td>
                     <td>0</td>
                     {% else %}
@@ -89,7 +89,7 @@
                 {% endif %}
             </tbody>
         </table>
-        <a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">
+        <a id="printPageButton" class="btn btn-success" href="javascript:window.print()">
             Print this page
         </a>
         <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_stok' %}">
@@ -136,7 +136,7 @@
                 {% endif %}
             </tbody>
         </table>
-        <a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">
+        <a id="printPageButton" class="btn btn-success" href="javascript:window.print()">
             Print this page
         </a>
         <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_masuk' %}">
@@ -189,7 +189,7 @@
                 {% endif %}
             </tbody>
         </table>
-        <a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">
+        <a id="printPageButton" class="btn btn-success" href="javascript:window.print()">
             Print this page
         </a>
         <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_keluar' %}">
