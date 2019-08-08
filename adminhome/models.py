@@ -70,7 +70,7 @@ class Barang_masuk(models.Model):
     jml_masuk = models.IntegerField()
     harga_satuan = models.IntegerField()
     no_resi = models.CharField(max_length=100,blank=True)
-    foto_masuk = models.ImageField(upload_to='foto/',blank=True , null=True, unique=False) 
+    foto_masuk = models.ImageField(upload_to='foto/',blank=True , null=True) 
     is_deleted = models.CharField(max_length=100,blank=True , null=True)
 
     supplier_id = models.ForeignKey(Supplier,on_delete=models.CASCADE,db_column='supplier_id')
@@ -122,7 +122,7 @@ class Stok_barang(models.Model):
     jumlah_stok = models.IntegerField(default=0)
     stok_akhir = models.IntegerField(default=0)
     keterangan = models.CharField(max_length=100)
-    foto_stok = models.ImageField(upload_to='foto/',blank=True , null=True, unique=True)
+    foto_stok = models.ImageField(upload_to='foto/',blank=True , null=True)
 
     jenis_id = models.ForeignKey(Jenis_brg, on_delete=models.DO_NOTHING,db_column='jenis_id')
     merk_id = models.ForeignKey(Merk_brg, on_delete=models.DO_NOTHING,db_column='merk_id')
