@@ -244,7 +244,7 @@ def caribarangkeluargrid(request):
     barangkeluar = request.GET.get('cari')
     daftar_barang = Barangkeluar.objects.filter(
             Q(nama_barang__icontains=barangkeluar) | Q(kode_barang__icontains=barangkeluar) |
-            Q(serialnumber__icontains=barangkeluar)
+            Q(serialnumber__icontains=barangkeluar) | Q(is_deleted='False')
         ).order_by('kode_barang')
     pagination = Paginator(daftar_barang,5)
     page = request.GET.get('page')
@@ -265,7 +265,7 @@ def caribarangkeluar(request):
     barangkeluar = request.GET.get('cari')
     daftar_barang = Barangkeluar.objects.filter(
             Q(nama_barang__icontains=barangkeluar) | Q(kode_barang__icontains=barangkeluar) |
-            Q(serialnumber__icontains=barangkeluar)
+            Q(serialnumber__icontains=barangkeluar) | Q(is_deleted='False')
         ).order_by('kode_barang')
     pagination = Paginator(daftar_barang,10)
     page = request.GET.get('page')
@@ -302,8 +302,8 @@ def barangkeluargrid(request):
 
 def editbarangkeluar(request,pk):
     keluar = Barangkeluar.objects.get(pk=pk)
-    barangmasuk = Barang_masuk.objects.all()
-    customer = Customer.objects.all()
+    barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
+    customer = Customer.objects.filter(is_deleted='False')
 
     if request.method == "POST":
         form = BarangkeluarForm(request.POST,request.FILES, instance=keluar)
@@ -357,11 +357,11 @@ def editbarangkeluar(request,pk):
 def addbarangkeluar(request):
     # stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
 
-    jenis = Jenis_brg.objects.all()
-    merk = Merk_brg.objects.all()
-    tipe = Tipe_brg.objects.all()
-    customer = Customer.objects.all()
-    barangmasuk = Barang_masuk.objects.all()
+    jenis = Jenis_brg.objects.filter(is_deleted='False')
+    merk = Merk_brg.objects.filter(is_deleted='False')
+    tipe = Tipe_brg.objects.filter(is_deleted='False')
+    customer = Customer.objects.filter(is_deleted='False')
+    barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
 
     if request.method == 'POST':
         form = BarangkeluarForm(request.POST , request.FILES)
@@ -381,42 +381,11 @@ def addbarangkeluar(request):
                 jenis_id = Jenis_brg.objects.get(nama_jenis=request.POST['jenis_id']).id_jenis,
                 merk_id = Merk_brg.objects.get(nama_merk=request.POST['merk_id']).id_merk,
                 tipe_id = Tipe_brg.objects.get(nama_tipe=request.POST['tipe_id']).id_tipe,
-
-                # jenis_id = field_object_jenis.value_from_object(obj_jenis),
-                # merk_id = field_object_merk.value_from_object(obj_merk),
-                # tipe_id = field_object_tipe.value_from_object(obj_tipe),
-
+                
                 alamat_customer = request.POST['alamat_customer'],
                 foto_keluar=request.FILES.get('foto_keluar')
             )
             form.save()
-            # cursor = connection.cursor()
-            # cursor.execute(
-            #     """update tb_barang_keluar set 
-            #         nama_barang='%s',
-            #         kode_barang='%s',
-            #         serialnumber='%s',
-            #         no_bukti='%s',
-            #         no_resi='%s',
-            #         tanggal='%s',
-            #         jumlah='%s',
-            #         harga_satuan='%s',
-            #         total_bayar='%s',
-            #         customer_id='%s',
-            #         alamat_customer='%s',
-            #         jenis_id='%s',
-            #         merk_id='%s',
-            #         tipe_id='%s'
-            #         foto_keluar='%s' where kd_barang='%s'"""
-            #         %(
-            #             request.POST['nm_barang'],
-            #             request.POST['harga_satuan'],
-            #             Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-            #             Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-            #             Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
-            #             request.POST['kd_barang']
-            #         )
-            #     )
 
             if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kode_barang')):
                 cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kode_barang')).latest('id_stok')
@@ -453,8 +422,8 @@ def addbarangkeluar(request):
 
 def simpantambahbarangkeluar(request):
     stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
-    customer = Customer.objects.all()
-    barangmasuk = Barang_masuk.objects.all()
+    customer = Customer.objects.filter(is_deleted='False')
+    barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
 
     if request.method == 'POST':
         form = BarangkeluarForm(request.POST , request.FILES)
