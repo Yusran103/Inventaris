@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-sm-13">
             <div class="box box-primary"> 
-                <form id="form1" action="{% url 'barangkeluar_add' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                <form id="form1" method="POST" class="form-horizontal" enctype="multipart/form-data">
                     {% csrf_token %}
                     <!-- konten -->
                     <div class="box box-primary">
@@ -204,8 +204,8 @@
                                 <!-- Button -->
                                 <div class="form-group pull-right">   
                                     <div class="col-sm-12">
-                                        <button type="submit" name="s1" id='s1' class="btn btn-md btn-primary">Simpan</button>
-                                        <button type="submit" name="s2" id='s2' class="btn btn-md btn-success">Simpan dan Tambah</button>
+                                        <input type="submit" value="Simpan" name="s1" id='s1' class="btn btn-md btn-primary"></input>
+                                        <input type="submit" value="Simpan dan Tambah" name="s2" id='s2' class="btn btn-md btn-success"></input>
                                         <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
                                     </div> 
                                 </div>
@@ -291,6 +291,7 @@
             });
             $('#s2').click(function(e){
                 e.preventDefault();
+                
                 var a = document.getElementById("id_nama_barang").value;
                 var b = document.getElementById("id_kode_barang").value;
                 var c = document.getElementById("id_serialnumber").value;
@@ -302,15 +303,20 @@
                 var i = document.getElementById("id_merk_id").value;
                 var j = document.getElementById("id_jenis_id").value;
                 var k = document.getElementById("id_tipe_id").value;
+                var l = document.getElementById("id_no_bukti").value;
+                var m = document.getElementById("id_tanggal").value;
+                var n = document.getElementById("id_harga_satuan").value;
+                var o = document.getElementById("id_total_bayar").value;
+                var p = document.getElementById("id_alamat_customer").value;
                 
-                if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "",e == null || e == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "") {
+                if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "",e == null || e == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "",l == null || l == "",m == null || m == "",n == null || n == "",o == null || o == "",p == null || p == "") {
                     alert("Tolong di isi semua kolom nya!");
                     return false;
                 }else{
                     var r = confirm("Apakan anda yakin?");
                     if (r == true) {
                         $('#form1').attr('action',  "{% url 'barangkeluar_addcreate' %}");
-                        $('#form1').submit();
+                $('#form1').submit();
                     } 
                 }
             });
