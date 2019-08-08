@@ -204,8 +204,8 @@ class Barang_masuk_form(ModelForm):
                 }
             ),
         )
-    # foto_masuk = forms.FileField(
-    #     )
+    foto_masuk = forms.FileField(
+        )
     jenis_id = forms.ModelChoiceField(
         queryset = Jenis_brg.objects.filter(is_deleted='False')
         )
