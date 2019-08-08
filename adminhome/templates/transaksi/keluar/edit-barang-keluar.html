@@ -176,8 +176,10 @@
 <script type="text/javascript" src="http://cdn.jsdelivr.net/select2/3.4.6/select2.min.js"></script>
 <script type="text/javascript" src="http://globaltradeconcierge.com/javascripts/bootstrap.min.js"></script>
 <script>
+    $('#id_no_bukti,#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#id_customer_id,#date,#jumlah,#totalbayar').attr('readonly',true);
+    
     // select 2
-    $('#mySelect').select2({
+    $('#mySelect,#id_merk_id,#id_jenis_id,#id_tipe_id,').select2({
         theme: "bootstrap 4"
     });
     
@@ -185,8 +187,6 @@
         theme: "bootstrap 4"
     });
 
-    $('#id_no_bukti,#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#id_customer_id,#date').attr('readonly',true);
-    
     // autofill customer
     function customer() {
         var x = document.getElementById("caricustomer").value;

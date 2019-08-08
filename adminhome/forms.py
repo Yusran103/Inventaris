@@ -293,6 +293,7 @@ class BarangkeluarForm(ModelForm):
         # to_field_name="nama_jenis",
         widget=Select(
             attrs={
+                # 'style':'width: 100%',
                 'class':'form-control',
                 # 'id':'demo8'
                 })
@@ -303,28 +304,30 @@ class BarangkeluarForm(ModelForm):
         # to_field_name="nama_jenis",
         widget=Select(
             attrs={
-                'style':'width: 100%',
-                # 'class':'form-control',
+                # 'style':'width: 100%',
+                'class':'form-control',
                 # 'id':'demo6'
                 })
         )
+
     merk_id = forms.ModelChoiceField(
         queryset = Merk_brg.objects.all(),
         # to_field_name="nama_merk"
         widget=Select(
             attrs={
-                'style':'width: 100%',
-                # 'class':'form-control',
+                # 'style':'width: 100%',
+                'class':'form-control',
                 # 'id':'demo5'
                 })
         )
+
     tipe_id = forms.ModelChoiceField(
         queryset = Tipe_brg.objects.all(),
         # to_field_name="nama_tipe"
         widget=Select(
             attrs={
-                'style':'width: 100%',
-                # 'class':'form-control',
+                # 'style':'width: 100%',
+                'class':'form-control',
                 # 'id':'demo7'
                 })
         )

@@ -35,7 +35,7 @@
                                             <option value=" | | | | | | | ">----- Pilih Barang -----</option>    
                                             {% if daftar_barangmasuk %}
                                             {% for data in daftar_barangmasuk %}
-                                            <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.harga_satuan}}|{{data.merk_id}}|{{data.jenis_id}}|{{data.tipe_id}}">[{{data.sn_barang}}] {{data.nm_barang}}</option>
+                                            <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.harga_satuan}}|{{data.merk_id.id_merk}}|{{data.jenis_id.id_jenis}}|{{data.tipe_id.id_tipe}}">[{{data.sn_barang}}] {{data.nm_barang}}</option>
                                             {% endfor %}
                                             {% else %}
                                             <option value="">Tidak Ada Data Barang Masuk</option>
@@ -122,8 +122,8 @@
                                         <select id="caricustomer" style="width: 100%" onclick="customer()">
                                             {%if daftar_customer%}
                                             {% for data in daftar_customer %}
-                                            <option value=" | | ">---- Pilih Customer ----</option>
-                                            <option value="{{data.nama_customer}}|{{data.alamat_customer}}">{{ forloop.counter }}. {{data.nama_customer}}</option>
+                                            <option value=" | ">---- Pilih Customer ----</option>
+                                            <option value="{{data.id_customer}}|{{data.alamat_customer}}">{{ forloop.counter }}. {{data.nama_customer}}</option>
                                             {% endfor %}
                                             {% else %}
                                             <option value="">Tidak Ada Data Customer</option>
@@ -177,7 +177,7 @@
 <script type="text/javascript" src="http://cdn.jsdelivr.net/select2/3.4.6/select2.min.js"></script>
 <script type="text/javascript" src="http://globaltradeconcierge.com/javascripts/bootstrap.min.js"></script>
 <script>
-    $('#mySelect,#id_merk_id,#id_jenis_id,#id_tipe_id').select2({
+    $('#mySelect').select2({
         theme: "bootstrap 4"
     });
     
@@ -209,7 +209,9 @@
             //     "max" : f
             // });
             
-            // $('#merkSelect').val(f).attr('selected',true);
+            $('#id_merk_id').val(f).attr('selected',true);
+            $('#id_jenis_id').val(g).attr('selected',true);
+            $('#id_tipe_id').val(h).attr('selected',true);
         };
         
         // autofill customer
@@ -220,6 +222,8 @@
             var b = y[1];
             $("#id_customer_id").val(a);
             $("#id_alamat_customer").val(b);
+
+            $('#id_customer_id').val(a).attr('selected',true);
         }
         
         // Jumlah
