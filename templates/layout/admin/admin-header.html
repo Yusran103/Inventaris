@@ -1,9 +1,23 @@
 {% load static %}
+<style>
+.imgframe {
+    border: 3px solid #367fa9;
+    display: block;
+    margin: 0px;
+    text-align:center;
+}
+.imgframe img {
+    border: 3px solid #367fa9;
+    margin: 0;
+    background: #367fa9;
+    padding: 0px;
+}
+</style>
 <header class="main-header">
     <!-- Logo -->
     <a href="#" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><img src="{% static 'assets/images/logo.png' %}" class="img-responsive img-thumbnail" width="50" height="50" /></span>
+        <span class="logo-mini"><img style="background-color: #367fa9;" src="{% static 'assets/images/logo.png' %}" class="imgframe centerimg" width="50" height="50" /></span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><b>Inventaris</b> Barang</span>
     </a>

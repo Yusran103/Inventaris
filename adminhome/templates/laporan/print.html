@@ -89,6 +89,12 @@
                 {% endif %}
             </tbody>
         </table>
+        <a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">
+            Print this page
+        </a>
+        <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_stok' %}">
+            Kembali
+        </a>
         {% elif judul == "Laporan Barang Masuk" %}
         <table class="table table-bordered table-striped">
             <thead style="font-size: 11px">
@@ -130,6 +136,12 @@
                 {% endif %}
             </tbody>
         </table>
+        <a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">
+            Print this page
+        </a>
+        <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_masuk' %}">
+            Kembali
+        </a>
         {% elif judul == "Laporan Barang Keluar" %}
         <table class="table table-bordered table-striped">
             <thead style="font-size: 11px">
@@ -177,13 +189,14 @@
                 {% endif %}
             </tbody>
         </table>
+        <a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">
+            Print this page
+        </a>
+        <a id="printPageButton" class="btn btn-primary" href="{% url 'laporan_keluar' %}">
+            Kembali
+        </a>
         {% endif %}
-    </tbody>
-</table>
-<a id="printPageButton" class="btn btn-primary" href="javascript:window.print()">
-    Print this page
-</a>
-</div>
+    </div>
 </section>
 {% endblock %}
 {% block extrajs%}
