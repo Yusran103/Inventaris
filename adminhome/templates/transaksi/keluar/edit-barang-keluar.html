@@ -159,10 +159,31 @@
                             <div class="form-group pull-right">   
                                 <div class="col-sm-12">
                                     <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <a href="/inventaris/barangkeluar/delete/{{ barang_keluar.id }}" type="button" class="btn btn-warning">Hapus</a>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Hapus</button>
+                                    <!-- Modal konfirmasi-delete -->
+                                    <div class="modal fade" id="myModal" style="display: none;">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title">HAPUS??</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Apakah anda yakin ingin menghapus data barang ini ?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a href="/inventaris/barangkeluar/delete/{{ barang_keluar.id }}" type="button" class="btn btn-danger">Hapus</a>
+                                                        <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end modal -->
                                     <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
                                 </div> 
                             </div>
+                            <!-- end Button -->
                         </div>
                     </div>
                 </div>
@@ -193,8 +214,10 @@
         var y = x.split("|");
         var a = y[0];
         var b = y[1];
-        $("#demo8").val(a);
-        $("#demo9").val(b);
+        $("#id_customer_id").val(a);
+        $("#id_alamat_customer").val(b);
+        
+        $('#id_customer_id').val(a).attr('selected',true);
     }
     
     // datepicker

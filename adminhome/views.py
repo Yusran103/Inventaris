@@ -6,6 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.db.models import Q
 from django.db import connection
+from django.http import HttpResponse
 
 # -----------+
 # LOGIN      |
@@ -327,21 +328,6 @@ def editbarangkeluar(request,pk):
             foto_keluar=request.FILES.get('foto_keluar')
             barang_keluar.save()
 
-            # stok = form2.save(commit=False)
-            # tanggal=request.POST['tanggal'],
-            # nm_barang=request.POST['nama_barang'],
-            # kd_barang=request.POST['kode_barang'],
-            # sn_barang=request.POST['serialnumber'],
-            # hrg_barang=request.POST['harga_satuan'],
-            # jumlah_stok=request.POST['jumlah'],
-            # stok_akhir= cr_stok.stok_akhir - int(request.POST['jumlah']),
-            # keterangan="Barang Keluar",
-            # foto_stok=request.FILES.get('foto_keluar'),
-            # jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
-            # merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
-            # tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
-            # stok.save()
-
             # RAW UPDATE for STOK(LAST CHOICE)
             cursor = connection.cursor()
             cursor.execute(
@@ -480,8 +466,13 @@ def simpantambahbarangkeluar(request):
                 )
             stok_barang.save()
 
-            messages.info(request, 'Data Barang berhasil ditambahkan!')
-            return redirect('/inventaris/barangkeluar/tambah')
+            # messages.info(request, 'Data Barang berhasil ditambahkan!')
+            # return redirect('/inventaris/barangkeluar/tambah')
+            url = '/inventaris/barangkeluar/tambah'
+            resp_body = '<script>alert("Barang berhasil ditambahkan");\
+                         window.location="%s"</script>' % url
+            return HttpResponse(resp_body)
+
     else:
         form = BarangkeluarForm()
     return render(request, 'transaksi/keluar/add-barang-keluar.html',{

@@ -35,7 +35,7 @@
                                     <label for="caribarang" class="col-sm-3 control-label">Cari Barang : </label>
                                     <div class="col-sm-9" id="caribarang">
                                         <select id="mySelect" style="width: 100%" onclick="myFunction()">
-                                            <option value=" | | | | | | | ">----- Pilih Barang -----</option>    
+                                            <option value=" | | | | | | | | ">----- Pilih Barang -----</option>    
                                             {% if daftar_barangmasuk %}
                                             {% for data in daftar_barangmasuk %}
                                             <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.harga_satuan}}|{{data.merk_id.id_merk}}|{{data.jenis_id.id_jenis}}|{{data.tipe_id.id_tipe}}">[{{data.sn_barang}}] {{data.nm_barang}}</option>
@@ -243,6 +243,7 @@
         var f = y[5];
         var g = y[6];
         var h = y[7];
+        // var i = y[8];
         $("#id_nama_barang").val(a);
         $("#id_kode_barang").val(b);
         $("#id_serialnumber").val(c);
@@ -252,8 +253,8 @@
         $("#id_jenis_id").val(g);
         $("#id_tipe_id").val(h);
         // $("#jumlah").attr({
-            //     "max" : f
-            // });
+            //         "max" : i
+            //     });
             
             $('#id_merk_id').val(f).attr('selected',true);
             $('#id_jenis_id').val(g).attr('selected',true);
@@ -291,34 +292,8 @@
             });
             $('#s2').click(function(e){
                 e.preventDefault();
-                
-                var a = document.getElementById("id_nama_barang").value;
-                var b = document.getElementById("id_kode_barang").value;
-                var c = document.getElementById("id_serialnumber").value;
-                var d = document.getElementById("id_foto_keluar").value;
-                var e = document.getElementById("id_jumlah").value;
-                var f = document.getElementById("id_no_resi").value;
-                var g = document.getElementById("date").value;
-                var h = document.getElementById("id_customer_id").value;
-                var i = document.getElementById("id_merk_id").value;
-                var j = document.getElementById("id_jenis_id").value;
-                var k = document.getElementById("id_tipe_id").value;
-                var l = document.getElementById("id_no_bukti").value;
-                var m = document.getElementById("id_tanggal").value;
-                var n = document.getElementById("id_harga_satuan").value;
-                var o = document.getElementById("id_total_bayar").value;
-                var p = document.getElementById("id_alamat_customer").value;
-                
-                if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "",e == null || e == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "",l == null || l == "",m == null || m == "",n == null || n == "",o == null || o == "",p == null || p == "") {
-                    alert("Tolong di isi semua kolom nya!");
-                    return false;
-                }else{
-                    var r = confirm("Apakan anda yakin?");
-                    if (r == true) {
-                        $('#form1').attr('action',  "{% url 'barangkeluar_addcreate' %}");
+                $('#form1').attr('action',  "{% url 'barangkeluar_addcreate' %}");
                 $('#form1').submit();
-                    } 
-                }
             });
         });
         

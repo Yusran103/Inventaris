@@ -82,6 +82,7 @@
                                     <th>Tanggal keluar</th>
                                     <th>Harga Satuan</th>
                                     <th>Jumlah</th>
+                                    <th>Total Harga</th>
                                     <th>customer</th>
                                     <th>No Serial</th>
                                     <th>Aksi</th>
@@ -98,6 +99,7 @@
                                     <td>{{ data.tanggal }}</td>
                                     <td>Rp. {{ data.harga_satuan|intcomma }}</td>
                                     <td>{{ data.jumlah }}</td>
+                                    <td>Rp. {{ data.total_bayar|intcomma }}</td>
                                     <td>{{ data.customer_id }}</td>
                                     <td>{{ data.serialnumber }}</td>
                                     <td>
