@@ -359,7 +359,7 @@ def editbarangkeluar(request,pk):
         })
 
 def addbarangkeluar(request):
-    # stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
+    stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
     jenis = Jenis_brg.objects.filter(is_deleted='False')
     merk = Merk_brg.objects.filter(is_deleted='False')
     tipe = Tipe_brg.objects.filter(is_deleted='False')
@@ -422,10 +422,9 @@ def addbarangkeluar(request):
         })
 
 def simpantambahbarangkeluar(request):
-    stok = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
+    stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
     customer = Customer.objects.filter(is_deleted='False')
     barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
-
     if request.method == 'POST':
         form = BarangkeluarForm(request.POST , request.FILES)
         if form.is_valid():

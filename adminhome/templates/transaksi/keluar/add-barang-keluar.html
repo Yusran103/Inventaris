@@ -35,13 +35,13 @@
                                     <label for="caribarang" class="col-sm-3 control-label">Cari Barang : </label>
                                     <div class="col-sm-9" id="caribarang">
                                         <select id="mySelect" style="width: 100%" onclick="myFunction()">
-                                            <option value=" | | | | | | | | ">----- Pilih Barang -----</option>    
-                                            {% if daftar_barangmasuk %}
-                                            {% for data in daftar_barangmasuk %}
-                                            <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.sn_barang}}|{{data.no_resi}}|{{data.harga_satuan}}|{{data.merk_id.id_merk}}|{{data.jenis_id.id_jenis}}|{{data.tipe_id.id_tipe}}">[{{data.sn_barang}}] {{data.nm_barang}}</option>
+                                            <option value=" | | | | | | ">----- Pilih Barang -----</option>    
+                                            {% if daftar_stok %}
+                                            {% for data in daftar_stok %}
+                                            <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.hrg_barang}}|{{data.merk_id.id_merk}}|{{data.jenis_id.id_jenis}}|{{data.tipe_id.id_tipe}}|{{data.stok_akhir}}">{{data.nm_barang}}</option>
                                             {% endfor %}
                                             {% else %}
-                                            <option value="">Tidak Ada Data Barang Masuk</option>
+                                            <option value="">Tidak Ada Data</option>
                                             {% endif %}
                                         </select>                                        
                                     </div>
@@ -118,6 +118,9 @@
                                         {% if form.jumlah.errors %}
                                         <p style="color: red;">{{form.jumlah.errors|striptags}}</p>
                                         {% endif %}
+                                        <div class="input-group">
+                                            <p id="totjumlah">Jumlah stok sekarang : {{data.stok_akhir}}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -243,22 +246,20 @@
         var f = y[5];
         var g = y[6];
         var h = y[7];
-        // var i = y[8];
         $("#id_nama_barang").val(a);
         $("#id_kode_barang").val(b);
-        $("#id_serialnumber").val(c);
-        $("#id_no_resi").val(d);
-        $("#id_harga_satuan").val(e);
-        $("#id_merk_id").val(f);
-        $("#id_jenis_id").val(g);
-        $("#id_tipe_id").val(h);
-        // $("#jumlah").attr({
-            //         "max" : i
-            //     });
+        $("#id_harga_satuan").val(c);
+        $("#id_merk_id").val(d);
+        $("#id_jenis_id").val(e);
+        $("#id_tipe_id").val(f);
+        $("#jumlah").attr({
+           "max" : g
+        });
+        document.getElementById("totjumlah").innerHTML = "Jumlah stok sekarang : "+g;
             
-            $('#id_merk_id').val(f).attr('selected',true);
-            $('#id_jenis_id').val(g).attr('selected',true);
-            $('#id_tipe_id').val(h).attr('selected',true);
+            $('#id_merk_id').val(d).attr('selected',true);
+            $('#id_jenis_id').val(e).attr('selected',true);
+            $('#id_tipe_id').val(f).attr('selected',true);
         };
         
         // autofill customer
