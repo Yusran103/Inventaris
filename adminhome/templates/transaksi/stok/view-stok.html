@@ -44,9 +44,9 @@
                     </div>
                     <br/>
                     <br/>
-                    <center>
-                        <nav aria-label="Page navigation example" style="display: inline-block">
-                            <ul class="pagination pagination-lg pagination-md pagination-sm justify-content-center">
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_stok.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
@@ -62,7 +62,7 @@
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
                     <div class="col-sm-12">
                         {% if stok != None %}
                         <p style="display: inline-block">Hasil Pencarian : {{request.GET.cari}}</p>
@@ -106,9 +106,9 @@
                             </tbody>
                         </table> 
                     </div>
-                    <center>
-                        <nav aria-label="Page navigation example" style="display: inline-block">
-                            <ul class="pagination pagination-lg pagination-md pagination-sm justify-content-center">
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_stok.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
@@ -124,7 +124,7 @@
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
                 </div>
             </div>
         </div>

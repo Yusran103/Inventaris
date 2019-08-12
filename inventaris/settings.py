@@ -135,3 +135,5 @@ MEDIA_URL = '/foto/'
 MEDIA_ROOT = (
     os.path.join(BASE_DIR, "foto")
 )
+
+AUTH_USER_MODEL = 'adminhome.User'

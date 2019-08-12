@@ -1,17 +1,17 @@
 {% load static %}
 <style>
-.imgframe {
-    border: 3px solid #367fa9;
-    display: block;
-    margin: 0px;
-    text-align:center;
-}
-.imgframe img {
-    border: 3px solid #367fa9;
-    margin: 0;
-    background: #367fa9;
-    padding: 0px;
-}
+    .imgframe {
+        border: 3px solid #367fa9;
+        display: block;
+        margin: 0px;
+        text-align:center;
+    }
+    .imgframe img {
+        border: 3px solid #367fa9;
+        margin: 0;
+        background: #367fa9;
+        padding: 0px;
+    }
 </style>
 <header class="main-header">
     <!-- Logo -->
@@ -31,10 +31,10 @@
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
                 <!-- User Account: style can be found in dropdown.less -->
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" href="#">Super User<span class="caret"></span></a>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" href="#">{{ request.session.nm_lengkap }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                            <li role="presentation"><a href="/changepassword">Ubah Password </a></li>
-                        <li role="presentation"><a href="#">Logout </a></li>
+                        <li role="presentation"><a href="/changepassword/{{ request.session.id_user }}">Ubah password</a></li>
+                        <li role="presentation"><a href="/inventaris/logout">Logout </a></li>
                     </ul>
                 </li>
                 <!-- Control Sidebar Toggle Button -->

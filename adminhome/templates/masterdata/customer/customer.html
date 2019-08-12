@@ -20,52 +20,47 @@
 {% endblock%}
 
 {% block page_content %}
-<section class="content-header">
-    <h1>
-        <i class="fa fa-database"></i> Customer
-    </h1>
-</section>
 <section class="content">
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
+                <div class="box-header">
+                    <i class="fa fa-database"></i>
+                    <h1 class="box-title">Daftar Customer</h1>
+                </div>
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="input-group input-group-md col-md-6 col-xs-8 col-lg-6 pull-left">
-                                <input type="text" class="form-control" placeholder="Cari.....">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
-                                </span>
-                            </div>
+                    <a class="btn btn-primary pull-right" style="display: inline-block" href="/inventaris/masterdata/customer/tambah"><i class="fa fa-plus"></i> Tambah</a>
+                    <form action="{% url 'customer_cari' %}" method="GET">
+                        <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
                         </div>
-                        <div class="pull-right col-md-4">
-                            <a class="btn btn-primary pull-right" href="/inventaris/masterdata/customer/tambah"><i class="fa fa-plus"></i> Tambah</a>
-                        </div>
-                    </div>
-                    
+                    </form>
+                    <br/>
+                    <br/>
                     <!-- pagination atas -->
-                    <center>
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_customer.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_customer.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_customer.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
-                                <li class="page-item disabled"><span class="current">Page {{ daftar_customer.number }} of {{ daftar_customer.paginator.num_pages }}.</span></li>
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_supplier.number }} of {{ daftar_customer.paginator.num_pages }}.</span></li>
                                 {% if daftar_customer.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_customer.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_customer.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_customer.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_customer.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
                     <!-- end pagination atas -->
-                    
                     <!-- konten -->
                     <div class="row">
                         {% if messages %}
@@ -79,14 +74,19 @@
                         </div>
                         {% endif %}
                         <div class="col-sm-12">
-                            <table id="data" class="table table-bordered table-striped table-responsive no-padding">
+                            {% if key_customer != None %}
+                            <p style="display: inline-block">Hasil Pencarian : {{key_customer}}</p>
+                            {% endif %}
+                            <table id="data" class="table table-bordered table-striped table-responsive no-padding" id="myTable">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Nama</th>
                                         <th>Alamat</th>
                                         <th>No HP</th>
+                                        {% if request.session.level == 'SuperAdmin' %}
                                         <th>Aksi</th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,16 +97,23 @@
                                         <td>{{ customer.nama_customer }}</td>
                                         <td>{{ customer.alamat_customer }}</td>
                                         <td>{{ customer.notlp_customer }}</td>
+                                        {% if request.session.level == 'SuperAdmin' %}
                                         <td><a href="/inventaris/masterdata/customer/edit/{{ customer.id_customer }}" class="btn btn-info"><i
                                             class="fa fa-edit"></i></a>
                                             <a href="/inventaris/masterdata/customer/delete/{{ customer.id_customer }}" class="btn btn-danger confirm-delete"><i
                                                 class="fa fa-trash"></i></a>
                                             </td>
                                         </tr>
+                                        {% endif %}
                                         {% endfor %}
+                                        {% endif %}
+                                        {% if key_customer != None %}
+                                        <tr>
+                                            <td colspan="5"><center>Costumer tersebut tidak ada...</center></td>
+                                        </tr>
                                         {% else %}
                                         <tr>
-                                            <td colspan="5"><center>Tidak ada data customer saat ini...</center></td>
+                                            <td colspan="5"><center>Tidak ada data costumer saat ini...</center></td>
                                         </tr>
                                         {% endif %}
                                     </tbody>
@@ -114,40 +121,38 @@
                             </div>
                         </div>
                         <!-- end konten -->
-                        
                         <!-- pagination bawah -->
-                        <center>
+                        <div style="text-align: center">
                             <nav aria-label="Page navigation example">
-                                <ul class="pagination pagination-lg justify-content-center">
+                                <ul class="pagination pagination-md justify-content-center">
                                     {% if daftar_customer.has_previous %}
                                     <li class="page-item">
-                                        <a href="?page=1" class="page-item">&laquo;</a>
-                                        <a href="?page={{ daftar_customer.previous_page_number }}" class="page-item">&lt;</a>
+                                        <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                        <a href="?page={{ daftar_customer.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                     </li>
                                     {% endif %}
-                                    <li class="page-item disabled"><span class="current">Page {{ daftar_customer.number }} of {{ daftar_customer.paginator.num_pages }}.</span></li>
+                                    <li class="page-item disabled"><span class="current">Page {{ daftar_supplier.number }} of {{ daftar_customer.paginator.num_pages }}.</span></li>
                                     {% if daftar_customer.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ daftar_customer.next_page_number }}">&gt;</a>
-                                        <a class="page-link" href="?page={{ daftar_customer.paginator.num_pages }}">&raquo;</a>
+                                        <a class="page-link" href="?page={{ daftar_customer.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                        <a class="page-link" href="?page={{ daftar_customer.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                     </li>
                                     {% endif %}
                                 </ul>
                             </nav>
-                        </center>
+                        </div>
                         <!-- end pagination bawah -->
-                        
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    {% endblock %}
-    {% block extrajs %}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-    <script>
-        $('.confirm-delete').on('click', function(e) {
-            return confirm('Apakah anda yakin ingin menghapus data tersebut?')
-        })
-    </script>
-    {% endblock %}
+    </div>
+</section>
+{% endblock %}
+{% block extrajs %} 
+<script>
+    $('.confirm-delete').on('click', function(e) {
+        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+    })
+</script>
+{% endblock %}

@@ -87,7 +87,9 @@
                                     <th>Jumlah</th>
                                     <th>Supplier</th>
                                     <th>No Resi</th>
+                                    {% if request.session.level == 'SuperAdmin' %}
                                     <th>Aksi</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -101,10 +103,12 @@
                                     <td>{{ barang_masuk.jml_masuk }}</td>
                                     <td>{{ barang_masuk.supplier_id }}</td>
                                     <td>{{ barang_masuk.no_resi }}</td>
+                                    {% if request.session.level == 'SuperAdmin' %}
                                     <td>
                                         <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-info"><i class="fa fa-edit"></i></a>
                                         <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" class="btn btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
                                     </td>
+                                    {% endif %}
                                 </tr>
                                 {% endfor %}
                                 {% elif barang_masuk != None %}
@@ -145,7 +149,6 @@
 </section>
 {% endblock %}
 {% block extrajs %}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <script>
     $('.confirm-delete').on('click', function(e) {
         return confirm('Apakah anda yakin ingin menghapus data tersebut?')

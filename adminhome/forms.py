@@ -1,7 +1,7 @@
 from django.forms.models import ModelMultipleChoiceField
 from django.forms import Textarea, ModelForm
 from django import forms
-from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Stok_barang
+from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Stok_barang,User
 
 # -------------+
 # FORM MERK    |
@@ -251,4 +251,38 @@ class Stok_form(ModelForm):
             'merk_id',
             'tipe_id'
             ]
-
+class Userform(ModelForm):
+    class Meta:
+        model = User
+        fields = ['nm_lengkap','email', 'username', 'password', 'level']
+        labels = {
+            'nm_lengkap':"Nama",
+            'email':'Email',
+            'username':'Username',
+            'password':'Password',
+            'level':'Level',
+        }
+        error_messages = {
+            'nm_lengkap': {
+                'required': 'Nama belum terisi'
+            },
+            'username' : {
+                'required': "Anda harus mengisi username"
+            },
+            'password' : {
+                'required': "Anda harus mengisi password"
+            },
+            'level':{
+                'required': "Anda harus memilih level akun"
+            },
+            'email':{
+                'required': "Anda harus mengisi email"
+            }
+        }
+        widgets = {
+            'nm_lengkap': forms.TextInput(attrs={'class':'form-control','placeholder':'masukan nama'}),
+            'email': forms.EmailInput(attrs={'class':'form-control','placeholder':'masukan email'}),
+            'username': forms.TextInput(attrs={'class':'form-control','placeholder':'masukan username'}),
+            'password': forms.PasswordInput(attrs={'class':'form-control','placeholder':'masukan password'}),
+            'level': forms.Select(attrs={'class':'form-control','placeholder':'pilih Level Akun'}),
+        }

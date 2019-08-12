@@ -3,50 +3,49 @@
 
 {% block page_content %}
 <section class="content-header">
-    <h1>
-        <i class="fa fa-database"></i> Supplier
-    </h1>
-</section>
-<section class="content">
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
+                <div class="box-header with-border">
+                    <i class="fa fa-database"></i>
+                    <h1 class="box-title">Daftar Supplier</h1>
+                </div>
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-md-8">
-                            <form action="">
-                                <div class="input-group input-group-md col-md-6 col-xs-8 col-lg-6 pull-left">
-                                    <input id="search_box_supplier" type="text" class="form-control" placeholder="Cari.....">
+                        <div class="col-md-10">
+                            <form action="{% url 'supplier_cari' %}" method="GET">
+                                <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4">
+                                    <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
                                     <span class="input-group-btn">
-                                        <button id="search_submit_supplier" type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                                        <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
                                     </span>
                                 </div>
-                            </div>
-                        </form>
-                        <div class="pull-right col-md-4">
+                            </form>
+                        </div>
+                        <div class="pull-right col-md-2">
                             <a class="btn btn-primary pull-right" href="/inventaris/masterdata/supplier/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         </div>
                     </div>
                     <!-- pagination atas -->
-                    <center>
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_supplier.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page=1" class="page-item">&laquo;</a>
-                                    <a href="?page={{ daftar_supplier.previous_page_number }}" class="page-item">&lt;</a>
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_supplier.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                 </li>
                                 {% endif %}
                                 <li class="page-item disabled"><span class="current">Page {{ daftar_supplier.number }} of {{ daftar_supplier.paginator.num_pages }}.</span></li>
                                 {% if daftar_supplier.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ daftar_supplier.next_page_number }}">&gt;</a>
-                                    <a class="page-link" href="?page={{ daftar_supplier.paginator.num_pages }}">&raquo;</a>
+                                    <a class="page-link" href="?page={{ daftar_supplier.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_supplier.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                 </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    </center>
+                    </div>
                     <!-- end pagination atas -->
                     
                     <!-- konten -->
@@ -62,6 +61,9 @@
                         </div>
                         {% endif %}
                         <div class="col-sm-12">
+                            {% if key_suplier != None %}
+                            <p style="display: inline-block">Hasil Pencarian : {{key_suplier}}</p>
+                            {% endif %}
                             <table id="data" class="table table-bordered table-striped table-responsive no-padding">
                                 <thead>
                                     <tr>
@@ -87,6 +89,10 @@
                                             </td>
                                         </tr>
                                         {% endfor %}
+                                        {% elif key_suplier != None %}
+                                        <tr>
+                                            <td colspan="5"><center>Supplier tersebut tidak ada...</center></td>
+                                        </tr>
                                         {% else %}
                                         <tr>
                                             <td colspan="5"><center>Tidak ada data supplier saat ini...</center></td>
@@ -99,25 +105,25 @@
                         <!-- end konten -->
                         
                         <!-- pagination bawah -->
-                        <center>
+                        <div style="text-align: center">
                             <nav aria-label="Page navigation example">
-                                <ul class="pagination pagination-lg justify-content-center">
+                                <ul class="pagination pagination-md justify-content-center">
                                     {% if daftar_supplier.has_previous %}
                                     <li class="page-item">
-                                        <a href="?page=1" class="page-item">&laquo;</a>
-                                        <a href="?page={{ daftar_supplier.previous_page_number }}" class="page-item">&lt;</a>
+                                        <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                        <a href="?page={{ daftar_supplier.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
                                     </li>
                                     {% endif %}
                                     <li class="page-item disabled"><span class="current">Page {{ daftar_supplier.number }} of {{ daftar_supplier.paginator.num_pages }}.</span></li>
                                     {% if daftar_supplier.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ daftar_supplier.next_page_number }}">&gt;</a>
-                                        <a class="page-link" href="?page={{ daftar_supplier.paginator.num_pages }}">&raquo;</a>
+                                        <a class="page-link" href="?page={{ daftar_supplier.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                        <a class="page-link" href="?page={{ daftar_supplier.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
                                     </li>
                                     {% endif %}
                                 </ul>
                             </nav>
-                        </center>
+                        </div>
                         <!-- end pagination bawah -->
                     </div>
                 </div>
@@ -126,7 +132,6 @@
     </section>
     {% endblock %}
     {% block extrajs %}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script>
         $('.confirm-delete').on('click', function(e) {
             return confirm('Apakah anda yakin ingin menghapus data tersebut?')

@@ -1,12 +1,19 @@
 from django.shortcuts import render, get_object_or_404 ,redirect
-from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang, Barang_keluar
-from adminhome.forms import Merkform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form, Stok_form
+from adminhome.models import Merk_brg , User , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang, Barang_keluar
+from adminhome.forms import Merkform , Customerform, Userform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form, Stok_form
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib import messages, auth
 from django.contrib import messages
 from django.db import connection
 from django.http import HttpResponse
-
+from django.contrib.auth.decorators import login_required
+import bcrypt
+from django.conf import settings
+from django.template import context
+from django.contrib.auth.hashers import make_password
 
 # -----------+
 # LOGIN      |
@@ -15,17 +22,150 @@ from django.http import HttpResponse
 def index(request):
     return render(request, 'login.html')
 
+def login_view(request):
+    if request.POST:
+        user = authenticate(username=request.POST['login_username'], password=request.POST['login_password'])
+        if user is not None:
+            akun = User.objects.get(id_user=user.id_user)
+            login(request, user)
+            request.session['nm_lengkap'] = akun.nm_lengkap
+            request.session['username'] = akun.username  
+            request.session['level'] = akun.level
+            request.session['password'] = akun.password
+            request.session['id_user'] = akun.id_user
+            return redirect('/inventaris/')
+        else:
+            messages.add_message(request, messages.INFO, 'Username atau password Anda salah')
+    return render(request, 'login.html')
+
+#-----------+
+#    USER   |
+# ----------+
+
+def logout_view(request):
+    logout(request)
+    return render(request, 'login.html')
+
+@login_required(login_url='/')
+def cariuser(request):
+    pengguna = request.GET.get('cari')
+    daftar_user = User.objects.filter(
+            Q(nm_lengkap__icontains=pengguna) | Q(username__icontains=pengguna) , Q(is_deleted='false')
+        ).order_by('nm_lengkap')
+    pagination = Paginator(daftar_user,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_users': posts,
+        'users':pengguna
+    }
+    return render(request, 'users/view-user.html', context)
+
+@login_required(login_url='/')
+def viewuser(request):
+    daftar_user = User.objects.filter(is_deleted='false')
+    adminonly = User.objects.filter(is_deleted='false',level='Admin')
+    pagination = Paginator(daftar_user,10)
+    page = request.GET.get('page','')
+    user_pg = pagination.get_page(page)
+    return render(request, 'users/view-user.html',{'daftar_users': user_pg,'adminonly':adminonly})
+
+@login_required(login_url='/')
+def register(request):
+    url = '/inventaris/users/tambah'
+    resp_body = '<script>alert("Username Sudah ada");\
+            window.location="%s"</script>' % url
+    if request.method == 'POST':
+        form_data = request.POST
+        form = Userform(form_data)
+        cek = User.objects.filter(username=request.POST['username'])
+        if cek == None:
+            return HttpResponse(resp_body)
+        else:
+            if form.is_valid():
+                akun = User(
+                    nm_lengkap=request.POST['nm_lengkap'], 
+                    email=request.POST['email'],
+                    username=request.POST['username'], 
+                    password=make_password(request.POST['password']),
+                    level=request.POST['level'],
+                    is_deleted='false'
+                    )
+                akun.save()
+                messages.warning(request, 'Berhasil menambah %s'%(request.POST['nm_lengkap']))
+                return redirect('/inventaris/users')
+    else:
+        form = Userform()
+    return render(request, 'users/add-user.html', {'form': form,'messages':messages})
+
+@login_required(login_url='/')
+def edituser(request,pk):
+    user = User.objects.get(pk=pk)
+    if request.method == "POST":
+        form = Userform(request.POST, instance=user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            nm_lengkap = request.POST['nm_lengkap']
+            email = request.POST['email']
+            username = request.POST['username']
+            level = request.POST['level']
+            password = make_password(request.POST['password']),
+            messages.warning(request, 'Berhasil merubah %s'%(user.nm_lengkap))
+            user.save()
+            return redirect('/inventaris/users', pk=user.pk)
+    else:
+        form = Userform(instance=user)
+    return render(request, 'users/edit-user.html', {'form': form, 'user' : user,'messages':messages})
+
+@login_required(login_url='/')
+def deleteuser(request,pk):
+    user = User.objects.get(pk=pk)
+    messages.warning(request, 'Berhasil menghapus %s'%(user.nm_lengkap))
+    cursor = connection.cursor()
+    cursor.execute("update tb_user set is_deleted='True' where id_user='%s'"%(user.id_user))
+    return redirect('/inventaris/users',{'messages':messages})
+
+@login_required(login_url='/')
+def changepassword(request,pk):
+    user = User.objects.get(pk = request.session['id_user'])
+    url = '/inventaris/'
+    resp_body = '<script>alert("Password user %s Berhasil di rubah, Silahkan Login Kembali");\
+            window.location="%s"</script>' % (user.nm_lengkap , url)
+
+    if request.method == "POST":
+        form = Userform(request.POST, instance=user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            password = request.POST['password']
+            user.save()
+            return HttpResponse(resp_body)
+    else:
+        form = Userform(instance=user)
+    return render(request, 'changepassword.html', {'form': form, 'user' : user,'messages':messages})
+
 # -----------+
 # DASHBOARD  |
 # -----------+
-
-
+@login_required(login_url='/')
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    Ssn = request.session
+    if Ssn != None :
+        for key, value in request.session.items():
+            print('{} => {}'.format(key, value))
+        return render(request, 'dashboard.html')
+    else :
+        return render(request, 'login.html')
 
 # -----------+
 # STOK       |
 # -----------+
+@login_required(login_url='/')
 def caristokgrid(request):
     stok = request.GET.get('cari')
     daftar_barang = Stok_barang.objects.filter(
@@ -45,7 +185,7 @@ def caristokgrid(request):
         'stok':stok
     }
     return render(request, 'transaksi/stok/viewgrid-stok.html', context)
-
+@login_required(login_url='/')
 def caristoklist(request):
     stok = request.GET.get('cari')
     daftar_barang = Stok_barang.objects.filter(
@@ -65,7 +205,7 @@ def caristoklist(request):
         'stok':stok
     }
     return render(request, 'transaksi/stok/view-stok.html', context)
-
+@login_required(login_url='/')
 def gridstok(request):
     daftar_stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
     pagination = Paginator(daftar_stok,5)
@@ -74,7 +214,7 @@ def gridstok(request):
     barang_stok_pg = pagination.get_page(page)
     return render(request, 'transaksi/stok/viewgrid-stok.html', {'daftar_stok': barang_stok_pg})
 
-
+@login_required(login_url='/')
 def stok(request):
     daftar_stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
     pagination = Paginator(daftar_stok,10)
@@ -86,11 +226,12 @@ def stok(request):
 # ------------+
 # BARANG MASUK|
 # ------------+
+@login_required(login_url='/')
 def caribarangmasukgrid(request):
     barangmasuk = request.GET.get('cari')
     daftar_barang = Barang_masuk.objects.filter(
             Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
-            Q(sn_barang__icontains=barangmasuk) | Q(is_deleted='False')
+            Q(sn_barang__icontains=barangmasuk) , Q(is_deleted='False')
         ).order_by('kd_barang')
     pagination = Paginator(daftar_barang,5)
     page = request.GET.get('page')
@@ -107,11 +248,12 @@ def caribarangmasukgrid(request):
     }
     return render(request, 'transaksi/masuk/viewgrid-barang-masuk.html', context)
 
+@login_required(login_url='/')
 def caribarangmasuk(request):
     barangmasuk = request.GET.get('cari')
     daftar_barang = Barang_masuk.objects.filter(
             Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
-            Q(sn_barang__icontains=barangmasuk) | Q(is_deleted='False')
+            Q(sn_barang__icontains=barangmasuk) , Q(is_deleted='False')
         ).order_by('kd_barang')
     pagination = Paginator(daftar_barang,10)
     page = request.GET.get('page')
@@ -128,6 +270,7 @@ def caribarangmasuk(request):
     }
     return render(request, 'transaksi/masuk/view-barang-masuk.html', context)
 
+@login_required(login_url='/')
 def barangmasuk(request):
     daftar_barang = Barang_masuk.objects.filter(is_deleted='False').order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,10)
@@ -136,7 +279,7 @@ def barangmasuk(request):
     barang_masuk_pg = pagination.get_page(page)
     return render(request, 'transaksi/masuk/view-barang-masuk.html', {'daftar_barang_masuk': barang_masuk_pg})
 
-
+@login_required(login_url='/')
 def barangmasukgrid(request):
     daftar_barang = Barang_masuk.objects.filter(is_deleted='False').order_by('-id_brg_masuk')
     pagination = Paginator(daftar_barang,5)
@@ -145,7 +288,7 @@ def barangmasukgrid(request):
     barang_masuk_pg = pagination.get_page(page)
     return render(request, 'transaksi/masuk/viewgrid-barang-masuk.html', {'daftar_barang_masuk': barang_masuk_pg})
 
-
+@login_required(login_url='/')
 def editbarangmasuk(request,pk):
     masuk = Barang_masuk.objects.get(pk=pk)
     if request.method == "POST":
@@ -184,7 +327,7 @@ def editbarangmasuk(request,pk):
                         request.POST['kd_barang']
                     )
                 )
-            # Still UnClear 
+            # CLEAR
             
             messages.success(request, 'Berhasil merubah %s'%(request.POST['nm_barang']))
             return redirect('/inventaris/barangmasuk', pk=masuk.pk)
@@ -192,6 +335,7 @@ def editbarangmasuk(request,pk):
         form = Barang_masuk_form(instance=masuk)
     return render(request, 'transaksi/masuk/edit-barang-masuk.html', {'form': form, 'barang_masuk' : masuk,'messages':messages})
 
+@login_required(login_url='/')
 def simpantambahbarangmasuk(request):
     jenis = Jenis_brg.objects.filter(is_deleted='False')
     merk = Merk_brg.objects.filter(is_deleted='False')
@@ -263,6 +407,7 @@ def simpantambahbarangmasuk(request):
         'messages':messages
     })
 
+@login_required(login_url='/')
 def tambahbarangmasuk(request):
     jenis = Jenis_brg.objects.filter(is_deleted='False')
     merk = Merk_brg.objects.filter(is_deleted='False')
@@ -332,6 +477,7 @@ def tambahbarangmasuk(request):
         'messages':messages
     })
 
+@login_required(login_url='/')
 def deletebarangmasuk(request,pk):
     barang_masuk = Barang_masuk.objects.get(pk=pk)
     # stok = Barang_masuk.jml_masuk
@@ -386,18 +532,19 @@ def tambahbarangkeluar(request):
 # LAPORAN      |
 # -------------+
 
-
+@login_required(login_url='/')
 def laporanmasuk(request):
     return render(request, 'laporan/laporan-barang-masuk.html')
 
-
+@login_required(login_url='/')
 def laporankeluar(request):
     return render(request, 'laporan/laporan-barang-keluar.html')
 
-
+@login_required(login_url='/')
 def laporanstok(request):
     return render(request, 'laporan/laporan-barang-stok.html')
 
+@login_required(login_url='/')
 def print_laporan_stok(request):
     judul = "Laporan Stok Barang"
     tanggal = request.POST.get('tanggal')
@@ -414,6 +561,7 @@ def print_laporan_stok(request):
     stok_barang = Stok_barang.objects.filter(tanggal__icontains=tanggal).order_by('tanggal')
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
+@login_required(login_url='/')
 def print_laporan_masuk(request):
     judul = "Laporan Barang Masuk"
     tanggal = request.POST.get('tanggal')
@@ -430,6 +578,7 @@ def print_laporan_masuk(request):
     stok_barang = Barang_masuk.objects.filter(tgl_masuk__icontains=tanggal,is_deleted='False').order_by('tgl_masuk')
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
+@login_required(login_url='/')
 def print_laporan_keluar(request):
     judul = "Laporan Barang Keluar"
     tanggal = request.POST.get('tanggal')
@@ -447,34 +596,34 @@ def print_laporan_keluar(request):
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
 # -------------+
-# USERS        |
-# -------------+
-
-
-def viewuser(request):
-    return render(request, 'users/view-user.html')
-
-
-def adduser(request):
-    return render(request, 'users/add-user.html')
-
-
-def edituser(request):
-    return render(request, 'users/edit-user.html')
-
-# ---------------+
-# CHANGE PASSWORD|
-# ---------------+
-
-
-def changepassword(request):
-    return render(request, 'changepassword.html')
-
-# -------------+
 # MASTER DATA  |
 # -------------+
+# ------------+
+#     MERK    |
+# ------------+
+@login_required(login_url='/')
+def carimerk(request):
+    merk = request.GET.get('cari')
+    print(merk)
+    daftar_merk = Merk_brg.objects.filter(
+            nama_merk__icontains=merk,is_deleted='False'
+        ).order_by('nama_merk')
+    pagination = Paginator(daftar_merk,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_merk': posts,
+        'key_merk':merk
+    }
+    return render(request, 'masterdata/merk/merk.html', context)
 
-
+@login_required(login_url='/')
 def viewmerk(request):
     daftar_merk = Merk_brg.objects.filter(is_deleted='False').order_by('-id_merk')
     pagination = Paginator(daftar_merk,10)
@@ -483,7 +632,7 @@ def viewmerk(request):
     merk_pg = pagination.get_page(page)
     return render(request, 'masterdata/merk/merk.html', {'daftar_merk': merk_pg})
 
-
+@login_required(login_url='/')
 def addmerk(request):
     if request.method == 'POST':
         form_data = request.POST
@@ -500,7 +649,7 @@ def addmerk(request):
         form = Merkform()
     return render(request, 'masterdata/merk/merk_tambah.html', {'form': form,'messages':messages})
 
-
+@login_required(login_url='/')
 def editmerk(request,pk):
     merk = Merk_brg.objects.get(pk=pk)
     if request.method == "POST":
@@ -515,13 +664,39 @@ def editmerk(request,pk):
         form = Merkform(instance=merk)
     return render(request, 'masterdata/merk/merk_edit.html', {'form': form, 'merk' : merk, 'messages':messages})
 
+@login_required(login_url='/')
 def deletemerk(request,pk):
-    Merk = Merk_brg.objects.get(pk=pk)
-    messages.warning(request, 'Berhasil menghapus %s'%(Merk.nama_merk))
+    merk = Merk_brg.objects.get(pk=pk)
+    messages.warning(request, 'Berhasil menghapus %s'%(merk.nama_merk))
     cursor = connection.cursor()
-    cursor.execute("update tb_merk_brg set is_deleted='True' where id_merk='%s'"%(Merk.id_merk))
+    cursor.execute("update tb_merk_brg set is_deleted='True' where id_merk='%s'"%(merk.id_merk))
     return redirect('/inventaris/masterdata/merk',{'messages':messages})
 
+# ------------+
+#     JENIS   |
+# ------------+
+@login_required(login_url='/')
+def carijenis(request):
+    jenis = request.GET.get('cari')
+    daftar_jenis = Jenis_brg.objects.filter(
+            nama_jenis__icontains=jenis,is_deleted='False'
+        ).order_by('nama_jenis')
+    pagination = Paginator(daftar_jenis,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_jenis': posts,
+        'key_jenis':jenis
+    }
+    return render(request, 'masterdata/jenis/jenis.html', context)
+
+@login_required(login_url='/')
 def viewjenis(request):
     daftar_jenis = Jenis_brg.objects.filter(is_deleted='False').order_by('-id_jenis')
     pagination = Paginator(daftar_jenis,10)
@@ -530,6 +705,7 @@ def viewjenis(request):
     jenis_pg = pagination.get_page(page)
     return render(request, 'masterdata/jenis/jenis.html', {'daftar_jenis': jenis_pg})
 
+@login_required(login_url='/')
 def addjenis(request):
     if request.method == 'POST':
         form_data = request.POST
@@ -546,6 +722,7 @@ def addjenis(request):
         form = Jenisform()
     return render(request, 'masterdata/jenis/jenis_tambah.html', {'form': form,'messages':messages})
 
+@login_required(login_url='/')
 def editjenis(request,pk):
     jenis = Jenis_brg.objects.get(pk=pk)
     if request.method == "POST":
@@ -560,6 +737,7 @@ def editjenis(request,pk):
         form = Jenisform(instance=jenis)
     return render(request, 'masterdata/jenis/jenis_edit.html', {'form': form, 'jenis' : jenis,'messages':messages})
 
+@login_required(login_url='/')
 def deletejenis(request,pk):
     jenis = Jenis_brg.objects.get(pk=pk)
     # RAW (LAST CHOICE)
@@ -569,6 +747,32 @@ def deletejenis(request,pk):
     messages.success(request, 'Berhasil menghapus %s'%(jenis.nama_jenis))
     return redirect('/inventaris/masterdata/jenis',{'messages':messages})
 
+# -------------+
+#    SUPPLIER  |
+# -------------+
+@login_required(login_url='/')
+def carisuplier(request):
+    suplier = request.GET.get('cari')
+    daftar_supplier = Supplier.objects.filter(
+            Q(nama_supplier__icontains=suplier) | Q(alamat_supplier__icontains=suplier) |
+            Q(notlp_supplier__icontains=suplier) , Q(is_deleted='False')
+        ).order_by('nama_supplier')
+    pagination = Paginator(daftar_supplier,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_supplier': posts,
+        'key_suplier':suplier
+    }
+    return render(request, 'masterdata/supplier/supplier.html', context)
+
+@login_required(login_url='/')
 def viewsupplier(request):
     daftar_supplier = Supplier.objects.filter(is_deleted='False').order_by('-id_supplier')
     pagination = Paginator(daftar_supplier,10)
@@ -577,6 +781,7 @@ def viewsupplier(request):
     supplier_pg = pagination.get_page(page)
     return render(request, 'masterdata/supplier/supplier.html', {'daftar_supplier': supplier_pg})
 
+@login_required(login_url='/')
 def addsupplier(request):
     if request.method == 'POST':
         form_data = request.POST
@@ -595,6 +800,7 @@ def addsupplier(request):
         form = Supplierform()
     return render(request, 'masterdata/supplier/supplier_tambah.html', {'form': form,'messages':messages})
 
+@login_required(login_url='/')
 def editsupplier(request,pk):
     supplier = Supplier.objects.get(pk=pk)
     if request.method == "POST":
@@ -611,6 +817,7 @@ def editsupplier(request,pk):
         form = Supplierform(instance=supplier)
     return render(request, 'masterdata/supplier/supplier_edit.html', {'form': form, 'supplier' : supplier,'messages':messages})
 
+@login_required(login_url='/')
 def deletesupplier(request,pk):
     supplier = Supplier.objects.get(pk=pk)
     messages.success(request, 'Berhasil menghapus %s'%(supplier.nama_supplier))
@@ -620,6 +827,33 @@ def deletesupplier(request,pk):
     
     return redirect('/inventaris/masterdata/supplier',{'messages':messages})
 
+# -------------+
+#    CUSTOMER  |
+# -------------+
+
+@login_required(login_url='/')
+def caricustomer(request):
+    customers = request.GET.get('cari')
+    daftar_customer = Customer.objects.filter(
+            Q(nama_customer__icontains=customers) | Q(alamat_customer__icontains=customers) |
+            Q(notlp_customer__icontains=customers) , Q(is_deleted='False')
+        ).order_by('nama_customer')
+    pagination = Paginator(daftar_customer,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_customer': posts,
+        'key_customer':customers
+    }
+    return render(request, 'masterdata/customer/customer.html', context)
+
+@login_required(login_url='/')
 def viewcustomer(request):
     daftar_customer = Customer.objects.filter(is_deleted='False').order_by('-id_customer')
     pagination = Paginator(daftar_customer,10)
@@ -627,6 +861,7 @@ def viewcustomer(request):
     customer_pg = pagination.get_page(page)
     return render(request, 'masterdata/customer/customer.html',{'daftar_customer': customer_pg})
 
+@login_required(login_url='/')
 def addcustomer(request):
     if request.method == 'POST':
         form_data = request.POST
@@ -645,6 +880,7 @@ def addcustomer(request):
         form = Customerform()
     return render(request, 'masterdata/customer/customer_tambah.html', {'form': form,'messages':messages})
 
+@login_required(login_url='/')
 def editcustomer(request,pk):
     customer = Customer.objects.get(pk=pk)
     if request.method == "POST":
@@ -661,6 +897,7 @@ def editcustomer(request,pk):
         form = Customerform(instance=customer)
     return render(request, 'masterdata/customer/customer_edit.html', {'form': form, 'customer' : customer,'messages':messages})
 
+@login_required(login_url='/')
 def deletecustomer(request,pk):
     customer = Customer.objects.get(pk=pk)
     messages.success(request, 'Berhasil menghapus %s'%(customer.nama_customer))
@@ -670,6 +907,32 @@ def deletecustomer(request,pk):
     
     return redirect('/inventaris/masterdata/customer',{'messages':messages})
 
+# -------------+
+#    TIPE      |
+# -------------+
+
+@login_required(login_url='/')
+def caritipe(request):
+    tipe = request.GET.get('cari')
+    daftar_tipe = Tipe_brg.objects.filter(
+            nama_tipe__icontains=tipe,is_deleted='False'
+        ).order_by('nama_tipe')
+    pagination = Paginator(daftar_tipe,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_tipe': posts,
+        'key_tipe':tipe
+    }
+    return render(request, 'masterdata/tipe/tipe.html', context)
+
+@login_required(login_url='/')
 def viewtipe(request):
     daftar_tipe = Tipe_brg.objects.filter(is_deleted='False').order_by('-id_tipe')
     pagination = Paginator(daftar_tipe,10)
@@ -694,6 +957,7 @@ def addtipe(request):
         form = Tipeform()
     return render(request, 'masterdata/tipe/tipe_tambah.html', {'form': form,'messages':messages})
 
+@login_required(login_url='/')
 def edittipe(request,pk):
     tipe = Tipe_brg.objects.get(pk=pk)
     if request.method == "POST":
@@ -708,6 +972,7 @@ def edittipe(request,pk):
         form = Tipeform(instance=tipe)
     return render(request, 'masterdata/tipe/tipe_edit.html', {'form': form, 'tipe' : tipe,'messages':messages})
 
+@login_required(login_url='/')
 def deletetipe(request,pk):
     tipe = Tipe_brg.objects.get(pk=pk)
     messages.success(request, 'Berhasil menghapus %s'%(tipe.nama_tipe))

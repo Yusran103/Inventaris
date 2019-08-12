@@ -99,10 +99,12 @@
                                             <h5><strong>Harga Barang :</strong> Rp.{{barang_masuk.harga_satuan|intcomma}},-</h5>
                                         </div>
                                     </div>
+                                    {% if request.session.level == 'SuperAdmin' %}
                                     <div class="col-sm-2 pull-right">
                                         <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
                                         <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" class="btn btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
                                     </div>
+                                    {% endif %}
                                 </div>
                                 <br/>
                             </div>
@@ -150,7 +152,6 @@
 {% endblock %}
 
 {% block extrajs %}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <script>
     $('.confirm-delete').on('click', function(e) {
         return confirm('Apakah anda yakin ingin menghapus data tersebut?')

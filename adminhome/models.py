@@ -1,3 +1,5 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.hashers import make_password
 from django.db import models
 
 # Create your models here.
@@ -134,7 +136,29 @@ class Stok_barang(models.Model):
     def __str__(self):
         return self.kd_barang
 
-class User(models.Model):
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **kwargs):
+        if not email:
+            raise ValueError('Email tidak valid')
+        if not kwargs.get('username'):
+            raise ValueError('Username tidak valid')
+        person = self.model(
+            email=self.normalize_email(email), username=kwargs.get('username')
+        )
+        person.set_password(password)
+        person.save()
+        return person
+
+    def create_superuser(self, email, password, **kwargs):
+        person = self.create_user(email, password, **kwargs)
+
+        person.is_superuser = True
+        person.is_staff = True
+        person.save()
+
+        return person
+
+class User(AbstractBaseUser):
     """docstring for user"""
     USER_CHOICES = [
         ('Admin', 'Admin'),
@@ -142,16 +166,41 @@ class User(models.Model):
     ]
 
     id_user = models.AutoField(primary_key=True)
-    nm_lengkap = models.CharField(max_length=25)
-    username = models.CharField(max_length=8)
-    password = models.CharField(max_length=8)
-    level = models.CharField(
-        max_length=20, choices=USER_CHOICES, default='Admin')
-    is_deleted = models.CharField(max_length=100,blank=True , null=True)
+    email = models.EmailField(unique=True)
+    nm_lengkap = models.CharField(max_length=255)
+    username = models.CharField(max_length=255,unique=True)
+    password = models.CharField(max_length=255)
+    level = models.CharField(max_length=20, choices=USER_CHOICES, default='SuperAdmin')
+    is_deleted = models.CharField(max_length=10,blank=True , null=True,default=False)
+
+    # You may need to add more fields
+
+    is_superuser = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email','nm_lengkap']
 
     def __str__(self):
-        return self.nm_lengkap
+        return self.username
 
+    def get_full_name(self):
+        return '{}'.format(self.nm_lengkap)
+    
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+    
+    def has_module_perms(self, adminhome):
+        return self.is_superuser
+    
+    def save(self, *args, **kwargs):
+        self.password = make_password(self.password)
+        super(User, self).save(*args, **kwargs)
+    
     class Meta:
         db_table = "tb_user"
 

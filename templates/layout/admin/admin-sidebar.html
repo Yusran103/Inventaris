@@ -22,6 +22,7 @@
                 </ul>
             </li>
             <!-- LAPORAN -->
+            {% if request.session.level == 'SuperAdmin' %}
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-book"></i>
@@ -56,6 +57,7 @@
                     
                 </ul>
             </li>
+            {% endif %}
         </ul>
     </section>
     <!-- /.sidebar -->
