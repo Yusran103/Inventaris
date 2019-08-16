@@ -43,10 +43,14 @@ urlpatterns = [
 
     # BARANG KELUAR
     path('inventaris/barangkeluar',adminhome.barangkeluargrid, name='barangkeluar_grid'),
-    path('inventaris/barangkeluar/list',adminhome.barangkeluar, name='barangkeluar_list'),
-    path('inventaris/barangkeluar/tambah',adminhome.tambahbarangkeluar, name='barangkeluar_add'),
-    # path('inventaris/barangkeluar/edit/<id:pk>', adminhome.editbarangkeluar,name='barangkeluar_edit'),
-    # path('inventaris/barangkeluar/delete/<id:pk>', adminhome.editbarangkeluar,name='barangkeluar_delete'),
+    path('inventaris/barangkeluar/list',adminhome.viewbarangkeluar, name='barangkeluar_list'),
+    path('inventaris/barangkeluar/tambah',adminhome.addbarangkeluar, name='barangkeluar_add'),
+    path('inventaris/barangkeluar/simpantambah',adminhome.simpantambahbarangkeluar, name='barangkeluar_addcreate'),
+    path('inventaris/barangkeluar/edit/<int:pk>', adminhome.editbarangkeluar,name='barangkeluar_edit'),
+    path('inventaris/barangkeluar/delete/<int:pk>', adminhome.deletebarangkeluar,name='barangkeluar_delete'),
+    path('inventaris/barangkeluar/cari', adminhome.caribarangkeluargrid,name='barangkeluar_grid_cari'),
+    path('inventaris/barangkeluar/list/cari', adminhome.caribarangkeluar,name='barangkeluar_cari'),
+
     
     # STOK
     path('inventaris/stok', adminhome.gridstok, name='stok_grid'),

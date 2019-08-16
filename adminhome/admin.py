@@ -1,10 +1,6 @@
 from django.contrib import admin
+from adminhome.models import *
 
 # Register your models here.
-from adminhome.models import User
-from adminhome.forms import Userform
 
-class UserAdmin(admin.ModelAdmin):
-    form = Userform
-
-admin.site.register(User,UserAdmin)
+admin.site.register(Akun)

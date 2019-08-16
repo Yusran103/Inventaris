@@ -26,7 +26,7 @@
                             <div class="col-sm-10">
                                 {{form.nm_barang}}
                                 {% if form.nm_barang.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.nm_barang.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.nm_barang.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                             <div class="col-sm-10">
                                 {{form.kd_barang}}
                                 {% if form.kd_barang.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.kd_barang.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.kd_barang.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -49,16 +49,7 @@
                                     </div>
                                 </div>
                                 {% if form.tgl_masuk.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.tgl_masuk.errors|striptags}}</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="serialnumber" class="col-sm-2 control-label">Serial Number : </label>
-                            <div class="col-sm-10">
-                                {{form.sn_barang}}
-                                {% if form.sn_barang.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.sn_barang.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.tgl_masuk.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -67,7 +58,7 @@
                             <div class="col-sm-3">
                                 {{form.jml_masuk}}
                                 {% if form.jml_masuk.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.jml_masuk.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.jml_masuk.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -76,7 +67,7 @@
                             <div class="col-sm-10">
                                 {{form.harga_satuan}}
                                 {% if form.sn_barang.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.harga_satuan.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.harga_satuan.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -85,7 +76,7 @@
                             <div class="col-sm-10">
                                 {{form.supplier_id}}
                                 {% if form.supplier_id.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.supplier_id.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.supplier_id.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -94,7 +85,7 @@
                             <div class="col-sm-10">
                                 {{form.no_resi}}
                                 {% if form.no_resi.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.no_resi.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.no_resi.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -103,7 +94,7 @@
                             <div class="col-sm-10" id="merk">
                                 {{form.merk_id}}
                                 {% if form.merk_id.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.merk_id.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.merk_id.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -112,7 +103,7 @@
                             <div class="col-sm-10" id="jenis">
                                 {{form.jenis_id}}
                                 {% if form.jenis_id.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.jenis_id.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.jenis_id.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -121,7 +112,7 @@
                             <div class="col-sm-10" id="tipe">
                                 {{form.tipe_id}}
                                 {% if form.tipe_id.errors %}
-                                <p style="background-color: #d9534f; color: white; " >{{form.tipe_id.errors|striptags}}</p>
+                                <p style=" color: red; " >{{form.tipe_id.errors|striptags}}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -131,7 +122,7 @@
                                 <div class="form-control">
                                     {{form.foto_masuk}}
                                     {% if form.foto_masuk.errors %}
-                                    <p style="background-color: #d9534f; color: white; " >{{form.foto_masuk.errors|striptags}}</p>
+                                    <p style=" color: red; " >{{form.foto_masuk.errors|striptags}}</p>
                                     {% endif %}
                                 </div>
                             </div>
@@ -161,7 +152,6 @@
             e.preventDefault();
             var a = document.getElementById("id_nm_barang").value;
             var b = document.getElementById("id_kd_barang").value;
-            var c = document.getElementById("id_sn_barang").value;
             var d = document.getElementById("id_foto_masuk").value;
             var e = document.getElementById("id_jml_masuk").value;
             var f = document.getElementById("id_no_resi").value;
@@ -172,12 +162,13 @@
             var k = document.getElementById("id_tipe_id").value;
             var l = document.getElementById("rupiah").value;
             
-            if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "",e == null || e == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "",l == null || l == "") {
+            if (a == null || a == "", b == null || b == "", d == null || d == "",e == null || e == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "",l == null || l == "") {
                 $('#form1').submit();
                 return false;
             }else{
                 var r = confirm("Apakan anda yakin?");
                 if (r == true) {
+                    alert("Data Barang Berhasil di Tambah");
                     $('#form1').attr('action', "{% url 'barangmasuk_add' %}");
                     $('#form1').submit();
                 } 
@@ -187,7 +178,6 @@
             e.preventDefault();
             var a = document.getElementById("id_nm_barang").value;
             var b = document.getElementById("id_kd_barang").value;
-            var c = document.getElementById("id_sn_barang").value;
             var d = document.getElementById("id_foto_masuk").value;
             var e = document.getElementById("id_jml_masuk").value;
             var f = document.getElementById("id_no_resi").value;
@@ -198,12 +188,13 @@
             var k = document.getElementById("id_tipe_id").value;
             var l = document.getElementById("rupiah").value;
             
-            if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "",e == null || e == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "",l == null || l == "") {
+            if (a == null || a == "", b == null || b == "", d == null || d == "",e == null || e == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "",l == null || l == "") {
                 alert("Tolong di isi semua kolom nya!");
                 return false;
             }else{
                 var r = confirm("Apakan anda yakin?");
                 if (r == true) {
+                    alert("Data Barang Berhasil di Tambah");
                     $('#form1').attr('action',  "{% url 'barangmasuk_addcreate' %}");
                     $('#form1').submit();
                 } 

@@ -1,5 +1,6 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/select2/3.5.2/select2.css">
@@ -12,141 +13,205 @@
     </h1>
 </section>
 <section class="content">
-    
     <div class="row">
-        <div class="col-sm-12">
-            <div class="box box-primary">
-                <form action="" class="form-horizontal">
-                    <div class="box-body">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="nobuktibeli" class="col-sm-3 control-label">No. Bukti Beli</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="nobuktibeli" placeholder="No. Bukti Beli">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="namabarang" class="col-sm-3 control-label">Cari Barang</label>
-                                <div class="col-sm-9" id="namabarang">
-                                    <select id="mySelect" style="width: 100%" onclick="myFunction()">
-                                        {% if masuk %}
-                                        <option value=" | | | | | | | ">Pilih Barang</option>
-                                        {% for list_Masuk in masuk %}
-                                        <option value="{{list_Masuk.nm_barang}}|{{list_Masuk.kd_barang}}|{{list_Masuk.sn_barang}}|{{list_Masuk.hrg_barang}}|{{list_Masuk.merk_id}}|{{list_Masuk.jenis_id}}|{{list_Masuk.tipe_id}}|{{list_Masuk.stok_akhir}}">{{list_Masuk.nm_barang}}</option>
-                                        {% endfor %}
-                                        {% else %}
-                                        <option value=" | | | | | | | ">Tidak Ada barang Masuk</option>
+        <div class="col-sm-13">
+            <div class="box box-primary"> 
+                <form id="form1" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- konten -->
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nobukti" class="col-sm-3 control-label">No. Bukti : </label>
+                                    <div class="col-sm-9">
+                                        {{form.no_bukti}}
+                                        {% if form.no_bukti.errors %}
+                                        <p style="color: red;">{{form.no_bukti.errors|striptags}}</p>
                                         {% endif %}
-                                    </select>
-                                    
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="kodebarang" class="col-sm-3 control-label">Nama Barang</label>
-                                <div class="col-sm-9">
-                                    <input type="text" disabled class="form-control" id="demo"> 
+                                <div class="form-group">
+                                    <label for="caribarang" class="col-sm-3 control-label">Cari Barang : </label>
+                                    <div class="col-sm-9" id="caribarang">
+                                        <select id="mySelect" style="width: 100%" onclick="myFunction()">
+                                            <option value=" | | | | | | ">----- Pilih Barang -----</option>    
+                                            {% if daftar_stok %}
+                                            {% for data in daftar_stok %}
+                                            <option value="{{data.nm_barang}}|{{data.kd_barang}}|{{data.hrg_barang}}|{{data.merk_id.id_merk}}|{{data.jenis_id.id_jenis}}|{{data.tipe_id.id_tipe}}|{{data.stok_akhir}}">{{data.nm_barang}}</option>
+                                            {% endfor %}
+                                            {% else %}
+                                            <option value="">Tidak Ada Data</option>
+                                            {% endif %}
+                                        </select>                                        
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="kodebarang" class="col-sm-3 control-label">Kode Barang</label>
-                                <div class="col-sm-9">
-                                    <input type="text" disabled class="form-control" id="demo1">
+                                <div class="form-group">
+                                    <label for="namabarang" class="col-sm-3 control-label">Nama Barang : </label>
+                                    <div class="col-sm-9">
+                                        {{form.nama_barang}}
+                                        {% if form.nama_barang.errors %}
+                                        <p style="color: red;">{{form.nama_barang.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>                                
+                                <div class="form-group">
+                                    <label for="kodebarang" class="col-sm-3 control-label">Kode Barang : </label>
+                                    <div class="col-sm-9">
+                                        {{form.kode_barang}}
+                                        {% if form.kode_barang.errors %}
+                                        <p style="color: red;">{{form.kode_barang.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="tanggalbarang" class="col-sm-3 control-label">Tanggal Keluar</label>
-                                <div class="col-sm-9">
-                                    <div class="input-group date">
-                                        <input type="text" class="form-control pull-right" id="date" placeholder="Tanggal Keluar">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
+                                <div class="form-group">
+                                    <label for="serialnumber" class="col-sm-3 control-label">Serial Number : </label>
+                                    <div class="col-sm-9">
+                                        {{form.serialnumber}}  
+                                        {% if form.serialnumber.errors %}
+                                        <p style="color: red;">{{form.serialnumber.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="noresi" class="col-sm-3 control-label">No. Resi : </label>
+                                    <div class="col-sm-9">
+                                        {{form.no_resi}}
+                                        {% if form.no_resi.errors %}
+                                        <p style="color: red;">{{form.no_resi.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="noresi" class="col-sm-3 control-label">Merk : </label>
+                                    <div class="col-sm-9">
+                                        {{form.merk_id}}  
+                                        {% if form.merk_id.errors %}
+                                        <p style="color: red;">{{form.merk_id.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="noresi" class="col-sm-3 control-label">Jenis : </label>
+                                    <div class="col-sm-9">
+                                        {{form.jenis_id}}  
+                                        {% if form.jenis_id.errors %}
+                                        <p style="color: red;">{{form.jenis_id.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="noresi" class="col-sm-3 control-label">Tipe : </label>
+                                    <div class="col-sm-9">
+                                        {{form.tipe_id}}
+                                        {% if form.tipe_id.errors %}
+                                        <p style="color: red;">{{form.tipe_id.errors|striptags}}</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="serialnumber" class="col-sm-3 control-label">Serial Number</label>
-                                <div class="col-sm-9">
-                                    <input type="text"  class="form-control" id="demo2">   
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <label for="jumlahkeluar" class="col-sm-3 control-label">Jumlah Keluar : </label>
+                                    <div class="col-sm-9">
+                                        {{form.jumlah}}
+                                        {% if form.jumlah.errors %}
+                                        <p style="color: red;">{{form.jumlah.errors|striptags}}</p>
+                                        {% endif %}
+                                        <div class="input-group">
+                                            <p id="totjumlah">Jumlah stok sekarang : {{data.stok_akhir}}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="jumlah" class="col-sm-3 control-label">Jumlah</label>
-                                <div class="col-sm-9">
-                                    <input type="number" class="form-control" min="1" id="jumlah" placeholder="Jumlah">
+                                <div class="form-group">
+                                    <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan : </label>
+                                    <div>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Rp</span>
+                                                {{form.harga_satuan}}
+                                                <span class="input-group-addon">.00</span>
+                                            </div>
+                                            {% if form.harga_satuan.errors %}
+                                            <p style="color: red;">{{form.harga_satuan.errors|striptags}}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="hargasatuan" class="col-sm-3 control-label">Harga Satuan</label>
-                                <div class="col-sm-9">
-                                    <input type="text" disabled class="form-control" id="demo3">
+                                <div class="form-group">
+                                    <label for="totalbayar" class="col-sm-3 control-label">Total Bayar : </label>
+                                    <div>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Rp</span>
+                                                {{form.total_bayar}}
+                                                <span class="input-group-addon">.00</span>
+                                            </div>                          
+                                            {% if form.total_bayar.errors %}
+                                            <p style="color: red;">{{form.total_bayar.errors|striptags}}</p>
+                                            {% endif %}
+                                        </div>              
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="totalbayar" class="col-sm-3 control-label">Total Bayar</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" disabled id="totalbayar" placeholder="Total Bayar">
+                                <div class="form-group">
+                                    <label for="ccustomer" class="col-sm-3 control-label">Cari Customer : </label>
+                                    <div class="col-sm-9">
+                                        <select id="caricustomer" style="width: 100%" onclick="customer()">
+                                            <option value=" | ">---- Pilih Customer ----</option>
+                                            {%if daftar_customer%}
+                                            {% for data in daftar_customer %}
+                                            <option value="{{data.id_customer}}|{{data.alamat_customer}}">{{ forloop.counter }}. {{data.nama_customer}}</option>
+                                            {% endfor %}
+                                            {% else %}
+                                            <option value="">Tidak Ada Data Customer</option>
+                                            {% endif %}
+                                        </select>   
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- col ke 2 -->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="customer" class="col-sm-2 control-label">Customer</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="customer" placeholder="Customer">
+                                <div class="form-group">
+                                    <label for="customer" class="col-sm-3 control-label">Customer : </label>
+                                    <div class="col-sm-9">
+                                        {{form.customer_id}}
+                                        {% if form.customer_id.errors %}
+                                        <p style="color: red;">{{form.customer_id.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="alamatcustomer" class="col-sm-2 control-label">Alamat Customer</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" id="alamatcustomer" rows="3" placeholder="Tulis alamat customer disini ..."></textarea>
+                                <div class="form-group">
+                                    <label for="alamatcustomer" class="col-sm-3 control-label">Alamat Customer: </label>
+                                    <div class="col-sm-9">
+                                        {{form.alamat_customer}}
+                                        {% if form.alamat_customer.errors %}
+                                        <p style="color: red;">{{form.alamat_customer.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="noresi" class="col-sm-2 control-label">No. Resi</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="noresi" placeholder="No. Resi">
+                                <div class="form-group">
+                                    <label for="tanggalkeluar" class="col-sm-3 control-label">Tanggal Keluar : </label>
+                                    <div class="col-sm-9">
+                                        {{form.tanggal}}
+                                        {% if form.tanggal.errors %}
+                                        <p style="color: red;">{{form.tanggal.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="merk" class="col-sm-2 control-label">Merk</label>
-                                <div class="col-sm-10" id="merk">
-                                    <select readonly id="merkSelect" style="width: 100%">
-                                        <option value="">-----------</option>
-                                        {% for list_Masuk in merk %}
-                                        <option value="{{list_Masuk.nama_merk}}">{{list_Masuk.nama_merk}}</option>
-                                        {% endfor %}
-                                    </select>
+                                <div class="form-group">
+                                    <label for="foto" class="col-sm-3 control-label">Foto : </label>
+                                    <div class="col-sm-9">
+                                        {{form.foto_keluar}}
+                                        {% if form.foto_keluar.errors %}
+                                        <p style="color: red;">{{form.foto_keluar.errors|striptags}}</p>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="jenis" class="col-sm-2 control-label">Jenis</label>
-                                <div class="col-sm-10" >
-                                    <input type="text" disabled class="form-control" id="demo5">
+                                <!-- Button -->
+                                <div class="form-group pull-right">   
+                                    <div class="col-sm-12">
+                                        <input type="submit" value="Simpan" name="s1" id='s1' class="btn btn-md btn-primary"></input>
+                                        <input type="submit" value="Simpan dan Tambah" name="s2" id='s2' class="btn btn-md btn-success"></input>
+                                        <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
+                                    </div> 
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="jenis" class="col-sm-2 control-label">tipe</label>
-                                <div class="col-sm-10" >
-                                    <input type="text" disabled class="form-control" id="demo6">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="gambar" class="col-sm-2 control-label">Gambar</label>
-                                <div class="col-sm-10">
-                                    <input type="file" id="gambar">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="form-group pull-right">    
-                                <a href="#" type="button" class="btn btn-primary">Simpan</a>
-                                <a href="#" type="button" class="btn btn-success">Simpan dan Tambah</a>
-                                <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
                             </div>
                         </div>
                     </div>
@@ -161,11 +226,16 @@
 <script type="text/javascript" src="http://cdn.jsdelivr.net/select2/3.4.6/select2.min.js"></script>
 <script type="text/javascript" src="http://globaltradeconcierge.com/javascripts/bootstrap.min.js"></script>
 <script>
+    $('#id_nama_barang,#id_kode_barang,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#totalbayar,#id_alamat_customer,#id_customer_id').attr('readonly',true);
     $('#mySelect').select2({
         theme: "bootstrap 4"
     });
     
-    // Autofill input by id
+    $('#caricustomer').select2({
+        theme: "bootstrap 4"
+    });
+    
+    // autofill barang
     function myFunction() {
         var x = document.getElementById("mySelect").value;
         var y = x.split("|");
@@ -177,34 +247,63 @@
         var f = y[5];
         var g = y[6];
         var h = y[7];
-        $("#demo").val(a);
-        $("#demo1").val(b);
-        $("#demo2").val(c);
-        $("#demo3").val(d);
-        $("#demo4").val(e);
-        $("#demo5").val(f);
-        $("#demo6").val(g);
-        
+        $("#id_nama_barang").val(a);
+        $("#id_kode_barang").val(b);
+        $("#id_harga_satuan").val(c);
+        $("#id_merk_id").val(d);
+        $("#id_jenis_id").val(e);
+        $("#id_tipe_id").val(f);
         $("#jumlah").attr({
-            "max" : h
+           "max" : g
+        });
+        document.getElementById("totjumlah").innerHTML = "Jumlah stok sekarang : "+g;
+            
+            $('#id_merk_id').val(d).attr('selected',true);
+            $('#id_jenis_id').val(e).attr('selected',true);
+            $('#id_tipe_id').val(f).attr('selected',true);
+        };
+        
+        // autofill customer
+        function customer() {
+            var x = document.getElementById("caricustomer").value;
+            var y = x.split("|");
+            var a = y[0];
+            var b = y[1];
+            $("#id_customer_id").val(a);
+            $("#id_alamat_customer").val(b);
+            
+            $('#id_customer_id').val(a).attr('selected',true);
+        }
+        
+        // Jumlah
+        $("#jumlah").keyup(function(){
+            var ambiljumlah = document.getElementById("jumlah").value;
+            var ambilharga = document.getElementById("id_harga_satuan").value;
+            var jumlah = parseInt(ambiljumlah);
+            var harga = parseInt(ambilharga);
+            var total = harga*jumlah;
+            $("#totalbayar").val(total);
         });
         
-        $('#merkSelect').val(e).attr('selected',true);
-    };
+        // dual save button
+        $(function() {
+            $('#s1').click(function(e){
+                e.preventDefault();
+                $('#form1').attr('action', "{% url 'barangkeluar_add' %}");
+                $('#form1').submit();
+            });
+            $('#s2').click(function(e){
+                e.preventDefault();
+                $('#form1').attr('action',  "{% url 'barangkeluar_addcreate' %}");
+                $('#form1').submit();
+            });
+        });
+        
+        // datepicker
+        $('#date').datepicker({
+            format : "yyyy-mm-dd",
+            autoclose: true,
+        });
+    </script>
+    {% endblock %}
     
-    // Auto total Bayar by id
-    $("#jumlah").keyup(function(){
-        var ambiljumlah = document.getElementById("jumlah").value;
-        var ambilharga = document.getElementById("demo3").value;
-        var jumlah = parseInt(ambiljumlah);
-        var harga = parseInt(ambilharga);
-        var total = harga*jumlah;
-        $("#totalbayar").val(total);
-    });
-    // datepicker
-    $('#date').datepicker({
-        format : "yyyy-mm-dd",
-        autoclose: true,
-    });
-</script>
-{% endblock %}

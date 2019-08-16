@@ -43,6 +43,7 @@
                         <a class="btn btn-primary pull-right" href="{% url 'user_add' %}"><i class="fa fa-user-plus"></i> Tambah</a>
                     </div>
                     <br/>
+                    <br/    >
                     <!-- paginate atas -->
                     <div style="text-align: center">
                         <nav aria-label="Page navigation example">
@@ -94,13 +95,13 @@
                             {% for users in daftar_users %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ users.nm_lengkap }}</td>
+                                <td>{{ users.akun__nm_lengkap }}</td>
                                 <td>{{ users.username }}</td>
-                                <td>{{ users.level }}</td>
+                                <td>{{ users.akun__level }}</td>
                                 <td>
 
-                                    <a href="/inventaris/users/edit/{{ users.id_user }}" class="btn btn-info"><i class="fa fa-edit"></i></a>
-                                    <a href="/inventaris/users/delete/{{ users.id_user }}" class="btn btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
+                                    <a href="/inventaris/users/edit/{{ users.id }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                    <a href="/inventaris/users/delete/{{ users.id }}" class="btn btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
 
                                 </td>
                             </tr>

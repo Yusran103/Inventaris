@@ -100,13 +100,12 @@
             <thead style="font-size: 11px">
                 <tr>
                     <th>No</th>
+                    <th>Tanggal Masuk</th>
                     <th>Kode Barang</th>
                     <th>Nama Barang</th>
-                    <th>Tanggal Masuk</th>
                     <th>Jumlah</th>
                     <th>Supplier</th>
                     <th>No Resi</th>
-                    <th>Serial Number</th>
                     <th>Merk</th>
                     <th>Jenis</th>
                     <th>Tipe</th>
@@ -117,13 +116,12 @@
                 {% for daftar_stok in stok %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
+                    <td>{{ daftar_stok.tgl_masuk }}</td>
                     <td>{{ daftar_stok.kd_barang}}</td>
                     <td>{{ daftar_stok.nm_barang }}</td>
-                    <td>{{ daftar_stok.tgl_masuk }}</td>
                     <td>{{ daftar_stok.jml_masuk }}</td>
                     <td>{{ daftar_stok.supplier_id }}</td>
                     <td>{{ daftar_stok.no_resi }}</td>
-                    <td>{{ daftar_stok.sn_barang }}</td>
                     <td>{{ daftar_stok.merk_id }}</td>
                     <td>{{ daftar_stok.jenis_id }}</td>
                     <td>{{ daftar_stok.tipe_id }}</td>
@@ -131,7 +129,7 @@
                 {% endfor %}
                 {% else %}
                 <tr>
-                    <td colspan="11"><center>Tidak ada data barang masuk pada bulan tersebut...</center></td>
+                    <td colspan="10"><center>Tidak ada data barang masuk pada bulan tersebut...</center></td>
                 </tr>
                 {% endif %}
             </tbody>
@@ -147,9 +145,9 @@
             <thead style="font-size: 11px">
                 <tr>
                     <th>No</th>
+                    <th>Tanggal Keluar</th>
                     <th>Kode Barang</th>
                     <th>Nama Barang</th>
-                    <th>Tanggal Keluar</th>
                     <th>Jumlah</th>
                     <th>Harga</th>
                     <th>Total Bayar</th>
@@ -167,16 +165,16 @@
                 {% for daftar_stok in stok %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ daftar_stok.kd_brg_keluar}}</td>
-                    <td>{{ daftar_stok.nm_brg_keluar }}</td>
-                    <td>{{ daftar_stok.tgl_keluar }}</td>
-                    <td>{{ daftar_stok.jml_keluar }}</td>
+                    <td>{{ daftar_stok.tanggal }}</td>
+                    <td>{{ daftar_stok.kode_barang}}</td>
+                    <td>{{ daftar_stok.nama_barang }}</td>
+                    <td>{{ daftar_stok.jumlah }}</td>
                     <td>{{ daftar_stok.harga_satuan }}</td>
                     <td>{{ daftar_stok.total_bayar }}</td>
                     <td>{{ daftar_stok.customer_id }}</td>
                     <td>{{ daftar_stok.alamat_customer }}</td>
                     <td>{{ daftar_stok.no_resi }}</td>
-                    <td>{{ daftar_stok.sn_barang }}</td>
+                    <td>{{ daftar_stok.serialnumber }}</td>
                     <td>{{ daftar_stok.merk_id }}</td>
                     <td>{{ daftar_stok.jenis_id }}</td>
                     <td>{{ daftar_stok.tipe_id }}</td>

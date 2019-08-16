@@ -47,8 +47,14 @@
                             </div>
                             <div class="form-group col-md-4 pull-right">
                             -->
-                                <input type="submit" value="Tambah" class="btn btn-primary confirm-add"></input>
-                                <a href="{% url 'user' %}" type="button" class="btn btn-danger">Kembali</a>
+                            <p><label for="level">level:</label> 
+                            <select class="form-control" id="level" name="level">
+                                <option value="Admin">Admin</option>
+                                <option value="SuperAdmin">SuperAdmin</option>
+                            </select>
+                            </p>
+                            <input type="submit" value="Tambah" class="btn btn-primary confirm-add"></input>
+                            <a href="{% url 'user' %}" type="button" class="btn btn-danger">Kembali</a>
                             <!-- </div> -->
                         </div>
                     </form>

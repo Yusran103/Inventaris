@@ -31,7 +31,7 @@
                         <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/list"><i class="fa fa-th-list"></i></a>
                     </div>
                     <br/>
-                    
+                    <br/>
                     <div style="text-align: center">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-md justify-content-center">
@@ -92,7 +92,6 @@
                                     <div class="col-sm-3 col-xs-4 col-lg-3">
                                         <div class="form-group">
                                             <h5><strong>Tanggal Masuk :</strong> {{barang_masuk.tgl_masuk}}</h5>
-                                            <h5><strong>Serial Number :</strong> {{barang_masuk.sn_barang}}</h5>
                                             <h5><strong>Jumlah :</strong> {{barang_masuk.jml_masuk}}</h5>
                                             <h5><strong>Supplier :</strong> {{barang_masuk.supplier_id}}</h5>
                                             <h5><strong>No Resi :</strong> {{barang_masuk.no_resi}}</h5>
@@ -101,8 +100,28 @@
                                     </div>
                                     {% if request.session.level == 'SuperAdmin' %}
                                     <div class="col-sm-2 pull-right">
-                                        <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
-                                        <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" class="btn btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
+                                        <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                        <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
+                                        <!-- Modal konfirmasi-delete -->
+                                        <div class="modal fade" id="myModal" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title">Konfirmasi Hapus</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Apakah anda yakin ingin menghapus <strong>{{barang_masuk.nm_barang}}</strong>?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}"" type="button" class="btn btn-danger">Hapus</a>
+                                                            <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end modal -->
                                     </div>
                                     {% endif %}
                                 </div>

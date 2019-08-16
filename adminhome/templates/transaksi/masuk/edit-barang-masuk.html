@@ -44,12 +44,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="sn_barang" class="col-sm-2 control-label">Serial Number : </label>
-                        <div class="col-sm-8">
-                            {{form.sn_barang}}
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label for="jml_masuk" class="col-sm-2 control-label">Jumlah : </label>
                         <div class="col-sm-2">
                             {{form.jml_masuk}}
@@ -94,51 +88,91 @@
                     <div class="form-group">
                         <label for="gambar" class="col-sm-2 control-label">Gambar : </label>
                         <div class="col-sm-8">
-
+                            
                             {{form.foto_masuk}}
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 pull-right">
-                    <input type="submit" value="Edit" onclick="return confirm('apakah anda yakin ingin mengubah data tersebut?')" class="btn btn-lg btn-primary"></input>
-                    <br/>
-                    <br/>
-                    <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" class="btn btn-lg btn-danger confirm-delete">Hapus</a>
-                    <br/>
-                    <br/>
-                    <a href="/inventaris/barangmasuk" class="btn btn-lg btn-success"><b>Kembali</b></a>
-                    <br/>
-                    <br/>
-                    <h4>Foto:</h4>
-                    {% if barang_masuk.foto_masuk %}
-                    <img src="{{barang_masuk.foto_masuk.url}}" class="img-responsive" width="150" height="150" />
-                    {% else %}
-                    <span class="text-muted" ><b> Tanpa Foto </b></span>
-                    {% endif %}
-                </div>
-            </form>
+                    <button type="button" class="btn btn-warning btn-lg"  data-toggle="modal" data-target="#myModal1">Edit</button>
+                    <!-- modal konfirmasi delete -->
+                    <div class="modal fade" id="myModal1" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                        <h4 class="modal-title">Konfirmasi Edit</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Apakah anda yakin ingin mengubah kode nama Barang <strong>{{form.kd_barang.value}}</strong> dengan nama barang <strong>{{form.nm_barang.value}}</strong> ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="submit" value="Ya" class="btn btn-warning"></input>
+                                        <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <button type="button" class="btn btn-danger btn-lg"  data-toggle="modal" data-target="#myModal">Hapus</button>
+                        <!-- modal konfirmasi delete -->
+                        <div class="modal fade" id="myModal" style="display: none;">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span></button>
+                                            <h4 class="modal-title">Konfirmasi Hapus</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Apakah anda yakin ingin menghapus kode nama Barang <strong>{{form.kd_barang.value}}</strong> dengan nama barang <strong>{{form.nm_barang.value}}</strong> ?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="/inventaris/masterdata/tipe/delete/{{ tipe.id_tipe }}" type="button" class="btn btn-danger">Hapus</a>
+                                            <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <!-- end modal -->
+                            <a href="/inventaris/barangmasuk" class="btn btn-lg btn-success"><b>Kembali</b></a>
+                            <br/>
+                            <br/>
+                            <h4>Foto:</h4>
+                            {% if barang_masuk.foto_masuk %}
+                            <img src="{{barang_masuk.foto_masuk.url}}" class="img-responsive" width="150" height="150" />
+                            {% else %}
+                            <span class="text-muted" ><b> Tanpa Foto </b></span>
+                            {% endif %}
+                        </div> 
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-</section>
-{% endblock %}
-{% block extrajs%}
-<script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
-<script>
-    $('#datepicker').datepicker({
-        format : "yyyy-mm-dd",
-        autoclose: true
-    });
-    
-    $('#id_kd_barang,#id_jml_masuk,#datepicker,#id_tipe_id').attr('readonly',true);
-
-    $.each($('select'),function(index,data){
-        var id = $(data).attr('id');
-        $('#'+id).addClass('form-control selectpicker')
-        $('#'+id).attr('data-live-search',true)
-    });
-    
-    $('.confirm-delete').on('click', function(e) {
-        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
-    });
-</script>   
-{% endblock %}
+    </section>
+    {% endblock %}
+    {% block extrajs%}
+    <script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
+    <script>
+        $('#datepicker').datepicker({
+            format : "yyyy-mm-dd",
+            autoclose: true
+        });
+        
+        $('#id_kd_barang,#id_jml_masuk,#datepicker,#id_tipe_id').attr('readonly',true);
+        
+        $.each($('select'),function(index,data){
+            var id = $(data).attr('id');
+            $('#'+id).addClass('form-control selectpicker')
+            $('#'+id).attr('data-live-search',true)
+        });
+        
+        $('.confirm-delete').on('click', function(e) {
+            return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+        });
+    </script>   
+    {% endblock %}

@@ -1,5 +1,6 @@
 {% extends  "layout/admin/base-admin.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block extrastyle %}
 <style>
@@ -30,93 +31,175 @@
                         <i class="fa fa-list-alt"></i>
                         <h1 class="box-title">Daftar Barang Keluar</h1>
                     </div>
-                    <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
-                        <input type="text" class="form-control" placeholder="Cari.....">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
+                    <form action="{% url 'barangkeluar_grid_cari' %}" method="GET">
+                        <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
+                            <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
                     <div class="pull-right col-md-4">
                         <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/list"><i class="fa fa-th-list"></i></a>
                     </div>
                     <br/>
                     <br/>
-                    <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
-                    </center>
+                    <!-- pagination atas -->
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
+                                {% if daftar_barangkeluar.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
+                                {% if daftar_barangkeluar.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- pagination atas-->
                     <br/>
+                    {% if messages %}
+                    <div class="col-sm-12">
+                        {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4 {% if message.tags %} class="{{ message.tags }}"{% endif %}><i class="icon fa fa-check"></i> {{ message }}</h4>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
                     <!-- KONTEN -->
-                    <div class="box box-warning">
+                    <div class="row">
                         <div class="col-sm-12">
-                            <form action="" role="form">
-                                
+                            {% if barang_keluar != None %}
+                            <p style="display: inline-block">Hasil Pencarian : {{request.GET.cari}}</p>
+                            {% endif %}
+                            {% if daftar_barangkeluar %}
+                            {% for data in daftar_barangkeluar %}
+                            <div class="box box-warning">
                                 <br>
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <img src="/static/assets/images/logo.png" alt="" class="img-thumbnail img-responsive">
+                                        {% if data.foto_keluar %}
+                                        <img src="{{data.foto_keluar.url}}" class="img-responsive img-thumbnail" width="150" height="150" />
+                                        {% else %}
+                                        <img src="{% static 'assets/images/noimage.png' %}" class="img-responsive img-thumbnail" width="150" height="150" />
+                                        {% endif %}
                                     </div>
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <h5><strong>Nama Barang</strong></h5>
-                                            <p>Barang Rahasia</p>
+                                            <p>{{data.nama_barang}}</p>
                                             <h5><strong>Kode Barang</strong></h5>
-                                            <p>1234-567-8910</p>
+                                            <p>{{data.kode_barang}}</p>
+                                            <h5><strong>Harga Satuan</strong></h5>
+                                            <p>Rp. {{data.harga_satuan|intcomma}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <h5><strong>Tanggal Keluar : </strong></h5>
-                                            <p>12-12-2020</p>
+                                            <p>{{data.tanggal}}</p>
                                             <h5><strong>Serial Number: </strong></h5>
-                                            <p>1234567890 </p>
+                                            <p>{{data.serialnumber}}</p>
                                             <h5><strong>Jumlah : </strong></h5>
-                                            <p>4000 ekor </p>
+                                            <p>{{data.jumlah}}</p>
                                             <strong><h5>Customer : </strong></h5>
-                                            <p>Blacksmith</p>
+                                            <p>{{data.customer_id}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <h5><strong>Alamat Customer : </strong></h5>
-                                            <p>Jl. Raden Kanjeng Jimat NO19 RT02 RW06 Magersari, Gedangan, Sidarjo</p>
+                                            <p>{{data.alamat_customer}}</p>
                                             <h5><strong>Nomor Resi : </strong></h5> 
-                                            <p>1234-89746849-12414</p>
+                                            <p>{{data.no_resi}}</p>
                                             <h5><strong>No. Bukti Beli : </strong></h5>
-                                            <p>123451234512345</p>
+                                            <p>{{data.no_bukti}}</p>
                                         </div>
                                     </div>
+                                    {% if request.session.level == 'SuperAdmin' %}
                                     <div class="col-sm-2">
-                                        <a href="/inventaris/barangkeluar/edit" type="button" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" type="button" class="btn btn-danger btn-sm">Hapus</a>
+                                        <a href="/inventaris/barangkeluar/edit/{{ data.id }}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                        <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
+                                        <!-- Modal konfirmasi-delete -->
+                                        <div class="modal fade" id="myModal" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title">Konfirmasi Hapus</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Apakah anda yakin ingin menghapus barang <strong>{{data.nama_barang}}</strong> dengan no. resi <strong>{{data.no_resi}}</strong> ?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger">HAPUS</a>
+                                                            <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end modal -->
+                                        </div>
+                                        {% endif %}
                                     </div>
+                                    {% endfor %}
+                                    {% elif barang_keluar != None %}
+                                    <div class="box box-warning">
+                                        <br/>  
+                                        <span><center>Barang Tersebut Tidak Ada</center></span>
+                                        <br/>
+                                    </div>
+                                    {% else %}
+                                    <div class="box box-warning">
+                                        <br/>  
+                                        <span><center>Tidak ada data barang keluar saat ini...</center></span>
+                                        <br/>
+                                    </div>
+                                    {% endif %}
                                 </div>
-                            </form>
+                            </div>
                         </div>
+                        <!--END KONTEN  -->
+                        <!-- pagination bawah -->
+                        <div style="text-align: center">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-md justify-content-center">
+                                    {% if daftar_barangkeluar.has_previous %}
+                                    <li class="page-item">
+                                        <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                        <a href="?page={{ daftar_barangkeluar.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
+                                    {% if daftar_barangkeluar.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                        <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                        <!-- pagination bawah -->  
                     </div>
-                    <!--END KONTEN  -->
-                    <center>
-                        <div class="pagination pagination-xs no-margin">
-                            <a href="#">&laquo;</a>
-                            <a href="#"><</a>
-                            <a href="#">1</a>
-                            <a href="#">/</a>
-                            <a href="#">1</a>
-                            <a href="#">></a>
-                            <a href="#">&raquo;</a>
-                        </div>
-                    </center>   
                 </div>
             </div>
         </div>
-    </div>
-</section>
-{% endblock %}
+    </section>
+    {% endblock %}
+    
+    {% block extrajs %}
+    {% endblock %}

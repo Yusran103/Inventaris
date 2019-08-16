@@ -1,7 +1,8 @@
 from django.forms.models import ModelMultipleChoiceField
-from django.forms import Textarea, ModelForm
+from django.forms import Textarea, ModelForm, Select
 from django import forms
-from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Stok_barang,User
+from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Stok_barang, Akun, Barangkeluar
+from django.contrib.auth.models import User
 
 # -------------+
 # FORM MERK    |
@@ -74,13 +75,15 @@ class Supplierform(ModelForm):
             required=True
         )
     alamat_supplier = forms.CharField(
-        widget=forms.TextInput(
+        widget=forms.Textarea(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Alamat Supplier'
-                }
-            ),
-            required=True
+                'placeholder':'Isikan Alamat Customer',
+                'rows':'3',
+                # 'id':'demo9'
+                # 'disabled':''
+            }
+        ),
         )
 
     notlp_supplier = forms.CharField(
@@ -112,12 +115,15 @@ class Customerform(ModelForm):
             required=True
         )
     alamat_customer = forms.CharField(
-        widget=forms.TextInput(
+        widget=forms.Textarea(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Alamat Customer'
-                }
-            ),
+                'placeholder':'Alamat Customer',
+                'rows':'3',
+                # 'id':'demo9'
+                # 'disabled':''
+            }
+        ),
             required=True
         )
 
@@ -138,7 +144,6 @@ class Customerform(ModelForm):
 # ------------+
 # BRG MSK FORM|
 # ------------+
-
 class Barang_masuk_form(ModelForm):
     kd_barang = forms.CharField(
         widget=forms.TextInput(
@@ -154,14 +159,6 @@ class Barang_masuk_form(ModelForm):
                 'class':'form-control',
                 'placeholder':'Isikan Nama Barang',
                 'autofocus': 'True'
-                }
-            ),
-        )
-    sn_barang = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-                'placeholder':'Isikan Serial Number Barang'
                 }
             ),
         )
@@ -221,7 +218,6 @@ class Barang_masuk_form(ModelForm):
         fields = [
             'kd_barang',
             'nm_barang',
-            'sn_barang',
             'tgl_masuk',
             'harga_satuan',
             'jml_masuk',
@@ -232,6 +228,183 @@ class Barang_masuk_form(ModelForm):
             'merk_id',
             'tipe_id'
             ]
+
+# --------------------+
+# FORM BARANG KELUAR  |
+# -------------------+
+class BarangkeluarForm(ModelForm):
+    no_bukti = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Bukti Barang'
+            }
+        ),
+        required=True
+    )
+
+    nama_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Kode Barang',
+                # 'id':'demo',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
+    kode_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Kode Barang',
+                # 'id':'demo1',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
+    tanggal = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control pull-right',
+                'placeholder':'Tanggal Keluar',
+                'data-date-format':"yyyy/mm/dd",
+                'id':'date',
+                'autocomplete':'off',
+            }
+        ),
+        required=True
+    )
+
+    serialnumber = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Serial Number Barang',
+                # 'id':'demo2',
+                # 'disable':''
+            }
+        ),
+        required=True
+    )
+
+    no_resi = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'No. Resi',
+                # 'id':'demo3',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
+    jumlah = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Jumlah Barang',
+                'min' : '0',
+                'id':'jumlah'
+            }
+        ),
+        required=True
+    )
+
+    harga_satuan = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Harga Satuan',
+                # 'id':'demo4',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
+    total_bayar = forms.IntegerField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Total Bayar',
+                'id':'totalbayar',
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
+    alamat_customer = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Alamat Customer',
+                'rows':'3',
+                # 'id':'demo9'
+                # 'disabled':''
+            }
+        ),
+        required=True
+    )
+
+    customer_id = forms.ModelChoiceField(
+        queryset = Customer.objects.filter(is_deleted='False'),
+        # to_field_name="nama_jenis",
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo8'
+                })
+        )
+
+    jenis_id = forms.ModelChoiceField(
+        queryset = Jenis_brg.objects.filter(is_deleted='False'),
+        # to_field_name="nama_jenis",
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo6'
+                })
+        )
+
+    merk_id = forms.ModelChoiceField(
+        queryset = Merk_brg.objects.filter(is_deleted='False'),
+        # to_field_name="nama_merk"
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo5'
+                })
+        )
+
+    tipe_id = forms.ModelChoiceField(
+        queryset = Tipe_brg.objects.filter(is_deleted='False'),
+        # to_field_name="nama_tipe"
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo7'
+                })
+        )
+
+    foto_keluar = forms.FileField(
+        required=True
+    )
+
+    class Meta:
+        model = Barangkeluar
+        fields = "__all__"
+
 
 # ----------+
 # STOK FORM |
@@ -251,38 +424,69 @@ class Stok_form(ModelForm):
             'merk_id',
             'tipe_id'
             ]
-class Userform(ModelForm):
+
+# ----------+
+# STOK FORM |
+# ----------+
+class User_form(ModelForm):
+    first_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan nama awal'
+                }
+            ),
+            required=True
+        )
+    last_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan nama akhir'
+                }
+            ),
+            required=True
+        )
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan username'
+                }
+            ),
+            required=True
+        )
+    email = forms.CharField(
+        widget=forms.EmailInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan email'
+                }
+            ),
+            required=True
+        )
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan password'
+                }
+            ),
+            required=True
+        )
     class Meta:
         model = User
-        fields = ['nm_lengkap','email', 'username', 'password', 'level']
-        labels = {
-            'nm_lengkap':"Nama",
-            'email':'Email',
-            'username':'Username',
-            'password':'Password',
-            'level':'Level',
-        }
-        error_messages = {
-            'nm_lengkap': {
-                'required': 'Nama belum terisi'
-            },
-            'username' : {
-                'required': "Anda harus mengisi username"
-            },
-            'password' : {
-                'required': "Anda harus mengisi password"
-            },
-            'level':{
-                'required': "Anda harus memilih level akun"
-            },
-            'email':{
-                'required': "Anda harus mengisi email"
-            }
-        }
-        widgets = {
-            'nm_lengkap': forms.TextInput(attrs={'class':'form-control','placeholder':'masukan nama'}),
-            'email': forms.EmailInput(attrs={'class':'form-control','placeholder':'masukan email'}),
-            'username': forms.TextInput(attrs={'class':'form-control','placeholder':'masukan username'}),
-            'password': forms.PasswordInput(attrs={'class':'form-control','placeholder':'masukan password'}),
-            'level': forms.Select(attrs={'class':'form-control','placeholder':'pilih Level Akun'}),
-        }
+        fields = [
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'password'
+        ]
+
+class Akun_form(ModelForm):
+    class Meta:
+        model = Akun
+        fields = [
+            'level'
+        ]

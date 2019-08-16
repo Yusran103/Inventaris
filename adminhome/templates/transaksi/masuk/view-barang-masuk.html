@@ -44,9 +44,10 @@
                         <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk"><i class="fa fa-pencil-square-o"></i></a>
                     </div>
                     <br/>
+                    <br/>
                     <div style="text-align: center">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barang_masuk.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
@@ -105,8 +106,29 @@
                                     <td>{{ barang_masuk.no_resi }}</td>
                                     {% if request.session.level == 'SuperAdmin' %}
                                     <td>
-                                        <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-info"><i class="fa fa-edit"></i></a>
-                                        <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" class="btn btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
+                                        <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                        <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
+                                        <!-- modal konfirmasi delete -->
+                                        <div class="modal fade" id="myModal" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title">Konfirmasi Hapus</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Apakah anda yakin ingin menghapus <strong>{{barang_masuk.nm_barang}}?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" type="button" class="btn btn-danger">Hapus</a>
+                                                            <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <!-- end modal -->
                                     </td>
                                     {% endif %}
                                 </tr>
@@ -125,7 +147,7 @@
                     </div>
                     <div style="text-align: center">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination pagination-lg justify-content-center">
+                            <ul class="pagination pagination-md justify-content-center">
                                 {% if daftar_barang_masuk.has_previous %}
                                 <li class="page-item">
                                     <a href="?page=1" class="page-item">&laquo;</a>

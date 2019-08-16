@@ -2,15 +2,14 @@
 {% load static %}
 
 {% block page_content %}
-<section class="content-header">
-    <h1>
-        <i class="fa fa-edit"></i> Tambah Tipe
-    </h1>
-</section>
 <section class="content">
     <div class="row">
         <div class="col-sm-12">
-            <div class="box box-success">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <i class="fa fa-edit"></i>
+                    <h1 class="box-title">Tambah Tipe</h1>
+                </div>
                 <div class="box-body">
                     <form action="{% url 'tipe_add' %}" method="POST" class="form-horizontal">
                         {% csrf_token %}
@@ -23,22 +22,41 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-5 pull-right">
-                                <input type="submit" value="Tambah" class="btn btn-primary confirm-add"></input>
-                                <a href="{% url 'tipe'%}" type="button" class="btn btn-danger">Kembali</a>
+                                <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#myModal">Tambah</button>
+                                <!-- modal konfirmasi delete -->
+                                <div class="modal fade" id="myModal" style="display: none;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span></button>
+                                                    <h4 class="modal-title">Konfirmasi Tambah</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Apakah anda yakin ingin menambah jenis ?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="submit" value="Tambah" class="btn btn-warning"></input>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Tidak</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="{% url 'tipe' %}" type="button" class="btn btn-primary">Kembali</a>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-{% endblock %}
-{% block extrajs %}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-<script>
-    $('.confirm-add').on('click', function(e) {
-        return confirm('Apakah anda yakin ingin menambah data tersebut?')
-    })
-</script>
-{% endblock %}
+    </section>
+    {% endblock %}
+    {% block extrajs %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script>
+        $('.confirm-add').on('click', function(e) {
+            return confirm('Apakah anda yakin ingin menambah data tersebut?')
+        })
+    </script>
+    {% endblock %}

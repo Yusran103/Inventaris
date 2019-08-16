@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404 ,redirect
-from adminhome.models import Merk_brg , User , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang, Barang_keluar
-from adminhome.forms import Merkform , Customerform, Userform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form, Stok_form
+from adminhome.models import Merk_brg , Jenis_brg , Supplier , Tipe_brg , Customer , Barang_masuk, Stok_barang, Barangkeluar,Akun
+from adminhome.forms import Merkform , Customerform , Supplierform , Tipeform, Jenisform, Customerform ,Barang_masuk_form, Stok_form, User_form, BarangkeluarForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.contrib.auth import authenticate, logout, login
@@ -14,6 +14,7 @@ import bcrypt
 from django.conf import settings
 from django.template import context
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
 
 # -----------+
 # LOGIN      |
@@ -24,15 +25,13 @@ def index(request):
 
 def login_view(request):
     if request.POST:
-        user = authenticate(username=request.POST['login_username'], password=request.POST['login_password'])
-        if user is not None:
-            akun = User.objects.get(id_user=user.id_user)
-            login(request, user)
+        users = authenticate(username=request.POST['login_username'], password=request.POST['login_password'])
+        if users is not None:
+            akun = Akun.objects.get(akun=users.id)
+            login(request, users)
             request.session['nm_lengkap'] = akun.nm_lengkap
-            request.session['username'] = akun.username  
             request.session['level'] = akun.level
-            request.session['password'] = akun.password
-            request.session['id_user'] = akun.id_user
+            request.session['id'] = users.id
             return redirect('/inventaris/')
         else:
             messages.add_message(request, messages.INFO, 'Username atau password Anda salah')
@@ -49,9 +48,7 @@ def logout_view(request):
 @login_required(login_url='/')
 def cariuser(request):
     pengguna = request.GET.get('cari')
-    daftar_user = User.objects.filter(
-            Q(nm_lengkap__icontains=pengguna) | Q(username__icontains=pengguna) , Q(is_deleted='false')
-        ).order_by('nm_lengkap')
+    daftar_user = User.objects.filter(akun__nm_lengkap__icontains=pengguna,akun__is_deleted='False').values('id','username','akun__nm_lengkap','akun__level')
     pagination = Paginator(daftar_user,10)
     page = request.GET.get('page')
     try:
@@ -69,84 +66,105 @@ def cariuser(request):
 
 @login_required(login_url='/')
 def viewuser(request):
-    daftar_user = User.objects.filter(is_deleted='false')
-    adminonly = User.objects.filter(is_deleted='false',level='Admin')
+    daftar_user = User.objects.filter(akun__is_deleted='False').values('id','username','akun__nm_lengkap','akun__level')
     pagination = Paginator(daftar_user,10)
     page = request.GET.get('page','')
     user_pg = pagination.get_page(page)
-    return render(request, 'users/view-user.html',{'daftar_users': user_pg,'adminonly':adminonly})
+    return render(request, 'users/view-user.html',{'daftar_users': user_pg})
 
 @login_required(login_url='/')
 def register(request):
-    url = '/inventaris/users/tambah'
-    resp_body = '<script>alert("Username Sudah ada");\
-            window.location="%s"</script>' % url
     if request.method == 'POST':
         form_data = request.POST
-        form = Userform(form_data)
-        cek = User.objects.filter(username=request.POST['username'])
-        if cek == None:
-            return HttpResponse(resp_body)
-        else:
-            if form.is_valid():
+        form = User_form(form_data)
+        if form.is_valid():
+            if request.POST['level'] == "SuperAdmin":
                 akun = User(
-                    nm_lengkap=request.POST['nm_lengkap'], 
+                    first_name=request.POST['first_name'], 
+                    last_name=request.POST['last_name'],
                     email=request.POST['email'],
                     username=request.POST['username'], 
                     password=make_password(request.POST['password']),
-                    level=request.POST['level'],
-                    is_deleted='false'
+                    is_staff = True,
+                    is_superuser = True 
                     )
-                akun.save()
-                messages.warning(request, 'Berhasil menambah %s'%(request.POST['nm_lengkap']))
-                return redirect('/inventaris/users')
+            else:
+                akun = User(
+                    first_name=request.POST['first_name'], 
+                    last_name=request.POST['last_name'],
+                    email=request.POST['email'],
+                    username=request.POST['username'], 
+                    password=make_password(request.POST['password']),
+                    is_staff = False,
+                    is_superuser = False 
+                    )
+            akun.save()
+            ambilakun = User.objects.get(username=request.POST['username'])
+            akuns = Akun.objects.create(
+                    nm_lengkap='%s %s'%(request.POST.get('first_name'),request.POST.get('last_name'),),
+                    level=request.POST['level'],
+                    is_deleted='False',
+                    akun_id=ambilakun.id
+                )
+            akuns.save()
+            messages.warning(request, 'Berhasil menambah %s %s'%(request.POST.get('first_name'),request.POST.get('last_name')))
+            return redirect('/inventaris/users')
     else:
-        form = Userform()
+        form = User_form()
     return render(request, 'users/add-user.html', {'form': form,'messages':messages})
 
 @login_required(login_url='/')
 def edituser(request,pk):
     user = User.objects.get(pk=pk)
     if request.method == "POST":
-        form = Userform(request.POST, instance=user)
+        form = User_form(request.POST, instance=user)
         if form.is_valid():
             user = form.save(commit=False)
-            nm_lengkap = request.POST['nm_lengkap']
+            cursor = connection.cursor()
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
             email = request.POST['email']
             username = request.POST['username']
-            level = request.POST['level']
-            password = make_password(request.POST['password']),
-            messages.warning(request, 'Berhasil merubah %s'%(user.nm_lengkap))
             user.save()
+            cursor.execute("update auth_user set password='%s' where id='%s'"%(make_password(request.POST['password']),user.id))
+            messages.warning(request, 'Berhasil merubah user %s %s'%(first_name , last_name))
+
+            cursor.execute(
+                """update tb_user set 
+                    nm_lengkap='%s %s' 
+                    where akun_id='%s'"""
+                    %(
+                        request.POST['first_name'],
+                        request.POST['last_name'],
+                        user.id
+                    )
+                )
             return redirect('/inventaris/users', pk=user.pk)
     else:
-        form = Userform(instance=user)
+        form = User_form(instance=user)
     return render(request, 'users/edit-user.html', {'form': form, 'user' : user,'messages':messages})
 
 @login_required(login_url='/')
 def deleteuser(request,pk):
     user = User.objects.get(pk=pk)
-    messages.warning(request, 'Berhasil menghapus %s'%(user.nm_lengkap))
-    cursor = connection.cursor()
-    cursor.execute("update tb_user set is_deleted='True' where id_user='%s'"%(user.id_user))
+    messages.warning(request, 'Berhasil menghapus %s %s'%(user.first_name,user.last_name))
+    user.delete()
     return redirect('/inventaris/users',{'messages':messages})
 
 @login_required(login_url='/')
 def changepassword(request,pk):
-    user = User.objects.get(pk = request.session['id_user'])
-    url = '/inventaris/'
-    resp_body = '<script>alert("Password user %s Berhasil di rubah, Silahkan Login Kembali");\
-            window.location="%s"</script>' % (user.nm_lengkap , url)
-
+    user = User.objects.filter(id = request.session['id']).first()
     if request.method == "POST":
-        form = Userform(request.POST, instance=user)
+        form = User_form(request.POST, instance=user)
         if form.is_valid():
-            user = form.save(commit=False)
-            password = request.POST['password']
-            user.save()
+            url = '/inventaris/'
+            resp_body = '<script>alert("Password user %s Berhasil di rubah, Silahkan Login Kembali");\
+            window.location="%s"</script>' % (user.username , url)
+            cursor = connection.cursor()
+            cursor.execute("update auth_user set password='%s' where id='%s'"%(make_password(request.POST['password']),user.id))
             return HttpResponse(resp_body)
     else:
-        form = Userform(instance=user)
+        form = User_form(instance=user)
     return render(request, 'changepassword.html', {'form': form, 'user' : user,'messages':messages})
 
 # -----------+
@@ -185,6 +203,7 @@ def caristokgrid(request):
         'stok':stok
     }
     return render(request, 'transaksi/stok/viewgrid-stok.html', context)
+
 @login_required(login_url='/')
 def caristoklist(request):
     stok = request.GET.get('cari')
@@ -230,8 +249,7 @@ def stok(request):
 def caribarangmasukgrid(request):
     barangmasuk = request.GET.get('cari')
     daftar_barang = Barang_masuk.objects.filter(
-            Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
-            Q(sn_barang__icontains=barangmasuk) , Q(is_deleted='False')
+            Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) , Q(is_deleted='False')
         ).order_by('kd_barang')
     pagination = Paginator(daftar_barang,5)
     page = request.GET.get('page')
@@ -252,8 +270,7 @@ def caribarangmasukgrid(request):
 def caribarangmasuk(request):
     barangmasuk = request.GET.get('cari')
     daftar_barang = Barang_masuk.objects.filter(
-            Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) |
-            Q(sn_barang__icontains=barangmasuk) , Q(is_deleted='False')
+            Q(nm_barang__icontains=barangmasuk) | Q(kd_barang__icontains=barangmasuk) , Q(is_deleted='False')
         ).order_by('kd_barang')
     pagination = Paginator(daftar_barang,10)
     page = request.GET.get('page')
@@ -297,7 +314,6 @@ def editbarangmasuk(request,pk):
             barang_masuk = form.save(commit=False)
             kd_barang=request.POST['kd_barang'],
             nm_barang=request.POST['nm_barang'],
-            sn_barang=request.POST['sn_barang'],
             tgl_masuk=request.POST['tgl_masuk'],
             harga_satuan=request.POST['harga_satuan'],
             supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
@@ -348,7 +364,6 @@ def simpantambahbarangmasuk(request):
             form = Barang_masuk(
                 kd_barang=request.POST['kd_barang'],
                 nm_barang=request.POST['nm_barang'],
-                sn_barang=request.POST['sn_barang'],
                 tgl_masuk=request.POST['tgl_masuk'],
                 supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
                 jml_masuk=request.POST['jml_masuk'],
@@ -419,7 +434,6 @@ def tambahbarangmasuk(request):
             form = Barang_masuk(
                 kd_barang=request.POST['kd_barang'],
                 nm_barang=request.POST['nm_barang'],
-                sn_barang=request.POST['sn_barang'],
                 tgl_masuk=request.POST['tgl_masuk'],
                 supplier_id=Supplier.objects.get(pk=request.POST.get('supplier_id')),
                 jml_masuk=request.POST['jml_masuk'],
@@ -506,27 +520,276 @@ def deletebarangmasuk(request,pk):
 # -------------+
 # BARANG KELUAR|
 # -------------+
-
-
-def barangkeluar(request):
+@login_required(login_url='/')
+def caribarangkeluargrid(request):
+    barangkeluar = request.GET.get('cari')
+    daftar_barang = Barangkeluar.objects.filter(
+            Q(nama_barang__icontains=barangkeluar) | Q(kode_barang__icontains=barangkeluar) |
+            Q(serialnumber__icontains=barangkeluar) , Q(is_deleted='False')
+        ).order_by('kode_barang')
+    pagination = Paginator(daftar_barang,5)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
     
-    return render(request, 'transaksi/keluar/view-barang-keluar.html')
+    context = {
+        'daftar_barangkeluar': posts,
+        'barang_keluar':barangkeluar
+    }
+    return render(request, 'transaksi/keluar/viewgrid-barang-keluar.html', context)
 
+@login_required(login_url='/')
+def caribarangkeluar(request):
+    barangkeluar = request.GET.get('cari')
+    daftar_barang = Barangkeluar.objects.filter(
+            Q(nama_barang__icontains=barangkeluar) | Q(kode_barang__icontains=barangkeluar) |
+            Q(serialnumber__icontains=barangkeluar) , Q(is_deleted='False')
+        ).order_by('kode_barang')
+    pagination = Paginator(daftar_barang,10)
+    page = request.GET.get('page')
+    try:
+        posts = pagination.page(page)
+    except PageNotAnInteger:
+        posts = pagination.page(1)
+    except EmptyPage:
+        posts = pagination.page(pagination.num_pages)
+    
+    context = {
+        'daftar_barangkeluar': posts,
+        'barang_keluar':barangkeluar
+    }
+    return render(request, 'transaksi/keluar/view-barang-keluar.html', context)
 
+@login_required(login_url='/')
+def viewbarangkeluar(request):
+    daftar_barangkeluar = Barangkeluar.objects.filter(is_deleted='False').order_by('-id')
+    pagination = Paginator(daftar_barangkeluar,10)
+    
+    page = request.GET.get('page','')
+    barangkeluar_pg = pagination.get_page(page)
+    return render(request, 'transaksi/keluar/view-barang-keluar.html', {'daftar_barangkeluar':barangkeluar_pg})
+
+@login_required(login_url='/')
 def barangkeluargrid(request):
-    return render(request, 'transaksi/keluar/viewgrid-barang-keluar.html')
+    daftar_barangkeluar = Barangkeluar.objects.filter(is_deleted='False').order_by('-id')
+    pagination = Paginator(daftar_barangkeluar,5)
+    
+    page = request.GET.get('page','')
+    barangkeluar_pg = pagination.get_page(page)
+    return render(request, 'transaksi/keluar/viewgrid-barang-keluar.html', {'daftar_barangkeluar':barangkeluar_pg})
 
+@login_required(login_url='/')
+def editbarangkeluar(request,pk):
+    keluar = Barangkeluar.objects.get(pk=pk)
+    barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
+    customer = Customer.objects.filter(is_deleted='False')
 
-def editbarangkeluar(request):
-    return render(request, 'transaksi/keluar/edit-barang-keluar.html')
+    if request.method == "POST":
+        form = BarangkeluarForm(request.POST,request.FILES, instance=keluar)
+        if form.is_valid():
+            barang_keluar = form.save(commit=False)
+            nama_barang=request.POST['nama_barang'],
+            kode_barang=request.POST['kode_barang'],
+            serialnumber=request.POST['serialnumber'],
+            no_bukti=request.POST['no_bukti'],
+            no_resi=request.POST['no_resi'],
+            tanggal=request.POST['tanggal'],
+            jumlah=request.POST['jumlah'],
+            harga_satuan=request.POST['harga_satuan'],
+            total_bayar=request.POST['total_bayar'],
+            customer_id=request.POST['customer_id'],
+            alamat_customer=request.POST['alamat_customer'],
+            jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+            merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+            tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id')),
+            foto_keluar=request.FILES.get('foto_keluar'),
+            barang_keluar.save()
+            cursor= connection.cursor()
+            cursor.execute("update tb_barang_keluar set is_deleted='False' where id = %s " %(keluar.id))
 
+            # RAW UPDATE for STOK(LAST CHOICE)
+            cursor = connection.cursor()
+            cursor.execute(
+                """update tb_stok set 
+                    nm_barang='%s',
+                    hrg_barang='%s',
+                    jenis_id='%s',
+                    merk_id='%s',
+                    tipe_id='%s' where kd_barang='%s'"""
+                    %(
+                        request.POST['nama_barang'],
+                        request.POST['harga_satuan'],
+                        request.POST.get('jenis_id'),
+                        request.POST.get('merk_id'),
+                        request.POST.get('tipe_id'),
+                        request.POST['kode_barang']
+                    )
+                )
 
-def tambahbarangkeluar(request): 
-    barang_masuk = Stok_barang.objects.order_by('kd_barang', '-stok_akhir').distinct('kd_barang')
-    jenis = Jenis_brg.objects.all()
-    merk = Merk_brg.objects.all()
-    tipe = Tipe_brg.objects.all()
-    return render(request, 'transaksi/keluar/add-barang-keluar.html',{'masuk' : barang_masuk,'jenis':jenis,'merk':merk,'tipe':tipe})
+            messages.info(request, 'Data Barang keluar berhasil diedit!')
+            return redirect('/inventaris/barangkeluar', pk=keluar.pk)
+    else:
+        form = BarangkeluarForm(instance=keluar)
+    return render(request, 'transaksi/keluar/edit-barang-keluar.html', {
+        'form': form,
+        'barang_keluar' : keluar,
+        'daftar_customer':customer,
+        'daftar_barangmasuk':barangmasuk,
+        })
+
+@login_required(login_url='/')
+def addbarangkeluar(request):
+    stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
+    jenis = Jenis_brg.objects.filter(is_deleted='False')
+    merk = Merk_brg.objects.filter(is_deleted='False')
+    tipe = Tipe_brg.objects.filter(is_deleted='False')
+    customer = Customer.objects.filter(is_deleted='False')
+    barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
+    if request.method == 'POST':
+        form = BarangkeluarForm(request.POST , request.FILES)
+        if form.is_valid():
+            form = Barangkeluar(
+                nama_barang=request.POST['nama_barang'],
+                kode_barang=request.POST['kode_barang'],
+                serialnumber=request.POST['serialnumber'],
+                no_bukti=request.POST['no_bukti'],
+                no_resi=request.POST['no_resi'],
+                tanggal=request.POST['tanggal'],
+                jumlah=request.POST['jumlah'],
+                harga_satuan=request.POST['harga_satuan'],
+                total_bayar=request.POST['total_bayar'],
+                customer_id=Customer.objects.get(pk=request.POST.get('customer_id')),
+                alamat_customer = request.POST['alamat_customer'],
+                jenis_id = Jenis_brg.objects.get(pk=request.POST['jenis_id']),
+                merk_id = Merk_brg.objects.get(pk=request.POST['merk_id']),
+                tipe_id = Tipe_brg.objects.get(pk=request.POST['tipe_id']),
+                foto_keluar=request.FILES.get('foto_keluar'),
+                is_deleted='False'
+            )
+            form.save()
+
+            if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kode_barang')):
+                cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kode_barang')).latest('id_stok')
+                stok_barang = Stok_barang.objects.create(
+                    tanggal=request.POST['tanggal'],
+                    nm_barang=request.POST['nama_barang'],
+                    kd_barang=request.POST['kode_barang'],
+                    hrg_barang=request.POST['harga_satuan'],
+                    jumlah_stok=request.POST['jumlah'],
+                    stok_akhir= cr_stok.stok_akhir - int(request.POST['jumlah']),
+                    keterangan="Barang Keluar",
+                    foto_stok=request.FILES.get('foto_keluar'),
+                    jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                    merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                    tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
+                )
+            stok_barang.save()
+
+            messages.info(request, 'Data Barang berhasil ditambahkan!')
+            return redirect('/inventaris/barangkeluar/list')
+    else:
+        form = BarangkeluarForm()
+    return render(request, 'transaksi/keluar/add-barang-keluar.html',{
+        'form': form,
+        'daftar_customer':customer,
+        'daftar_barangmasuk':barangmasuk,
+        'messages':messages,
+        'daftar_stok':stok,
+        'daftar_jenis':jenis,
+        'daftar_merk':merk,
+        'daftar_tipe':tipe,
+        })
+
+@login_required(login_url='/')
+def simpantambahbarangkeluar(request):
+    stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang')
+    customer = Customer.objects.filter(is_deleted='False')
+    barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
+    if request.method == 'POST':
+        form = BarangkeluarForm(request.POST , request.FILES)
+        if form.is_valid():
+            form = Barangkeluar(
+                nama_barang=request.POST['nama_barang'],
+                kode_barang=request.POST['kode_barang'],
+                serialnumber=request.POST['serialnumber'],
+                no_bukti=request.POST['no_bukti'],
+                no_resi=request.POST['no_resi'],
+                tanggal=request.POST['tanggal'],
+                jumlah=request.POST['jumlah'],
+                harga_satuan=request.POST['harga_satuan'],
+                total_bayar=request.POST['total_bayar'],
+                customer_id=Customer.objects.get(pk=request.POST.get('customer_id')),
+                alamat_customer = request.POST['alamat_customer'],
+                jenis_id = Jenis_brg.objects.get(pk=request.POST['jenis_id']),
+                merk_id = Merk_brg.objects.get(pk=request.POST['merk_id']),
+                tipe_id = Tipe_brg.objects.get(pk=request.POST['tipe_id']),
+                foto_keluar=request.FILES.get('foto_keluar'),
+                is_deleted='False'
+            )
+            form.save()
+            if Stok_barang.objects.filter(kd_barang__icontains=request.POST.get('kode_barang')):
+                cr_stok = Stok_barang.objects.filter(kd_barang=request.POST.get('kode_barang')).latest('id_stok')
+                stok_barang = Stok_barang.objects.create(
+                    tanggal=request.POST['tanggal'],
+                    nm_barang=request.POST['nama_barang'],
+                    kd_barang=request.POST['kode_barang'],
+                    sn_barang=request.POST['serialnumber'],
+                    hrg_barang=request.POST['harga_satuan'],
+                    jumlah_stok=request.POST['jumlah'],
+                    stok_akhir= cr_stok.stok_akhir - int(request.POST['jumlah']),
+                    keterangan="Barang Keluar",
+                    foto_stok=request.FILES.get('foto_keluar'),
+                    jenis_id=Jenis_brg.objects.get(pk=request.POST.get('jenis_id')),
+                    merk_id=Merk_brg.objects.get(pk=request.POST.get('merk_id')),
+                    tipe_id=Tipe_brg.objects.get(pk=request.POST.get('tipe_id'))
+                )
+            stok_barang.save()
+
+            # messages.info(request, 'Data Barang berhasil ditambahkan!')
+            # return redirect('/inventaris/barangkeluar/tambah')
+            url = '/inventaris/barangkeluar/tambah'
+            resp_body = '<script>alert("Barang berhasil ditambahkan");\
+                        window.location="%s"</script>' % url
+            return HttpResponse(resp_body)
+    else:
+        form = BarangkeluarForm()
+    return render(request, 'transaksi/keluar/add-barang-keluar.html',{
+        'form': form,
+        'daftar_customer':customer,
+        'daftar_barangmasuk':barangmasuk,
+        'messages':messages,
+        'daftar_stok':stok
+        })
+
+@login_required(login_url='/')
+def deletebarangkeluar(request, pk):
+    barang_keluar = Barangkeluar.objects.get(pk=pk)
+    if Stok_barang.objects.filter(kd_barang__icontains=barang_keluar.kode_barang):
+        cr_stok = Stok_barang.objects.filter(kd_barang=barang_keluar.kode_barang).latest('id_stok')
+        stok_barang = Stok_barang.objects.create(
+            tanggal=barang_keluar.tanggal,
+            nm_barang=barang_keluar.nama_barang,
+            kd_barang=barang_keluar.kode_barang,
+            hrg_barang=barang_keluar.harga_satuan,
+            jumlah_stok=barang_keluar.jumlah,
+            stok_akhir= cr_stok.stok_akhir + int(barang_keluar.jumlah),
+            keterangan="Hapus Barang Keluar",
+            foto_stok=barang_keluar.foto_keluar,
+            jenis_id=barang_keluar.jenis_id,
+            merk_id=barang_keluar.merk_id,
+            tipe_id=barang_keluar.tipe_id
+        )   
+        stok_barang.save()
+
+    cursor = connection.cursor()
+    cursor.execute("update tb_barang_keluar set is_deleted='True' where id='%s'"%(barang_keluar.id))
+
+    messages.info(request, 'Data Barang keluar berhasil dihapus!')
+    return redirect('/inventaris/barangkeluar')
 
 # -------------+
 # LAPORAN      |
@@ -585,14 +848,13 @@ def print_laporan_keluar(request):
     url = '/inventaris/laporan/barangkeluar'
     resp_body = '<script>alert("Bulan di butuhkan");\
             window.location="%s"</script>' % url
-
     if tanggal == None:
         return HttpResponse(resp_body)
     else:
         pecah = tanggal.split('-')
         tahun = pecah[0]
         bulan = pecah[1]
-    stok_barang = Barang_keluar.objects.filter(tgl_keluar__icontains=tanggal,is_deleted='False').order_by('tgl_keluar')
+    stok_barang = Barangkeluar.objects.filter(tanggal__icontains=tanggal,is_deleted='False').order_by('tanggal')
     return render(request, 'laporan/print.html',{'stok':stok_barang,'tahun':tahun,'bulan':bulan,'judul':judul})
 
 # -------------+
