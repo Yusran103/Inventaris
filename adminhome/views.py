@@ -10,7 +10,6 @@ from django.contrib import messages
 from django.db import connection
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-import bcrypt
 from django.conf import settings
 from django.template import context
 from django.contrib.auth.hashers import make_password
