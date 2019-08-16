@@ -6,15 +6,14 @@
 {% endblock%}
 
 {% block page_content %}
-<section class="content-header">
-    <h1>
-        <i class="fa fa-edit"></i> Tambah User
-    </h1>
-</section>
 <section class="content">
     <div class="row">
         <div class="col-sm-12">
-            <div class="box box-success">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <i class="fa fa-edit"></i>
+                    <h1 class="box-title">Tambah User</h1>
+                </div>
                 <div class="box-body">
                     <form action="/register" method="POST" class="form-horizontal">
                         {% csrf_token %}
@@ -48,33 +47,32 @@
                             <div class="form-group col-md-4 pull-right">
                             -->
                             <p><label for="level">level:</label> 
-                            <select class="form-control" id="level" name="level">
-                                <option value="Admin">Admin</option>
-                                <option value="SuperAdmin">SuperAdmin</option>
-                            </select>
+                                <select class="form-control" id="level" name="level">
+                                    <option value="Admin">Admin</option>
+                                    <option value="SuperAdmin">SuperAdmin</option>
+                                </select>
                             </p>
-                            <input type="submit" value="Tambah" class="btn btn-primary confirm-add"></input>
-                            <a href="{% url 'user' %}" type="button" class="btn btn-danger">Kembali</a>
+                            <input type="submit" value="Tambah" class="btn btn-warning confirm-add"></input>
+                            <a href="{% url 'user' %}" type="button" class="btn btn-primary">Kembali</a>
                             <!-- </div> -->
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-{% endblock %}
-{% block extrajs%}
-<script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-<script>
-    $('.confirm-add').on('click', function(e) {
-        return confirm('Apakah anda yakin ingin menambah data tersebut?')
-    })
-</script>
-<script>
-    $('#datepicker').datepicker({
-        autoclose: true
-    });
-</script>
-{% endblock %}
+    </section>
+    {% endblock %}
+    {% block extrajs%}
+    <script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script>
+        $('.confirm-add').on('click', function(e) {
+            return confirm('Apakah anda yakin ingin menambah data tersebut?')
+        })
+    </script>
+    <script>
+        $('#datepicker').datepicker({
+            autoclose: true
+        });
+    </script>
+    {% endblock %}

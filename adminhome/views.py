@@ -172,11 +172,12 @@ def changepassword(request,pk):
 # -----------+
 @login_required(login_url='/')
 def dashboard(request):
+    daftar_stok = Stok_barang.objects.order_by('kd_barang', '-id_stok').distinct('kd_barang').values('kd_barang','nm_barang','stok_akhir')   
     Ssn = request.session
     if Ssn != None :
         for key, value in request.session.items():
             print('{} => {}'.format(key, value))
-        return render(request, 'dashboard.html')
+        return render(request, 'dashboard.html',{'daftar_stok':daftar_stok})
     else :
         return render(request, 'login.html')
 
@@ -737,7 +738,6 @@ def simpantambahbarangkeluar(request):
                     tanggal=request.POST['tanggal'],
                     nm_barang=request.POST['nama_barang'],
                     kd_barang=request.POST['kode_barang'],
-                    sn_barang=request.POST['serialnumber'],
                     hrg_barang=request.POST['harga_satuan'],
                     jumlah_stok=request.POST['jumlah'],
                     stok_akhir= cr_stok.stok_akhir - int(request.POST['jumlah']),

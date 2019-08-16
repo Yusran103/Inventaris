@@ -149,7 +149,8 @@ class Barang_masuk_form(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Kode Barang'
+                'placeholder':'Isikan Kode Barang',
+                'autofocus': 'True'
                 }
             ),
         )
@@ -237,7 +238,8 @@ class BarangkeluarForm(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'No. Bukti Barang'
+                'placeholder':'No. Bukti Barang',
+                'autofocus': 'True'
             }
         ),
         required=True
@@ -433,7 +435,8 @@ class User_form(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan nama awal'
+                'placeholder':'Isikan nama awal',
+                'autofocus': 'True'
                 }
             ),
             required=True

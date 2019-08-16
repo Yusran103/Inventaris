@@ -247,6 +247,7 @@
         var f = y[5];
         var g = y[6];
         var h = y[7];
+        var i = parseInt(g) - 2
         $("#id_nama_barang").val(a);
         $("#id_kode_barang").val(b);
         $("#id_harga_satuan").val(c);
@@ -254,7 +255,7 @@
         $("#id_jenis_id").val(e);
         $("#id_tipe_id").val(f);
         $("#jumlah").attr({
-           "max" : g
+           "max" : i
         });
         document.getElementById("totjumlah").innerHTML = "Jumlah stok sekarang : "+g;
             

@@ -13,6 +13,47 @@
         mengenai barang masuk dan barang keluar pada perusahaan 
         CV. Adisatya IT Consultant.
     </h1>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div class="row col-12">
+        <div class="box box-danger col-sm-4">
+            <h4>Jumlah Stok Barang Kurang Dari 10:</h4>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Kode barang</th>
+                        <th>Nama Barang</th>
+                        <th>Jumlah Stok</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if daftar_stok %}
+                    {% for stok in daftar_stok %}
+                    {% if stok.stok_akhir < 10  %}
+                    <tr>
+                        <td>{{ stok.kd_barang }}</td>
+                        <td>{{ stok.nm_barang }}</td>
+                        <td>
+                            {{ stok.stok_akhir }}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </section>
-
 {% endblock %}
