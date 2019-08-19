@@ -197,8 +197,7 @@ class Barang_masuk_form(ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'Isikan Harga Barang',
-                'id':'rupiah',
+                'placeholder':'Isikan Harga Barang'
                 }
             ),
         )
