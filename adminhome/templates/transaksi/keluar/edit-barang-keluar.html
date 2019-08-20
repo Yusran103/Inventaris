@@ -215,7 +215,7 @@
 <script type="text/javascript" src="http://cdn.jsdelivr.net/select2/3.4.6/select2.min.js"></script>
 <script type="text/javascript" src="http://globaltradeconcierge.com/javascripts/bootstrap.min.js"></script>
 <script>
-    $('#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#jumlah,#totalbayar').attr('readonly',true);
+    $('#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#id_alamat_customer,#totalbayar').attr('readonly',true);
     
     // select 2
     $('#mySelect').select2({
@@ -247,7 +247,7 @@
     // Jumlah
     $("#jumlah").keyup(function(){
         var ambiljumlah = document.getElementById("jumlah").value;
-        var ambilharga = document.getElementById("demo4").value;
+        var ambilharga = document.getElementById("id_harga_satuan").value;
         var jumlah = parseInt(ambiljumlah);
         var harga = parseInt(ambilharga);
         var total = harga*jumlah;

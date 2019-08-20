@@ -29,6 +29,7 @@ def login_view(request):
             akun = Akun.objects.get(akun=users.id)
             login(request, users)
             request.session['nm_lengkap'] = akun.nm_lengkap
+            request.session['first_name'] = users.first_name
             request.session['level'] = akun.level
             request.session['id'] = users.id
             return redirect('/inventaris/')
@@ -326,21 +327,29 @@ def editbarangmasuk(request,pk):
             barang_masuk.save()
 
             # RAW UPDATE for STOK(LAST CHOICE)
+            ambilid = Stok_barang.objects.filter(kd_barang=masuk.kd_barang).order_by('kd_barang', '-id_stok').distinct('kd_barang').first()
+            jumlah= int(ambilid.stok_akhir) - int(ambilid.jumlah_stok)
             cursor = connection.cursor()
             cursor.execute(
                 """update tb_stok set 
+                    kd_barang='%s',
                     nm_barang='%s',
                     hrg_barang='%s',
+                    jumlah_stok='%s',
+                    stok_akhir='%s',
                     jenis_id='%s',
                     merk_id='%s',
-                    tipe_id='%s' where kd_barang='%s'"""
+                    tipe_id='%s' where id_stok ='%s' """
                     %(
+                        request.POST['kd_barang'],
                         request.POST['nm_barang'],
                         request.POST['harga_satuan'],
+                        request.POST['jml_masuk'],
+                        int(jumlah) + int(request.POST['jml_masuk']),
                         request.POST.get('jenis_id'),
                         request.POST.get('merk_id'),
                         request.POST.get('tipe_id'),
-                        request.POST['kd_barang']
+                        ambilid.id_stok
                     )
                 )
             # CLEAR
@@ -496,22 +505,22 @@ def deletebarangmasuk(request,pk):
     barang_masuk = Barang_masuk.objects.get(pk=pk)
     # stok = Barang_masuk.jml_masuk
     # jumlahstok = Stok_barang.objects.filter(kd_barang=barang_masuk.kd_barang).order_by('kd_barang', '-id_stok').distinct('kd_barang')
-    if Stok_barang.objects.filter(kd_barang__icontains=barang_masuk.kd_barang):
-        cr_stok = Stok_barang.objects.filter(kd_barang=barang_masuk.kd_barang).latest('id_stok')
-        stok_barang = Stok_barang.objects.create(
-            tanggal=barang_masuk.tgl_masuk,
-            nm_barang=barang_masuk.nm_barang,
-            kd_barang=barang_masuk.kd_barang,
-            hrg_barang=barang_masuk.harga_satuan,
-            jumlah_stok=barang_masuk.jml_masuk,
-            stok_akhir= cr_stok.stok_akhir - int(barang_masuk.jml_masuk),
-            keterangan="Hapus Barang Masuk",
-            foto_stok=barang_masuk.foto_masuk,
-            jenis_id=barang_masuk.jenis_id,
-            merk_id=barang_masuk.merk_id,
-            tipe_id=barang_masuk.tipe_id
-        )   
-        stok_barang.save()
+    # if Stok_barang.objects.filter(kd_barang__icontains=barang_masuk.kd_barang):
+    #     cr_stok = Stok_barang.objects.filter(kd_barang=barang_masuk.kd_barang).latest('id_stok')
+    #     stok_barang = Stok_barang.objects.create(
+    #         tanggal=barang_masuk.tgl_masuk,
+    #         nm_barang=barang_masuk.nm_barang,
+    #         kd_barang=barang_masuk.kd_barang,
+    #         hrg_barang=barang_masuk.harga_satuan,
+    #         jumlah_stok=barang_masuk.jml_masuk,
+    #         stok_akhir= cr_stok.stok_akhir - int(barang_masuk.jml_masuk),
+    #         keterangan="Hapus Barang Masuk",
+    #         foto_stok=barang_masuk.foto_masuk,
+    #         jenis_id=barang_masuk.jenis_id,
+    #         merk_id=barang_masuk.merk_id,
+    #         tipe_id=barang_masuk.tipe_id
+    #     )   
+    #     stok_barang.save()
     messages.success(request, 'Berhasil menghapus %s'%(barang_masuk.nm_barang))
     cursor = connection.cursor()
     cursor.execute("update tb_barang_masuk set is_deleted='True' where id_brg_masuk='%s'"%(barang_masuk.id_brg_masuk))
@@ -585,7 +594,6 @@ def barangkeluargrid(request):
 @login_required(login_url='/')
 def editbarangkeluar(request,pk):
     keluar = Barangkeluar.objects.get(pk=pk)
-    barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
     customer = Customer.objects.filter(is_deleted='False')
 
     if request.method == "POST":
@@ -612,23 +620,33 @@ def editbarangkeluar(request,pk):
             cursor.execute("update tb_barang_keluar set is_deleted='False' where id = %s " %(keluar.id))
 
             # RAW UPDATE for STOK(LAST CHOICE)
+            ambilid = Stok_barang.objects.filter(kd_barang=keluar.kode_barang).order_by('kd_barang', '-id_stok').distinct('kd_barang').first()
+            jumlah= int(ambilid.stok_akhir) + int(ambilid.jumlah_stok)
             cursor = connection.cursor()
             cursor.execute(
                 """update tb_stok set 
+                    kd_barang='%s',
                     nm_barang='%s',
                     hrg_barang='%s',
+                    jumlah_stok='%s',
+                    stok_akhir='%s',
                     jenis_id='%s',
                     merk_id='%s',
-                    tipe_id='%s' where kd_barang='%s'"""
+                    tipe_id='%s' where id_stok ='%s' """
                     %(
+                        request.POST['kode_barang'],
                         request.POST['nama_barang'],
                         request.POST['harga_satuan'],
+                        request.POST['jumlah'],
+                        int(jumlah) - int(request.POST['jumlah']),
                         request.POST.get('jenis_id'),
                         request.POST.get('merk_id'),
                         request.POST.get('tipe_id'),
-                        request.POST['kode_barang']
+                        ambilid.id_stok
                     )
                 )
+            # CLEAR
+
 
             messages.info(request, 'Data Barang keluar berhasil diedit!')
             return redirect('/inventaris/barangkeluar', pk=keluar.pk)
@@ -638,7 +656,6 @@ def editbarangkeluar(request,pk):
         'form': form,
         'barang_keluar' : keluar,
         'daftar_customer':customer,
-        'daftar_barangmasuk':barangmasuk,
         })
 
 @login_required(login_url='/')
@@ -648,7 +665,6 @@ def addbarangkeluar(request):
     merk = Merk_brg.objects.filter(is_deleted='False')
     tipe = Tipe_brg.objects.filter(is_deleted='False')
     customer = Customer.objects.filter(is_deleted='False')
-    barangmasuk = Barang_masuk.objects.filter(is_deleted='False')
     if request.method == 'POST':
         form = BarangkeluarForm(request.POST , request.FILES)
         if form.is_valid():
@@ -696,7 +712,6 @@ def addbarangkeluar(request):
     return render(request, 'transaksi/keluar/add-barang-keluar.html',{
         'form': form,
         'daftar_customer':customer,
-        'daftar_barangmasuk':barangmasuk,
         'messages':messages,
         'daftar_stok':stok,
         'daftar_jenis':jenis,
@@ -767,22 +782,22 @@ def simpantambahbarangkeluar(request):
 @login_required(login_url='/')
 def deletebarangkeluar(request, pk):
     barang_keluar = Barangkeluar.objects.get(pk=pk)
-    if Stok_barang.objects.filter(kd_barang__icontains=barang_keluar.kode_barang):
-        cr_stok = Stok_barang.objects.filter(kd_barang=barang_keluar.kode_barang).latest('id_stok')
-        stok_barang = Stok_barang.objects.create(
-            tanggal=barang_keluar.tanggal,
-            nm_barang=barang_keluar.nama_barang,
-            kd_barang=barang_keluar.kode_barang,
-            hrg_barang=barang_keluar.harga_satuan,
-            jumlah_stok=barang_keluar.jumlah,
-            stok_akhir= cr_stok.stok_akhir + int(barang_keluar.jumlah),
-            keterangan="Hapus Barang Keluar",
-            foto_stok=barang_keluar.foto_keluar,
-            jenis_id=barang_keluar.jenis_id,
-            merk_id=barang_keluar.merk_id,
-            tipe_id=barang_keluar.tipe_id
-        )   
-        stok_barang.save()
+    # if Stok_barang.objects.filter(kd_barang__icontains=barang_keluar.kode_barang):
+    #     cr_stok = Stok_barang.objects.filter(kd_barang=barang_keluar.kode_barang).latest('id_stok')
+    #     stok_barang = Stok_barang.objects.create(
+    #         tanggal=barang_keluar.tanggal,
+    #         nm_barang=barang_keluar.nama_barang,
+    #         kd_barang=barang_keluar.kode_barang,
+    #         hrg_barang=barang_keluar.harga_satuan,
+    #         jumlah_stok=barang_keluar.jumlah,
+    #         stok_akhir= cr_stok.stok_akhir + int(barang_keluar.jumlah),
+    #         keterangan="Hapus Barang Keluar",
+    #         foto_stok=barang_keluar.foto_keluar,
+    #         jenis_id=barang_keluar.jenis_id,
+    #         merk_id=barang_keluar.merk_id,
+    #         tipe_id=barang_keluar.tipe_id
+    #     )   
+    #     stok_barang.save()
 
     cursor = connection.cursor()
     cursor.execute("update tb_barang_keluar set is_deleted='True' where id='%s'"%(barang_keluar.id))

@@ -150,37 +150,55 @@
     $(function() {
         $('#s1').click(function(e){
             e.preventDefault();
-            $.each($('input'),function(index,data){
-                var id = $(data).attr('id');
-                if (id == ""|| id == null ){
-                    alert("Tolong di isi semua kolomnya!");
-                    return false;
-                }else{
-                    var r = confirm("Apakan anda yakin?");
-                    if (r == true) {
-                        alert("Data Barang Berhasil di Tambah");
-                        $('#form1').attr('action', "{% url 'barangmasuk_add' %}");
-                        $('#form1').submit();
-                    } 
-                }
-            });
-            $('#s2').click(function(e){
-                e.preventDefault();
-                $.each($('input'),function(index,data){
-                    var id = $(data).attr('id');
-                    if (id == ""|| id == null ){
-                        alert("Tolong di isi semua kolomnya!");
-                        return false;
-                    }else{
-                        var r = confirm("Apakan anda yakin?");
-                        if (r == true) {
-                            alert("Data Barang Berhasil di Tambah");
-                            $('#form1').attr('action',  "{% url 'barangmasuk_addcreate' %}");
-                            $('#form1').submit();
-                        }
-                    }
-                });
-            });
+            var a = document.getElementById("id_nm_barang").value;
+            var b = document.getElementById("id_kd_barang").value;
+            var d = document.getElementById("id_foto_masuk").value;
+            var e = document.getElementById("id_jml_masuk").value;
+            var f = document.getElementById("id_no_resi").value;
+            var g = document.getElementById("datepicker").value;
+            var h = document.getElementById("id_supplier_id").value;
+            var i = document.getElementById("id_merk_id").value;
+            var j = document.getElementById("id_jenis_id").value;
+            var k = document.getElementById("id_tipe_id").value;
+            var l = document.getElementById("id_harga_satuan").value;
+            
+            if (a == null || a == "", b == null || b == "", d == null || d == "",e == null || e == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "",l == null || l == "") {
+                alert("Tolong di isi semua kolom nya!");
+                return false;
+            }else{
+                var r = confirm("Apakan anda yakin?");
+                if (r == true) {
+                    alert("Data Barang Berhasil di Tambah");
+                    $('#form1').attr('action', "{% url 'barangmasuk_add' %}");
+                    $('#form1').submit();
+                } 
+            }
+        });
+        $('#s2').click(function(e){
+            e.preventDefault();
+            var ed = document.getElementById("id_jml_masuk").value;
+            var a = document.getElementById("id_nm_barang").value;
+            var b = document.getElementById("id_kd_barang").value;
+            var d = document.getElementById("id_foto_masuk").value;
+            var f = document.getElementById("id_no_resi").value;
+            var g = document.getElementById("datepicker").value;
+            var h = document.getElementById("id_supplier_id").value;
+            var i = document.getElementById("id_merk_id").value;
+            var j = document.getElementById("id_jenis_id").value;
+            var k = document.getElementById("id_tipe_id").value;
+            var l = document.getElementById("id_harga_satuan").value;
+            
+            if (ed == null || ed == "", b == null || b == "", d == null || d == "", a == null || a == "",f == null || f == "",g == null || g == "",h == null || h == "",i == null || i == "",j == null || j == "",k == null || k == "",l == null || l == "") {
+                alert("Tolong di isi semua kolom nya!");
+                return false;
+            }else{
+                var r = confirm("Apakan anda yakin?");
+                if (r == true) {
+                    alert("Data Barang Berhasil di Tambah");
+                    $('#form1').attr('action',  "{% url 'barangmasuk_addcreate' %}");
+                    $('#form1').submit();
+                } 
+            }
         });
     });
     

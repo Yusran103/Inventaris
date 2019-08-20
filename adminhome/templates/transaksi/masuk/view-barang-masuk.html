@@ -106,7 +106,9 @@
                                     <td>{{ barang_masuk.no_resi }}</td>
                                     {% if request.session.level == 'SuperAdmin' %}
                                     <td>
+                                        {% if forloop.first %}
                                         <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                        {% endif %}
                                         <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
                                         <!-- modal konfirmasi delete -->
                                         <div class="modal fade" id="myModal" style="display: none;">

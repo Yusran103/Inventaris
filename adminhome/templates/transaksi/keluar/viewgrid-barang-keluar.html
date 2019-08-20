@@ -113,7 +113,7 @@
                                             <h5><strong>Serial Number: </strong></h5>
                                             <p>{{data.serialnumber}}</p>
                                             <h5><strong>Jumlah : </strong></h5>
-                                            <p>{{data.jumlah}}</p>
+                                            <p>{{data.jumlah}} Unit</p>
                                             <strong><h5>Customer : </strong></h5>
                                             <p>{{data.customer_id}}</p>
                                         </div>
@@ -130,7 +130,9 @@
                                     </div>
                                     {% if request.session.level == 'SuperAdmin' %}
                                     <div class="col-sm-2">
+                                        {% if forloop.first %}
                                         <a href="/inventaris/barangkeluar/edit/{{ data.id }}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                        {% endif %}
                                         <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
                                         <!-- Modal konfirmasi-delete -->
                                         <div class="modal fade" id="myModal" style="display: none;">
@@ -197,9 +199,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    {% endblock %}
-    
-    {% block extrajs %}
-    {% endblock %}
+        </section>
+        {% endblock %}
+        
+        {% block extrajs %}
+        {% endblock %}
