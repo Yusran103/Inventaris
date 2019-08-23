@@ -154,7 +154,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ccustomer" class="col-sm-3 control-label">Cari Customer : </label>
+                                    <label for="caricustomer" class="col-sm-3 control-label">Cari Customer : </label>
                                     <div class="col-sm-9">
                                         <select id="caricustomer" style="width: 100%" onclick="customer()">
                                             <option value=" | ">---- Pilih Customer ----</option>
@@ -247,7 +247,6 @@
         var f = y[5];
         var g = y[6];
         var h = y[7];
-        var i = parseInt(g) - 2
         $("#id_nama_barang").val(a);
         $("#id_kode_barang").val(b);
         $("#id_harga_satuan").val(c);
@@ -255,7 +254,7 @@
         $("#id_jenis_id").val(e);
         $("#id_tipe_id").val(f);
         $("#jumlah").attr({
-           "max" : i
+           "max" : 1
         });
         document.getElementById("totjumlah").innerHTML = "Jumlah stok sekarang : "+g;
             
@@ -272,7 +271,6 @@
             var b = y[1];
             $("#id_customer_id").val(a);
             $("#id_alamat_customer").val(b);
-            
             $('#id_customer_id').val(a).attr('selected',true);
         }
         

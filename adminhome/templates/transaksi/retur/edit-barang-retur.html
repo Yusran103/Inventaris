@@ -1,0 +1,191 @@
+{% extends  "layout/admin/base-admin.html" %}
+
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap-select.css">
+{% endblock%}
+
+{% block page_content %}
+
+<section class="content-header">
+    <!-- Horizontal Form -->
+    <div class="row">
+        <div class="box box-danger col-md-12 col-xs-12 col-lg-12">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-edit"></i> Edit Barang Retur <b> - {{barang_masuk.nm_barang}} </b></h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <div class="col-md-9 col-xs-9 col-lg-9">         
+                <form action="{% url 'barangmasuk_edit' pk=barang_masuk.pk %}" method="POST" class="form-horizontal"  enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="invoice" class="col-sm-2 control-label">invoice : </label>
+                        <div class="col-sm-10">
+                            {{form.no_bukti}}
+                            {% if form.no_bukti.errors %}
+                            <p style=" color: red; " >{{form.no_bukti.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="kd_barang" class="col-sm-2 control-label">Kode Barang : </label>
+                        <div class="col-sm-10">
+                            {{form.kd_barang}}
+                            {% if form.kd_barang.errors %}
+                            <p style=" color: red; " >{{form.kd_barang.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nm_barang" class="col-sm-2 control-label">Nama Barang : </label>
+                        <div class="col-sm-10">
+                            {{form.nm_barang}}
+                            {% if form.nm_barang.errors %}
+                            <p style=" color: red; " >{{form.nm_barang.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sn_barang" class="col-sm-2 control-label">Serial Number : </label>
+                        <div class="col-sm-10">
+                            {{form.sn_barang}}
+                            {% if form.sn_barang.errors %}
+                            <p style=" color: red; " >{{form.sn_barang.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tgl_masuk" class="col-sm-2 control-label">Tanggal : </label>
+                        <div class="col-sm-10">
+                            <div class="input-group date">
+                                {{form.tanggal}}
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                            </div>
+                            {% if form.tanggal.errors %}
+                            <p style=" color: red; " >{{form.tanggal.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplier" class="col-sm-2 control-label">Supplier : </label>
+                        <div class="col-sm-10">
+                            {{form.supplier_id}}
+                            {% if form.supplier_id.errors %}
+                            <p style=" color: red; " >{{form.supplier_id.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplier" class="col-sm-2 control-label">Customer : </label>
+                        <div class="col-sm-10">
+                            {{form.customer_id}}
+                            {% if form.customer_id.errors %}
+                            <p style=" color: red; " >{{form.customer_id.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="merk" class="col-sm-2 control-label">Merk : </label>
+                        <div class="col-sm-10" id="merk">
+                            {{form.merk_id}}
+                            {% if form.merk_id.errors %}
+                            <p style=" color: red; " >{{form.merk_id.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="jenis" class="col-sm-2 control-label">Jenis : </label>
+                        <div class="col-sm-10" id="jenis">
+                            {{form.jenis_id}}
+                            {% if form.jenis_id.errors %}
+                            <p style=" color: red; " >{{form.jenis_id.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="jenis" class="col-sm-2 control-label">Tipe : </label>
+                        <div class="col-sm-10" id="tipe">
+                            {{form.tipe_id}}
+                            {% if form.tipe_id.errors %}
+                            <p style=" color: red; " >{{form.tipe_id.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="jenis" class="col-sm-2 control-label">Foto : </label>
+                        <div class="col-sm-10" id="tipe">
+                            {{form.foto}}
+                            {% if form.foto.errors %}
+                            <p style=" color: red; " >{{form.foto.errors|striptags}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pull-right">
+                    <button type="button" class="btn btn-warning btn-lg"  data-toggle="modal" data-target="#myModal1">Edit</button>
+                    <!-- modal konfirmasi delete -->
+                    <div class="modal fade" id="myModal1" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                        <h4 class="modal-title">Konfirmasi Edit</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Apakah anda yakin ingin mengubah kode nama Barang <strong>{{form.kd_barang.value}}</strong> dengan nama barang <strong>{{form.nm_barang.value}}</strong> ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="submit" value="Ya" class="btn btn-warning"></input>
+                                        <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <!-- modal konfirmasi delete -->
+                        <a href="/inventaris/barangretur/delete/{{ barang_masuk.id_brg_retur }}" type="button" class="btn btn-danger btn-lg confrim-delete">Hapus</a>
+                        <br/>
+                        <br/>
+                        <!-- end modal -->
+                        <a href="/inventaris/barangretur" class="btn btn-lg btn-success"><b>Kembali</b></a>
+                        <br/>
+                        <br/>
+                        <h4>Foto:</h4>
+                        {% if barang_masuk.foto %}
+                        <img src="{{barang_masuk.foto.url}}" class="img-responsive" width="150" height="150" />
+                        {% else %}
+                        <span class="text-muted" ><b> Tanpa Foto </b></span>
+                        {% endif %}
+                    </div> 
+                </div>
+            </form>
+        </div>  
+    </section>
+    {% endblock %}
+    {% block extrajs%}
+    <script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
+    <script>
+        $('#datepicker').datepicker({
+            format : "yyyy-mm-dd",
+            autoclose: true
+        });
+        
+        $('#id_kd_barang,#datepicker,#id_tipe_id,#id_no_bukti,#id_nm_barang,#id_sn_barang').attr('readonly',true);
+        
+        $.each($('select'),function(index,data){
+            var id = $(data).attr('id');
+            $('#'+id).addClass('form-control selectpicker')
+            $('#'+id).attr('data-live-search',true)
+        });
+        
+        $('.confirm-delete').on('click', function(e) {
+            return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+        });
+    </script>   
+    {% endblock %}

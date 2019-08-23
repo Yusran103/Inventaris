@@ -1,0 +1,225 @@
+{% extends  "layout/admin/base-admin.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'swal/sweetalert2.css' %}">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/select2/3.5.2/select2.css">
+{% endblock%}
+
+{% block page_content %}
+
+<section class="content-header">
+    <div class="row">
+        <!-- Horizontal Form -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-edit"></i><b> Tambah Barang Retur</b></h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <div class="col-md-9 col-xs-9 col-lg-9">
+            <form action="" id="form1" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="box box-primary">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="cariinvoice" class="col-sm-2 control-label">Cari Invoice : </label>
+                            <div class="col-sm-10" id="cariinvoice">
+                                <select id="mySelect" style="width: 100%" onclick="myFunction()">
+                                    <option value=" | | | | | | | ">----- Pilih Invoice -----</option>    
+                                    {% if barangkeluar %}
+                                    {% for data in barangkeluar %}
+                                    <option value="{{data.no_bukti}}|{{data.kode_barang}}|{{data.nama_barang}}|{{data.merk_id.id_merk}}|{{data.jenis_id.id_jenis}}|{{data.tipe_id.id_tipe}}|{{data.tanggal}}|{{data.customer_id.id_customer}}|{{data.serialnumber}}|{{barangmasuk.supplier_id}}">{{data.no_bukti}} - {{data.customer_id.nama_customer}} - {{data.nama_barang}}</option>
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="">Tidak Ada Data</option>
+                                    {% endif %}
+                                </select>                                        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice" class="col-sm-2 control-label">invoice : </label>
+                            <div class="col-sm-10">
+                                {{form.no_bukti}}
+                                {% if form.no_bukti.errors %}
+                                <p style=" color: red; " >{{form.no_bukti.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="kd_barang" class="col-sm-2 control-label">Kode Barang : </label>
+                            <div class="col-sm-10">
+                                {{form.kd_barang}}
+                                {% if form.kd_barang.errors %}
+                                <p style=" color: red; " >{{form.kd_barang.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggal_beli" class="col-sm-2 control-label">Tanggal Pembelian : </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" readonly id="tanggal_beli">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nm_barang" class="col-sm-2 control-label">Nama Barang : </label>
+                            <div class="col-sm-10">
+                                {{form.nm_barang}}
+                                {% if form.nm_barang.errors %}
+                                <p style=" color: red; " >{{form.nm_barang.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sn_barang" class="col-sm-2 control-label">Serial Number : </label>
+                            <div class="col-sm-10">
+                                {{form.sn_barang}}
+                                {% if form.sn_barang.errors %}
+                                <p style=" color: red; " >{{form.sn_barang.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tgl_masuk" class="col-sm-2 control-label">Tanggal : </label>
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    {{form.tanggal}}
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                                {% if form.tanggal.errors %}
+                                <p style=" color: red; " >{{form.tanggal.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier" class="col-sm-2 control-label">Supplier : </label>
+                            <div class="col-sm-10">
+                                {{form.supplier_id}}
+                                {% if form.supplier_id.errors %}
+                                <p style=" color: red; " >{{form.supplier_id.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier" class="col-sm-2 control-label">Customer : </label>
+                            <div class="col-sm-10">
+                                {{form.customer_id}}
+                                {% if form.customer_id.errors %}
+                                <p style=" color: red; " >{{form.customer_id.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="merk" class="col-sm-2 control-label">Merk : </label>
+                            <div class="col-sm-10" id="merk">
+                                {{form.merk_id}}
+                                {% if form.merk_id.errors %}
+                                <p style=" color: red; " >{{form.merk_id.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="jenis" class="col-sm-2 control-label">Jenis : </label>
+                            <div class="col-sm-10" id="jenis">
+                                {{form.jenis_id}}
+                                {% if form.jenis_id.errors %}
+                                <p style=" color: red; " >{{form.jenis_id.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="jenis" class="col-sm-2 control-label">Tipe : </label>
+                            <div class="col-sm-10" id="tipe">
+                                {{form.tipe_id}}
+                                {% if form.tipe_id.errors %}
+                                <p style=" color: red; " >{{form.tipe_id.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="jenis" class="col-sm-2 control-label">Foto : </label>
+                            <div class="col-sm-10" id="tipe">
+                                {{form.foto}}
+                                {% if form.foto.errors %}
+                                <p style=" color: red; " >{{form.foto.errors|striptags}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+            <div class="col-md-3 col-xs-3 col-lg-3  pull-right" style="display: inline-block">
+                <input type="submit" value="Tambah" name="s1" id='s1' class="btn btn-md btn-primary"></input>
+                <br/>
+                <br/>
+                <input type="submit" value="Simpan dan Tambah" name="s2" id='s2' class="btn btn-md btn-success"></input>
+                <br/>
+                <br/>
+                <a href="/inventaris/barangretur" class="btn btn-md btn-danger"><b>Kembali</b></a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+{% block extrajs%}
+<script type="text/javascript" src="http://cdn.jsdelivr.net/select2/3.4.6/select2.min.js"></script>
+<script src="{% static 'swal/sweetalert2.all.js' %}"></script>
+<script>
+    $(function() {
+        $('#s1').click(function(e){
+            e.preventDefault();
+            var r = confirm("Apakan anda yakin?");
+            if (r == true) {
+                alert("Data Barang Berhasil di Tambah");
+                $('#form1').attr('action', "{% url 'barangretur_add' %}");
+                $('#form1').submit();
+            } 
+        });
+        $('#s2').click(function(e){
+            e.preventDefault();
+            var r = confirm("Apakan anda yakin?");
+            if (r == true) {
+                alert("Data Barang Berhasil di Tambah");
+                $('#form1').attr('action',  "{% url 'barangretur_addcreate' %}");
+                $('#form1').submit();
+            } 
+        });
+    });
+    
+    $('#id_no_bukti,#id_nm_barang,#id_kd_barang,#id_sn_barang,#id_merk_id,#id_customer_id,#id_jenis_id,#id_tipe_id,#id_supplier_id').attr('readonly',true);
+    $('#mySelect').select2({
+        theme: "bootstrap 4"
+    });
+    function myFunction() {
+        var x = document.getElementById("mySelect").value;
+        var y = x.split("|");
+        var a = y[0];
+        var b = y[1];
+        var c = y[2];
+        var d = y[3];
+        var e = y[4];
+        var f = y[5];
+        var g = y[6];
+        var h = y[7];
+        var i = y[8];
+        var j = y[9];
+    
+        $("#id_no_bukti").val(a);
+        $("#id_kd_barang").val(b);
+        $("#id_nm_barang").val(c); 
+        $('#id_merk_id').val(d).attr('selected',true);
+        $('#id_jenis_id').val(e).attr('selected',true);
+        $('#id_tipe_id').val(f).attr('selected',true);
+        $('#id_customer_id').val(h).attr('selected',true);
+        $("#tanggal_beli").val(g); 
+        $("#id_sn_barang").val(i);
+        $('#id_supplier_id').val(j).attr('selected',true); 
+    };
+    
+    $('#datepicker').datepicker({
+        format : "yyyy-mm-dd",
+        autoclose: true
+    });
+</script>
+{% endblock %}

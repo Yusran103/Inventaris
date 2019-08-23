@@ -5,40 +5,28 @@
 {% block extrastyle %}
 <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap-select.css">
 {% endblock %}
-
 {% block page_content %}
 
 <section class="content-header">
     <!-- Horizontal Form -->
     <div class="box box-info col-md-12">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fa fa-print"></i><b> Cetak Laporan Barang Keluar</b></h3>
+            <h3 class="box-title"><i class="fa fa-print"></i><b> Cetak Invoice</b></h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
         <div class="col-md-9">        
-            <form action="{% url 'print_keluar' %}" method="POST" class="form-horizontal">
+            <form action="{% url 'print_invoice' %}" method="POST" class="form-horizontal">
                 {% csrf_token %}
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="tanggalmasuk" class="col-sm-2 control-label">Tanggal : </label>
-                        <div class="col-sm-5">
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="month" name="tanggal" date class="form-control pull-right" required autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="caribarang" class="col-sm-2 control-label">Jenis : </label>
-                        <div class="col-sm-5" id="caribarang">
+                        <label for="caribarang" class="col-sm-3 control-label">Cari Invoice : </label>
+                        <div class="col-sm-9" id="caribarang">
                             <select id="mySelect" name="mySelect" class="form-control selectpicker" style="width: 100%" >
-                                <option value="">----- Pilih Jenis -----</option>    
-                                {% if jenis %}
-                                {% for data in jenis %}
-                                <option value="{{data.id_jenis}}">{{data.nama_jenis}}</option>
+                                <option value="">----- Pilih Invoice -----</option>    
+                                {% if cari %}
+                                {% for data in cari %}
+                                <option value="{{data.no_bukti}}">{{data.no_bukti}}</option>
                                 {% endfor %}
                                 {% else %}
                                 <option value="">Tidak Ada Data Barang Keluar</option>
@@ -55,7 +43,7 @@
     </div>
 </section>
 {% endblock %}
-{% block extrajs %}
+{% block extrajs%}
 <script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
 <script>
     $.each($('select'),function(index,data){
@@ -63,6 +51,7 @@
         $('#'+id).addClass('form-control selectpicker')
         $('#'+id).attr('data-live-search',true)
     });
+
     $('#datepicker').datepicker({
         autoclose: true,
         format: "MM yyyy",

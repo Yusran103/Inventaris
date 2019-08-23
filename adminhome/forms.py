@@ -1,7 +1,7 @@
 from django.forms.models import ModelMultipleChoiceField
 from django.forms import Textarea, ModelForm, Select
 from django import forms
-from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Stok_barang, Akun, Barangkeluar
+from adminhome.models import Merk_brg, Supplier, Tipe_brg, Jenis_brg, Customer, Barang_masuk, Stok_barang, Akun, Barangkeluar, Barang_retur
 from django.contrib.auth.models import User
 
 # -------------+
@@ -427,7 +427,7 @@ class Stok_form(ModelForm):
             ]
 
 # ----------+
-# STOK FORM |
+# User FORM |
 # ----------+
 class User_form(ModelForm):
     first_name = forms.CharField(
@@ -492,3 +492,129 @@ class Akun_form(ModelForm):
         fields = [
             'level'
         ]
+
+class Barang_retur_form(ModelForm):
+    nm_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan nama barang',
+                'autofocus': 'True'
+                }
+            ),
+            required=True
+        )
+    kd_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan kode barang',
+                'autofocus': 'True'
+                }
+            ),
+            required=True
+        )
+    no_bukti = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan nomor bukti'
+                }
+            ),
+            required=True
+        )
+    sn_barang = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Isikan Serial Number'
+                }
+            ),
+            required=True
+        )
+    tanggal = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'Tanggal  ',
+                'data-date-format':"yyyy/mm/dd",
+                'id':'datepicker',
+                'autocomplete':'off',
+            }
+        ),
+        required=True
+    )
+    supplier_id = forms.ModelChoiceField(
+        queryset = Supplier.objects.filter(is_deleted='False'),
+        # to_field_name="nama_jenis",
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo6'
+                })
+        )
+
+    customer_id = forms.ModelChoiceField(
+        queryset = Customer.objects.filter(is_deleted='False'),
+        # to_field_name="nama_jenis",
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo6'
+                })
+        )
+
+    jenis_id = forms.ModelChoiceField(
+        queryset = Jenis_brg.objects.filter(is_deleted='False'),
+        # to_field_name="nama_jenis",
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo6'
+                })
+        )
+
+    merk_id = forms.ModelChoiceField(
+        queryset = Merk_brg.objects.filter(is_deleted='False'),
+        # to_field_name="nama_merk"
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo5'
+                })
+        )
+
+    tipe_id = forms.ModelChoiceField(
+        queryset = Tipe_brg.objects.filter(is_deleted='False'),
+        # to_field_name="nama_tipe"
+        widget=Select(
+            attrs={
+                # 'style':'width: 100%',
+                'class':'form-control',
+                # 'id':'demo7'
+                })
+        )
+    
+    foto = forms.FileField(
+        required=True
+    )
+
+    class Meta:
+        model = Barang_retur
+        fields = [
+            'nm_barang',
+            'kd_barang',
+            'no_bukti',
+            'sn_barang',
+            'tanggal',
+            'supplier_id',
+            'merk_id',
+            'jenis_id',
+            'tipe_id',
+            'customer_id',
+            'foto'
+            ]

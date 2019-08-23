@@ -97,76 +97,57 @@
                                         <td>{{ customer.nama_customer }}</td>
                                         <td>{{ customer.alamat_customer }}</td>
                                         <td>{{ customer.notlp_customer }}</td>
-                                        <td><a href="/inventaris/masterdata/customer/edit/{{ customer.id_customer }}" class="btn btn-sm btn-warning"><i
-                                            class="fa fa-edit"></i></a>
-                                            <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
-                                            <!-- modal konfirmasi delete -->
-                                            <div class="modal fade" id="myModal" style="display: none;">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">×</span></button>
-                                                                <h4 class="modal-title">Konfirmasi Hapus</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>Apakah anda yakin ingin menghapus customer <strong>{{customer.nama_customer}}</strong> ?</p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <a href="/inventaris/masterdata/customer/delete/{{ customer.id_customer }}" class="btn btn-danger">Hapus</a>
-                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Tidak</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- end modal -->
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                            {% elif key_customer != None %}
-                                            <tr>
-                                                <td colspan="5"><center>Costumer tersebut tidak ada...</center></td>
-                                            </tr>
-                                            {% else %}
-                                            <tr>
-                                                <td colspan="5"><center>Tidak ada data costumer saat ini...</center></td>
-                                            </tr>
-                                            {% endif %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- end konten -->
-                            <!-- pagination bawah -->
-                            <div style="text-align: center">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination pagination-md justify-content-center">
-                                        {% if daftar_customer.has_previous %}
-                                        <li class="page-item">
-                                            <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
-                                            <a href="?page={{ daftar_customer.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
-                                        </li>
-                                        {% endif %}
-                                        <li class="page-item disabled"><span class="current">Page {{ daftar_supplier.number }} of {{ daftar_customer.paginator.num_pages }}.</span></li>
-                                        {% if daftar_customer.has_next %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ daftar_customer.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
-                                            <a class="page-link" href="?page={{ daftar_customer.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
-                                        </li>
-                                        {% endif %}
-                                    </ul>
-                                </nav>
-                            </div>
-                            <!-- end pagination bawah -->
+                                        <td><a href="/inventaris/masterdata/customer/edit/{{ customer.id_customer }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                            <a href="/inventaris/masterdata/customer/delete/{{ customer.id_customer }}" class="btn confirm-delete btn-sm btn-danger">Hapus</a>
+                                            
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% elif key_customer != None %}
+                                    <tr>
+                                        <td colspan="5"><center>Costumer tersebut tidak ada...</center></td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="5"><center>Tidak ada data costumer saat ini...</center></td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                    <!-- end konten -->
+                    <!-- pagination bawah -->
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
+                                {% if daftar_customer.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_customer.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_supplier.number }} of {{ daftar_customer.paginator.num_pages }}.</span></li>
+                                {% if daftar_customer.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_customer.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_customer.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- end pagination bawah -->
                 </div>
             </div>
-        </section>
-        {% endblock %}
-        {% block extrajs %} 
-        <script>
-            $('.confirm-delete').on('click', function(e) {
-                return confirm('Apakah anda yakin ingin menghapus data tersebut?')
-            })
-        </script>
-        {% endblock %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block extrajs %} 
+<script>
+    $('.confirm-delete').on('click', function(e) {
+        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+    })
+</script>
+{% endblock %}

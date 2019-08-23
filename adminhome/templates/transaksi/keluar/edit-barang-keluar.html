@@ -160,98 +160,83 @@
                                 <div class="col-sm-12">
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal1">Simpan</button>
                                     <div class="modal fade" id="myModal1" style="display: none;">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span></button>
-                                                            <h4 class="modal-title">Konfirmasi Simpan</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>Apakah anda yakin ingin mengubah data barang ini ?</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-warning">Simpan</button>
-                                                            <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Hapus</button>
-                                    <!-- Modal konfirmasi-delete -->
-                                    <div class="modal fade" id="myModal" style="display: none;">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">×</span></button>
-                                                        <h4 class="modal-title">Konfirmasi Hapus</h4>
+                                                        <h4 class="modal-title">Konfirmasi Simpan</h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p>Apakah anda yakin ingin menghapus data barang ini ?</p>
+                                                        <p>Apakah anda yakin ingin mengubah data barang ini ?</p>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <a href="/inventaris/barangkeluar/delete/{{ barang_keluar.id }}" type="button" class="btn btn-danger">Hapus</a>
+                                                        <button type="submit" class="btn btn-warning">Simpan</button>
                                                         <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- end modal -->
-                                    <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
-                                </div> 
+                                        <a href="/inventaris/barangkeluar/delete/{{ barang_keluar.id }}" type="button" class="btn confirm-delete btn-warning">Hapus</a>
+                                        <a href="/inventaris/barangkeluar" type="button" class="btn btn-danger">Kembali</a>
+                                    </div> 
+                                </div>
+                                <!-- end Button -->
                             </div>
-                            <!-- end Button -->
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-</section>
-{% endblock %}
-
-{% block extrajs %}
-<script type="text/javascript" src="http://cdn.jsdelivr.net/select2/3.4.6/select2.min.js"></script>
-<script type="text/javascript" src="http://globaltradeconcierge.com/javascripts/bootstrap.min.js"></script>
-<script>
-    $('#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#id_alamat_customer,#totalbayar').attr('readonly',true);
+    </section>
+    {% endblock %}
     
-    // select 2
-    $('#mySelect').select2({
-        theme: "bootstrap 4"
-    });
-    
-    $('#caricustomer').select2({
-        theme: "bootstrap 4"
-    });
-    
-    // autofill customer
-    function customer() {
-        var x = document.getElementById("caricustomer").value;
-        var y = x.split("|");
-        var a = y[0];
-        var b = y[1];
-        $("#id_customer_id").val(a);
-        $("#id_alamat_customer").val(b);
+    {% block extrajs %}
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/select2/3.4.6/select2.min.js"></script>
+    <script type="text/javascript" src="http://globaltradeconcierge.com/javascripts/bootstrap.min.js"></script>
+    <script>
+        $('#id_nama_barang,#datepicker,#id_kode_barang,#id_serialnumber,#id_no_resi,#id_merk_id,#id_jenis_id,#id_tipe_id,#id_harga_satuan,#id_alamat_customer,#totalbayar').attr('readonly',true);
         
-        $('#id_customer_id').val(a).attr('selected',true);
-    }
+        // select 2
+        $('#mySelect').select2({
+            theme: "bootstrap 4"
+        });
+        
+        $('#caricustomer').select2({
+            theme: "bootstrap 4"
+        });
+        
+        // autofill customer
+        function customer() {
+            var x = document.getElementById("caricustomer").value;
+            var y = x.split("|");
+            var a = y[0];
+            var b = y[1];
+            $("#id_customer_id").val(a);
+            $("#id_alamat_customer").val(b);
+            
+            $('#id_customer_id').val(a).attr('selected',true);
+        }
+        
+        // datepicker
+        $('#date').datepicker({
+            format : "yyyy-mm-dd",
+            autoclose: true,
+        });
+        
+        // Jumlah
+        $("#jumlah").keyup(function(){
+            var ambiljumlah = document.getElementById("jumlah").value;
+            var ambilharga = document.getElementById("id_harga_satuan").value;
+            var jumlah = parseInt(ambiljumlah);
+            var harga = parseInt(ambilharga);
+            var total = harga*jumlah;
+            $("#totalbayar").val(total);
+        });
+        
+        $('.confirm-delete').on('click', function(e) {
+            return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+        })
+    </script>
     
-    // datepicker
-    $('#date').datepicker({
-        format : "yyyy-mm-dd",
-        autoclose: true,
-    });
-    
-    // Jumlah
-    $("#jumlah").keyup(function(){
-        var ambiljumlah = document.getElementById("jumlah").value;
-        var ambilharga = document.getElementById("id_harga_satuan").value;
-        var jumlah = parseInt(ambiljumlah);
-        var harga = parseInt(ambilharga);
-        var total = harga*jumlah;
-        $("#totalbayar").val(total);
-    });
-</script>
-{% endblock %}
+    {% endblock %}

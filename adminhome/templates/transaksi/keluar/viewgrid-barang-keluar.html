@@ -42,6 +42,7 @@
                     <div class="pull-right col-md-4">
                         <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/tambah"><i class="fa fa-plus"></i> Tambah</a>
                         <a class="btn btn-primary pull-right" href="/inventaris/barangkeluar/list"><i class="fa fa-th-list"></i></a>
+                        <a class="btn btn-primary pull-right" href="/invoice"><i class="fa fa-print"></i> Invoice</a>
                     </div>
                     <br/>
                     <br/>
@@ -133,74 +134,61 @@
                                         {% if forloop.first %}
                                         <a href="/inventaris/barangkeluar/edit/{{ data.id }}" type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
                                         {% endif %}
-                                        <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
-                                        <!-- Modal konfirmasi-delete -->
-                                        <div class="modal fade" id="myModal" style="display: none;">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span></button>
-                                                            <h4 class="modal-title">Konfirmasi Hapus</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>Apakah anda yakin ingin menghapus barang <strong>{{data.nama_barang}}</strong> dengan no. resi <strong>{{data.no_resi}}</strong> ?</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-danger">HAPUS</a>
-                                                            <button type="button" class="btn btn-info" data-dismiss="modal">Tidak</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- end modal -->
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                    {% endfor %}
-                                    {% elif barang_keluar != None %}
-                                    <div class="box box-warning">
-                                        <br/>  
-                                        <span><center>Barang Tersebut Tidak Ada</center></span>
-                                        <br/>
-                                    </div>
-                                    {% else %}
-                                    <div class="box box-warning">
-                                        <br/>  
-                                        <span><center>Tidak ada data barang keluar saat ini...</center></span>
-                                        <br/>
+                                        
+                                        <a href="/inventaris/barangkeluar/delete/{{ data.id }}" type="button" class="btn btn-sm btn-danger confirm-delete">Hapus</a>
+                                        
                                     </div>
                                     {% endif %}
                                 </div>
+                                {% endfor %}
+                                {% elif barang_keluar != None %}
+                                <div class="box box-warning">
+                                    <br/>  
+                                    <span><center>Barang Tersebut Tidak Ada</center></span>
+                                    <br/>
+                                </div>
+                                {% else %}
+                                <div class="box box-warning">
+                                    <br/>  
+                                    <span><center>Tidak ada data barang keluar saat ini...</center></span>
+                                    <br/>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
-                        <!--END KONTEN  -->
-                        <!-- pagination bawah -->
-                        <div style="text-align: center">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination pagination-md justify-content-center">
-                                    {% if daftar_barangkeluar.has_previous %}
-                                    <li class="page-item">
-                                        <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
-                                        <a href="?page={{ daftar_barangkeluar.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
-                                    </li>
-                                    {% endif %}
-                                    <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
-                                    {% if daftar_barangkeluar.has_next %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
-                                        <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                            </nav>
-                        </div>
-                        <!-- pagination bawah -->  
                     </div>
+                    <!--END KONTEN  -->
+                    <!-- pagination bawah -->
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
+                                {% if daftar_barangkeluar.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_barangkeluar.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_barangkeluar.number }} of {{ daftar_barangkeluar.paginator.num_pages }}.</span></li>
+                                {% if daftar_barangkeluar.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_barangkeluar.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- pagination bawah -->  
                 </div>
             </div>
-        </section>
-        {% endblock %}
-        
-        {% block extrajs %}
-        {% endblock %}
+        </div>
+    </section>
+    {% endblock %}
+    
+    {% block extrajs %}
+    <script>
+        $('.confirm-delete').on('click', function(e) {
+            return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+        })
+    </script>
+    {% endblock %}

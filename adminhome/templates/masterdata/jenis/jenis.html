@@ -96,79 +96,58 @@
                                     <tr>
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ jenis.nama_jenis }}</td>
-                                        <td><a href="/inventaris/masterdata/jenis/edit/{{ jenis.id_jenis }}" class="btn btn-sm btn-warning"><i
-                                            class="fa fa-edit"></i></a>
-                                            <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"></i></button>
-                                            <!-- modal konfirmasi delete -->
-                                            <div class="modal fade" id="myModal" style="display: none;">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">×</span></button>
-                                                                <h4 class="modal-title">Konfirmasi Hapus</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>Apakah anda yakin ingin menghapus jenis <strong>{{jenis.nama_jenis}}</strong> ?</p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                    <a href="/inventaris/masterdata/jenis/delete/{{ jenis.id_jenis }}" class="btn btn-danger confirm-delete">Hapus</a>
-                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Tidak</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> 
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                        {% elif key_jenis != None %}
-                                        <tr>
-                                            <td colspan="3"><center>Jenis tersebut tidak ada...</center></td>
-                                        </tr>
-                                        {% else %}
-                                        <tr>
-                                            <td colspan="3"><center>Tidak ada data jenis saat ini...</center></td>
-                                        </tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <!-- end konten -->
-                        
-                        <!-- pagination bawah -->
-                        <div style="text-align: center">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination pagination-md justify-content-center">
-                                    {% if daftar_jenis.has_previous %}
-                                    <li class="page-item">
-                                        <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
-                                        <a href="?page={{ daftar_jenis.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
-                                    </li>
+                                        <td><a href="/inventaris/masterdata/jenis/edit/{{ jenis.id_jenis }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                            <a href="/inventaris/masterdata/jenis/delete/{{ jenis.id_jenis }}" class="btn btn-sm btn-danger confirm-delete">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% elif key_jenis != None %}
+                                    <tr>
+                                        <td colspan="3"><center>Jenis tersebut tidak ada...</center></td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="3"><center>Tidak ada data jenis saat ini...</center></td>
+                                    </tr>
                                     {% endif %}
-                                    <li class="page-item disabled"><span class="current">Page {{ daftar_jenis.number }} of {{ daftar_jenis.paginator.num_pages }}.</span></li>
-                                    {% if daftar_jenis.has_next %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ daftar_jenis.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
-                                        <a class="page-link" href="?page={{ daftar_jenis.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                            </nav>
+                                </tbody>
+                            </table>
                         </div>
-                        <!-- end pagination bawah -->
-                        
                     </div>
+                    <!-- end konten -->
+                    
+                    <!-- pagination bawah -->
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
+                                {% if daftar_jenis.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page=1{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&laquo;</a>
+                                    <a href="?page={{ daftar_jenis.previous_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}" class="page-item">&lt;</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item disabled"><span class="current">Page {{ daftar_jenis.number }} of {{ daftar_jenis.paginator.num_pages }}.</span></li>
+                                {% if daftar_jenis.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ daftar_jenis.next_page_number }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&gt;</a>
+                                    <a class="page-link" href="?page={{ daftar_jenis.paginator.num_pages }}{% if request.GET.cari %}&cari={{ request.GET.cari }}{% endif %}">&raquo;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- end pagination bawah -->
+                    
                 </div>
             </div>
         </div>
-    </section>
-    {% endblock %}
-    {% block extrajs %}
-    <script>
-        $('.confirm-delete').on('click', function(e) {
-            return confirm('Apakah anda yakin ingin menghapus data tersebut?')
-        })
-    </script>
-    {% endblock %}
+    </div>
+</section>
+{% endblock %}
+{% block extrajs %}
+<script>
+    $('.confirm-delete').on('click', function(e) {
+        return confirm('Apakah anda yakin ingin menghapus data tersebut?')
+    })
+</script>
+{% endblock %}

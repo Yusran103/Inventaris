@@ -51,7 +51,16 @@ urlpatterns = [
     path('inventaris/barangkeluar/cari', adminhome.caribarangkeluargrid,name='barangkeluar_grid_cari'),
     path('inventaris/barangkeluar/list/cari', adminhome.caribarangkeluar,name='barangkeluar_cari'),
 
-    
+    # BARANG RETUR
+    path('inventaris/barangretur',adminhome.barangreturgrid, name='barangretur_grid'),
+    path('inventaris/barangretur/list',adminhome.barangretur, name='barangretur_list'),
+    path('inventaris/barangretur/tambah',adminhome.tambahbarangretur, name='barangretur_add'),
+    path('inventaris/barangretur/simpantambah',adminhome.simpantambahbarangretur, name='barangretur_addcreate'),
+    path('inventaris/barangretur/edit/<int:pk>', adminhome.editbarangretur,name='barangretur_edit'),
+    path('inventaris/barangretur/delete/<int:pk>', adminhome.deletebarangretur,name='barangretur_delete'),
+    path('inventaris/barangretur/cari', adminhome.caribarangreturgrid,name='barangretur_grid_cari'),
+    path('inventaris/barangretur/list/cari', adminhome.caribarangretur,name='barangretur_cari'),
+
     # STOK
     path('inventaris/stok', adminhome.gridstok, name='stok_grid'),
     path('inventaris/stok/cari', adminhome.caristokgrid, name='stok_grid_cari'),
@@ -65,6 +74,9 @@ urlpatterns = [
     path('inventaris/laporan/print/stok', adminhome.print_laporan_stok, name='print_stok'),
     path('inventaris/laporan/print/masuk', adminhome.print_laporan_masuk, name='print_masuk'),
     path('inventaris/laporan/print/keluar', adminhome.print_laporan_keluar, name='print_keluar'),
+    # CETAK INVOICE
+    path('invoice/', adminhome.invoice, name='invoice'),
+    path('invoice/print', adminhome.print_invoice, name='print_invoice'),
     
     # USERS
     path('inventaris/users', adminhome.viewuser, name='user'),

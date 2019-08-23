@@ -29,9 +29,9 @@
                 <div class="box-footer clearfix">
                     <div class="box-header with-border">
                         <i class="fa fa-list-alt"></i>
-                        <h1 class="box-title">Daftar Barang Masuk</h1>
+                        <h1 class="box-title">Daftar Barang Retur</h1>
                     </div>
-                    <form action="{% url 'barangmasuk_cari' %}" method="GET">
+                    <form action="{% url 'barangretur_cari' %}" method="GET">
                         <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
                             <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
                             <span class="input-group-btn">
@@ -40,8 +40,8 @@
                         </div>
                     </form>
                     <div class="pull-right col-md-4">
-                        <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/tambah"><i class="fa fa-plus"></i> Tambah</a>
-                        <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk"><i class="fa fa-pencil-square-o"></i></a>
+                        <a class="btn btn-primary pull-right" href="/inventaris/barangretur/tambah"><i class="fa fa-plus"></i> Tambah</a>
+                        <a class="btn btn-primary pull-right" href="/inventaris/barangretur"><i class="fa fa-pencil-square-o"></i></a>
                     </div>
                     <br/>
                     <br/>
@@ -82,12 +82,12 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>No</th>
+                                    <th>No Invoice</th>
                                     <th>Kode Barang</th>
                                     <th>Nama Barang</th>
-                                    <th>Tanggal Masuk</th>
-                                    <th>Jumlah</th>
+                                    <th>Serial Number</th>
+                                    <th>Tanggal</th>
                                     <th>Supplier</th>
-                                    <th>No Resi</th>
                                     {% if request.session.level == 'SuperAdmin' %}
                                     <th>Aksi</th>
                                     {% endif %}
@@ -98,19 +98,18 @@
                                 {% for barang_masuk in daftar_barang_masuk %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
+                                    <td>{{ barang_masuk.no_bukti }}</td>
                                     <td>{{ barang_masuk.kd_barang }}</td>
                                     <td>{{ barang_masuk.nm_barang }}</td>
-                                    <td>{{ barang_masuk.tgl_masuk }}</td>
-                                    <td>{{ barang_masuk.jml_masuk }}</td>
+                                    <td>{{ barang_masuk.sn_barang }}</td>
+                                    <td>{{ barang_masuk.tanggal }}</td>
                                     <td>{{ barang_masuk.supplier_id }}</td>
-                                    <td>{{ barang_masuk.no_resi }}</td>
                                     {% if request.session.level == 'SuperAdmin' %}
                                     <td>
                                         {% if forloop.first %}
-                                        <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="/inventaris/barangretur/edit/{{ barang_masuk.id_brg_retur }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
                                         {% endif %}
-                                        <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}" type="button" class="btn btn-sm btn-danger confirm-delete">Hapus</a>
-                                        <!-- end modal -->
+                                        <a href="/inventaris/barangretur/delete/{{ barang_masuk.id_brg_retur }}" type="button" class="btn btn-sm btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
                                     </td>
                                     {% endif %}
                                 </tr>
@@ -121,7 +120,7 @@
                                 </tr>
                                 {% else %}
                                 <tr>
-                                    <td colspan="8"><center>Tidak ada data barang masuk saat ini...</center></td>
+                                    <td colspan="8"><center>Tidak ada data barang retur saat ini...</center></td>
                                 </tr>
                                 {% endif %}
                             </tbody>

@@ -112,6 +112,7 @@ class Barangkeluar(models.Model):
     customer_id =  models.ForeignKey(Customer,on_delete=models.CASCADE,db_column='customer_id')
     foto_keluar = models.ImageField(upload_to='foto/', blank=True, null=True)
     is_deleted = models.CharField(max_length=100,blank=True , null=True)
+    is_return = models.CharField(max_length=100,blank=True , null=True)
 
     class Meta:
         db_table = "tb_barang_keluar"
@@ -148,6 +149,29 @@ class Stok_barang(models.Model):
     def delete(self, *args, **kwargs):
         self.foto_stok.delete()
         super().delete(*args, **kwargs)
+
+class Barang_retur(models.Model):
+    id_brg_retur = models.AutoField(primary_key=True)
+    tanggal = models.DateField()
+    no_bukti =  models.CharField(max_length=100)
+    kd_barang = models.CharField(max_length=100)
+    nm_barang = models.CharField(max_length=100)
+    sn_barang = models.CharField(max_length=100)
+    keterangan = models.CharField(max_length=100)
+    is_deleted = models.CharField(max_length=100,blank=True , null=True)
+    foto = models.ImageField(upload_to='foto/', blank=True, null=True)
+
+    customer_id = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True,db_column='customer_id')
+    supplier_id = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True,db_column='supplier_id')
+    merk_id = models.ForeignKey(Merk_brg, on_delete=models.SET_NULL, null=True,db_column='merk_id')
+    tipe_id = models.ForeignKey(Tipe_brg, on_delete=models.SET_NULL, null=True,db_column='tipe_id')
+    jenis_id =  models.ForeignKey(Jenis_brg, on_delete=models.SET_NULL, null=True,db_column='jenis_id')
+
+    def __str__(self):
+        return self.nm_barang
+
+    class Meta:
+        db_table = "tb_barang_retur"
 
 class Akun(models.Model):
     """docstring for user"""

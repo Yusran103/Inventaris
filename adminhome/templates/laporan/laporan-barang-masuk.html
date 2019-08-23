@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% block extrastyle %}
+<link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap-select.css">
+{% endblock %}
+
 {% block page_content %}
 
 <section class="content-header">
@@ -27,14 +31,36 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="caribarang" class="col-sm-2 control-label">Jenis : </label>
+                        <div class="col-sm-5" id="caribarang">
+                            <select id="mySelect" name="mySelect" class="form-control selectpicker" style="width: 100%" >
+                                <option value="">----- Pilih Jenis -----</option>    
+                                {% if jenis %}
+                                {% for data in jenis %}
+                                <option value="{{data.id_jenis}}">{{data.nama_jenis}}</option>
+                                {% endfor %}
+                                {% else %}
+                                <option value="">Tidak Ada Data Barang Keluar</option>
+                                {% endif %}
+                            </select>                                        
+                        </div>
+                    </div>
                     <div class="col-md-offset-2">
                         <input type="submit" value="Cari" class="btn btn-primary"></input>
                     </div> 
                 </div>
             </form>
-    </div>
-</section>
-{% endblock %}
-{% block extrajs%}
-
-{% endblock %}
+        </div>
+    </section>
+    {% endblock %}
+    {% block extrajs%}
+    <script src="/static/assets/bootstrap/js/bootstrap-select.js"></script>
+    <script>
+        $.each($('select'),function(index,data){
+            var id = $(data).attr('id');
+            $('#'+id).addClass('form-control selectpicker')
+            $('#'+id).attr('data-live-search',true)
+        });
+    </script>
+    {% endblock %}

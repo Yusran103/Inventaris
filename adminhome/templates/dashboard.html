@@ -2,6 +2,31 @@
 
 {% load static %}
 
+{% block extrastyle %}
+<style>
+.fixed_header{
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.fixed_header tbody{
+  display:block;
+  width: 100%;
+  overflow: auto;
+    height: 100px;
+}
+
+.fixed_header thead tr {
+   display: block;
+}
+
+.fixed_header th, .fixed_header td {    
+  text-align: left;
+  width: 900px;
+}
+</style>
+{% endblock %}
+
 {% block page_content %}
 
 <section class="content-header">
@@ -15,7 +40,7 @@
     <br/>
     <br/>
     <br/>
-    <div class="row col-12" style=" margin-left: 70px; margin-right: 70px">
+    <div class="row col-12 fixed_header" style=" margin-left: 70px; margin-right: 70px">
         <div class="box box-danger col-sm-4">
             <h4>Jumlah Stok Barang Kurang Dari 10:</h4>
             <table class="table table-hover">
@@ -29,7 +54,7 @@
                 <tbody>
                     {% if daftar_stok %}
                     {% for stok in daftar_stok %}
-                    {% if stok.stok_akhir < 10  %}
+                    {% if stok.stok_akhir < 11  %}
                     <tr>
                         <td>{{ stok.kd_barang }}</td>
                         <td>{{ stok.nm_barang }}</td>

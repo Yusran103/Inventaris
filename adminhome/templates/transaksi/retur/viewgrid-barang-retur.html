@@ -15,9 +15,9 @@
                 <div class="box-footer clearfix">
                     <div class="box-header with-border">
                         <i class="fa fa-list-alt"></i>
-                        <h1 class="box-title">Daftar Barang Masuk</h1>
+                        <h1 class="box-title">Daftar Barang Retur</h1>
                     </div>
-                    <form action="{% url 'barangmasuk_grid_cari' %}" method="GET">
+                    <form action="{% url 'barangretur_grid_cari' %}" method="GET">
                         <div class="input-group input-group-md col-md-4 col-xs-6 col-lg-4 pull-left">
                             <input type="text" name="cari" value="{{request.GET.cari}}" class="form-control" placeholder="Cari ......">
                             <span class="input-group-btn">
@@ -27,8 +27,8 @@
                     </form>
                     
                     <div class="pull-right col-md-4">
-                        <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/tambah"><i class="fa fa-plus"></i> Tambah</a>
-                        <a class="btn btn-primary pull-right" href="/inventaris/barangmasuk/list"><i class="fa fa-th-list"></i></a>
+                        <a class="btn btn-primary pull-right" href="/inventaris/barangretur/tambah"><i class="fa fa-plus"></i> Tambah</a>
+                        <a class="btn btn-primary pull-right" href="/inventaris/barangretur/list"><i class="fa fa-th-list"></i></a>
                     </div>
                     <br/>
                     <br/>
@@ -74,8 +74,8 @@
                                 <div class="row">
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <div class="container">
-                                            {% if barang_masuk.foto_masuk %}
-                                            <img src="{{barang_masuk.foto_masuk.url}}" class="img-responsive img-thumbnail" width="100" height="100" />
+                                            {% if barang_masuk.foto %}
+                                            <img src="{{barang_masuk.foto.url}}" class="img-responsive img-thumbnail" width="100" height="100" />
                                             {% else %}
                                             <img src="{% static 'assets/images/images.png' %}" class="img-responsive img-thumbnail" width="100" height="100" />
                                             {% endif %}
@@ -83,27 +83,29 @@
                                     </div>
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <div class="form-group">
-                                            <h5><strong>Nama Barang :</strong></h5>
-                                            <p>{{barang_masuk.nm_barang}}</p>
+                                            <h5><strong>No Invoice :</strong></h5>
+                                            <p>{{barang_masuk.no_bukti}}</p>
                                             <h5><strong>Kode Barang :</strong></h5>
                                             <p>{{barang_masuk.kd_barang}}</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-3 col-xs-4 col-lg-3">
                                         <div class="form-group">
-                                            <h5><strong>Tanggal Masuk :</strong> {{barang_masuk.tgl_masuk}}</h5>
-                                            <h5><strong>Jumlah :</strong> {{barang_masuk.jml_masuk}}</h5>
+                                            <h5><strong>Nama Barang :</strong> {{barang_masuk.nm_barang}}</h5>
+                                            <h5><strong>Tanggal :</strong> {{barang_masuk.tanggal}}</h5>
                                             <h5><strong>Supplier :</strong> {{barang_masuk.supplier_id}}</h5>
-                                            <h5><strong>No Resi :</strong> {{barang_masuk.no_resi}}</h5>
-                                            <h5><strong>Harga Barang :</strong> Rp.{{barang_masuk.harga_satuan|intcomma}},-</h5>
+                                            <h5><strong>Merk :</strong> {{barang_masuk.merk_id}}</h5>
+                                            <h5><strong>Jenis :</strong> {{barang_masuk.jenis_id}}</h5>
+                                            <h5><strong>Tipe :</strong> {{barang_masuk.tipe_id}}</h5>
                                         </div>
                                     </div>
                                     {% if request.session.level == 'SuperAdmin' %}
                                     <div class="col-sm-2 pull-right">
                                         {% if forloop.first %}
-                                        <a href="/inventaris/barangmasuk/edit/{{ barang_masuk.id_brg_masuk }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="/inventaris/barangretur/edit/{{ barang_masuk.id_brg_retur }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
                                         {% endif %}
-                                        <a href="/inventaris/barangmasuk/delete/{{ barang_masuk.id_brg_masuk }}"" type="button" class="btn btn-sm btn-danger confirm-delete">Hapus</a>
+                                        <a href="/inventaris/barangretur/delete/{{ barang_masuk.id_brg_retur }}"" type="button" class="btn btn-sm btn-danger confirm-delete"><i class="fa fa-trash"></i></a>
+                                        <!-- end modal -->
                                     </div>
                                     {% endif %}
                                 </div>
@@ -119,7 +121,7 @@
                             {% else %}
                             <div class="box box-warning">
                                 <br/>  
-                                <span><center>Tidak ada data barang masuk saat ini...</center></span>
+                                <span><center>Tidak ada data barang retur saat ini...</center></span>
                                 <br/>
                             </div>
                             {% endif %}
